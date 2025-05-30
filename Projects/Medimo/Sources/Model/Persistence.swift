@@ -15,28 +15,32 @@ struct PersistenceController {
         let controller = PersistenceController(inMemory: true)
         let context = controller.container.viewContext
         
+        // 예시 데이터 추가
         var mockGlossarys: [Glossary] = []
         var mockTerms: [Term] = []
         var mockMorphemes: [Morpheme] = []
         
         // 예시 데이터 추가
-        for i in 0..<10 {
+        for i in 0..<4 {
             let newGlossary = Glossary(context: context)
+            newGlossary.id = UUID()
             newGlossary.title = "title\(i)"
             mockGlossarys.append(newGlossary)
         }
-        
-        for i in 0..<4 {
+//        
+        for i in 0..<10 {
             let newTerm = Term(context: context)
+            newTerm.id = UUID()
             newTerm.spelling = "spelling\(i)"
             newTerm.meaning = "meaning\(i)"
             newTerm.abbreviation = "abbreviation\(i)"
             newTerm.explanation = "explanation\(i)"
             mockTerms.append(newTerm)
         }
-        
+//        
         for i in 0..<4 {
             let newMorpheme = Morpheme(context: context)
+            newMorpheme.id = UUID()
             newMorpheme.spelling = "spelling\(i)"
             newMorpheme.meaning = "meaning\(i)"
             mockMorphemes.append(newMorpheme)
@@ -52,7 +56,6 @@ struct PersistenceController {
         mockTerms[6].morphemes = [mockMorphemes[0], mockMorphemes[1]]
         mockTerms[9].morphemes = [mockMorphemes[2]]
         
-        
         do {
             try context.save()
         } catch {
@@ -67,7 +70,7 @@ struct PersistenceController {
 
     // inMemory가 true일 경우 디스크에 저장되지 않음 (테스트, 프리뷰 용)
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "MyApp") // <- xcdatamodeld 파일 이름과 동일해야 함
+        container = NSPersistentContainer(name: "MedicalModel")
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")

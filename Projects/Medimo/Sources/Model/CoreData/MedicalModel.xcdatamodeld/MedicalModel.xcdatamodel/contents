@@ -10,7 +10,6 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="meaning" attributeType="String"/>
         <attribute name="morphemeKey" optional="YES" attributeType="String"/>
-        <attribute name="serverId" attributeType="String"/>
         <attribute name="spelling" attributeType="String"/>
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="morphemes" inverseEntity="Term"/>
     </entity>
@@ -19,7 +18,6 @@
         <attribute name="explanation" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="meaning" attributeType="String"/>
-        <attribute name="serverId" attributeType="String"/>
         <attribute name="spelling" attributeType="String"/>
         <attribute name="termKey" optional="YES" attributeType="String"/>
         <relationship name="glossarys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
