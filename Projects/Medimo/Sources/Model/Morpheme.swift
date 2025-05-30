@@ -9,9 +9,10 @@
 import Foundation
 import CoreData
 
+@objc(Morpheme)
 public class Morpheme: NSManagedObject, Identifiable {
     
-    public class func fetchRequest() -> NSFetchRequest<Morpheme> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Morpheme> {
         return NSFetchRequest<Morpheme>(entityName: "Morpheme")
     }
 
@@ -19,7 +20,17 @@ public class Morpheme: NSManagedObject, Identifiable {
     @NSManaged public var morphemeKey: String?
     @NSManaged public var spelling: String
     @NSManaged public var meaning: String
+    @NSManaged public var terms: NSSet?
     
-    @NSManaged public var terms: Set<Term>
-    
+    @objc(addTermsObject:)
+    @NSManaged public func addToTerms(_ value: Term)
+
+    @objc(removeTermsObject:)
+    @NSManaged public func removeFromTerms(_ value: Term)
+
+    @objc(addTerms:)
+    @NSManaged public func addToTerms(_ values: NSSet)
+
+    @objc(removeTerms:)
+    @NSManaged public func removeFromTerms(_ values: NSSet)
 }

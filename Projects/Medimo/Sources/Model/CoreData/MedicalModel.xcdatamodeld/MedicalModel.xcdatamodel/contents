@@ -4,7 +4,7 @@
         <attribute name="grossaryKey" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="terms" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Term" inverseName="glossarys" inverseEntity="Term"/>
+        <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="glossarys" inverseEntity="Term"/>
     </entity>
     <entity name="Morpheme" representedClassName="Morpheme" syncable="YES">
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
@@ -12,7 +12,7 @@
         <attribute name="morphemeKey" optional="YES" attributeType="String"/>
         <attribute name="serverId" attributeType="String"/>
         <attribute name="spelling" attributeType="String"/>
-        <relationship name="terms" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Term" inverseName="morphemes" inverseEntity="Term"/>
+        <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="morphemes" inverseEntity="Term"/>
     </entity>
     <entity name="Term" representedClassName="Term" syncable="YES">
         <attribute name="abbreviation" optional="YES" attributeType="String"/>
@@ -22,7 +22,7 @@
         <attribute name="serverId" attributeType="String"/>
         <attribute name="spelling" attributeType="String"/>
         <attribute name="termKey" optional="YES" attributeType="String"/>
-        <relationship name="glossarys" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
-        <relationship name="morphemes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
+        <relationship name="glossarys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
+        <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
     </entity>
 </model>
