@@ -22,20 +22,20 @@ public class Term: NSManagedObject, Identifiable {
     @NSManaged public var abbreviation: String?
     @NSManaged public var meaning: String
     @NSManaged public var explanation: String?
-    @NSManaged public var glossarys: NSSet?
+    @NSManaged public var glossaries: NSSet?
     @NSManaged public var morphemes: NSSet?
     
-    @objc(addGlossaryObject:)
-    @NSManaged public func addToGlossarys(_ value: Glossary)
+    @objc(addGlossariesObject:)
+    @NSManaged public func addToGlossaries(_ value: Glossary)
 
-    @objc(removeGlossarysObject:)
-    @NSManaged public func removeFromGlossarys(_ value: Glossary)
+    @objc(removeGlossariesObject:)
+    @NSManaged public func removeFromGlossaries(_ value: Glossary)
 
-    @objc(addGlossarys:)
-    @NSManaged public func addToGlossary(_ values: NSSet)
+    @objc(addGlossaries:)
+    @NSManaged public func addToGlossaries(_ values: NSSet)
 
-    @objc(removeGlossarys:)
-    @NSManaged public func removeFromGlossarys(_ values: NSSet)
+    @objc(removeGlossaries:)
+    @NSManaged public func removeFromGlossaries(_ values: NSSet)
     
     @objc(addMorphemeObject:)
     @NSManaged public func addToMorphemes(_ value: Morpheme)
