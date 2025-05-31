@@ -1,11 +1,12 @@
 import SwiftUI
 
 public struct ContentView: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
     public init() {}
 
     public var body: some View {
-        Text("Hello, World!")
-            .padding()
+        GlossaryListView(context: managedObjectContext)
     }
 }
 

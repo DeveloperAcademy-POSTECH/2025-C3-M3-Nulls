@@ -19,7 +19,7 @@ struct GlossaryListView: View {
     var body: some View {
         List {
             ForEach(viewModel.glossaries) { glossary in
-                Text(glossary.title)
+                Text(glossary.title ?? "")
             }
         }
     }
