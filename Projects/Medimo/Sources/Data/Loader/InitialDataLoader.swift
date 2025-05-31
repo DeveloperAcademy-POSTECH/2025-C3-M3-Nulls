@@ -22,6 +22,8 @@ class InitialDataLoader {
         try loadGlossaries()
         try loadTerms()
         try loadMorphemes()
+        try linkGlossaryToTerm()
+        try linkTermToMorpheme()
     }
     
     private func loadGlossaries() throws {
