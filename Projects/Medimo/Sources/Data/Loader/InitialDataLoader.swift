@@ -25,7 +25,7 @@ class InitialDataLoader {
     }
     
     private func loadGlossaries() throws {
-        let glossaries: [GlossaryDto] = try loadJson("glossaries.json")
+        let glossaries: [GlossaryDto] = try loadJsonData("glossaries.json")
         for g in glossaries {
             let glossary = Glossary(context: context)
             glossary.id = UUID()
@@ -36,7 +36,7 @@ class InitialDataLoader {
     }
     
     private func loadTerms() throws {
-        let terms: [TermDto] = try loadJson("terms.json")
+        let terms: [TermDto] = try loadJsonData("terms.json")
         for t in terms {
             let term = Term(context: context)
             term.id = UUID()
@@ -50,7 +50,7 @@ class InitialDataLoader {
     }
     
     private func loadMorphemes() throws {
-        let morphemes: [MorphemeDto] = try loadJson("morphemes.json")
+        let morphemes: [MorphemeDto] = try loadJsonData("morphemes.json")
         for m in morphemes {
             let morpheme = Morpheme(context: context)
             morpheme.id = UUID()
@@ -62,18 +62,18 @@ class InitialDataLoader {
     }
     
     private func linkGlossaryToTerm() throws {
-        let links: [GlossaryTermLinkDto] = try loadJson("glossary_term_links.json")
+        let links: [GlossaryTermLinkDto] = try loadJsonData("glossary_term_links.json")
         for link in links {
             guard let glossary = glossaryMap[link.glossaryKey],
                   let term = termMap[link.termKey] else { continue }
             
             glossary.addToTerms(term)
-            term.addToGlossaries(glossary)
+            term.addToGlossarys(glossary)
         }
     }
     
     private func linkTermToMorpheme() throws {
-        let links: [TermMorphemeLinkDto] = try loadJson("term_morpheme_links.json")
+        let links: [TermMorphemeLinkDto] = try loadJsonData("term_morpheme_links.json")
         for link in links {
             guard let term = termMap[link.termKey],
                   let morpheme = morphemeMap[link.morphemeKey] else { continue }
@@ -81,7 +81,7 @@ class InitialDataLoader {
         }
     }
     
-    private func loadJson<T: Decodable>(_ filename: String) throws -> [T] {
+    private func loadJsonData<T: Decodable>(_ filename: String) throws -> [T] {
         guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
             throw NSError(domain: "File not found: \(filename)", code: 404)
         }
