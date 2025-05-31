@@ -81,9 +81,36 @@ struct PersistenceController {
                 fatalError("Unresolved error loading store \(error), \(error.userInfo)")
             }
         })
+        
+        let context = container.viewContext
+        if isFirstLaunch() {
+            let loader = InitialDataLoader(context: context)
+            do {
+                try loader.loadInitialData()
+                try context.save()
+                #if DEBUG
+                print("Initial data loaded.")
+                #endif
+            } catch {
+                #if DEBUG
+                print("Failed to load initial data: \(error)")
+                #endif
+            }
+        }
 
         // 병합 정책 설정 (선택 사항)
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
+    
+    private func isFirstLaunch() -> Bool {
+        // Glossary가 1개 이상 존재하는지 여부로 최초 실행 여부 판단
+        let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
+        do {
+            let count = try container.viewContext.count(for: fetchRequest)
+            return count == 0
+        } catch {
+            return true
+        }
     }
 }
