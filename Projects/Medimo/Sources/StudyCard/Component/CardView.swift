@@ -24,7 +24,12 @@ struct CardView: View {
             VStack(spacing: 8) {
                 HStack {
                     Button(action: {
-                    isPlaying.toggle()
+                        isPlaying.toggle()
+                        
+                        // TODO: 1초가 아니라 사운드 재생 시간만큼 재생 이미지 띄우기
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            isPlaying = false
+                        }
                     }) {
                         Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
                             .imageScale(.large)
