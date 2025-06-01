@@ -19,25 +19,37 @@ struct StudyCardView: View {
     }
     
     var body: some View {
-        VStack {
-            Spacer()
-            
-            Text("\(index) / \(viewModel.studyTermSize)")
-            
-            CardView(term: viewModel.studyTerms[0])//index - 1])
-                .padding(20)
-            
-            HStack(spacing: 6) {
-                ForEach(0..<viewModel.studyTermSize, id: \.self) { i in
-                    Circle()
-                        .fill(i == index - 1 ? Color("Navy") : Color.gray.opacity(0.3))
-                        .frame(width: 8, height: 8)
+        NavigationStack {
+            VStack {
+                Spacer()
+                
+                Text("\(index) / \(viewModel.studyTermSize)")
+                
+                CardView(term: viewModel.studyTerms[index - 1])
+                    .padding(20)
+                    .gesture(
+                        DragGesture()
+                            .onEnded { value in
+                                let horizontalAmount = value.translation.width
+                                
+                                if horizontalAmount < -50 {
+                                    index += 1
+                                } else if horizontalAmount > 50 {
+                                    index -= 1
+                                }
+                            }
+                    )
+                
+                HStack(spacing: 6) {
+                    ForEach(0..<viewModel.studyTermSize, id: \.self) { i in
+                        Circle()
+                            .fill(i == index - 1 ? Color("Navy") : Color.gray.opacity(0.3))
+                            .frame(width: 8, height: 8)
+                    }
                 }
-            }
-
-            Spacer()
-
-            if viewModel.studyTermSize == index {
+                
+                Spacer()
+                
                 Button("문제 풀기") {
                     // TODO: 액션 정의
                 }
@@ -47,9 +59,10 @@ struct StudyCardView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .shadow(radius: 3)
+                .opacity(viewModel.studyTermSize == index ? 1 : 0)
             }
+            .padding(20)
         }
-        .padding(20)
     }
 }
 

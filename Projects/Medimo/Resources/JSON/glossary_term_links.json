@@ -1,18 +1,65 @@
 [
-  {
-    "glossaryKey": "anatomy",
-    "termKey": "neuron"
+    {
+        "glossaryKey": "anatomy",
+        "termKey": "neuron"
+    },
+    {
+        "glossaryKey": "anatomy",
+        "termKey": "muscle"
+    },
+    {
+        "glossaryKey":
+        "anatomy",
+        "termKey": "artery"
+    },
+    {
+        "glossaryKey": "anatomy",
+        "termKey": "bone"
+    },
+    {
+        "glossaryKey": "anatomy",
+        "termKey": "nerve"
+    },
+
+    {
+        "glossaryKey": "pharmacology",
+        "termKey": "aspirin"
+    },
+    {
+        "glossaryKey": "pharmacology",
+        "termKey": "acetaminophen"
   },
-  {
-    "glossaryKey": "pharmacology",
-    "termKey": "aspirin"
-  },
-  {
-    "glossaryKey": "pathology",
-    "termKey": "infarction"
-  },
-  {
-    "glossaryKey": "pathology",
-    "termKey": "hepatitis"
-  }
+    {
+        "glossaryKey": "pharmacology",
+        "termKey": "ibuprofen"
+    },
+    {
+        "glossaryKey": "pharmacology",
+        "termKey": "antibiotic"
+    },
+    {
+        "glossaryKey": "pharmacology",
+        "termKey": "antacid"
+    },
+
+    {
+        "glossaryKey": "pathology",
+        "termKey": "infarction"
+    },
+    {
+        "glossaryKey": "pathology",
+        "termKey": "hepatitis"
+    },
+    {
+        "glossaryKey": "pathology",
+        "termKey": "anemia"
+    },
+    {
+        "glossaryKey": "pathology",
+        "termKey": "tumor"
+    },
+    {
+        "glossaryKey": "pathology",
+        "termKey": "infection"
+    }
 ]
