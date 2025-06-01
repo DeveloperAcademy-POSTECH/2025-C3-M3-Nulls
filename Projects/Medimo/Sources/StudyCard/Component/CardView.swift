@@ -33,7 +33,6 @@ struct CardView: View {
                     }
                     .onTapGesture {
                         isPlaying.toggle()
-                        
                     }
 
                     Spacer()
