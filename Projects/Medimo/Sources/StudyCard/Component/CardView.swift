@@ -57,7 +57,7 @@ struct CardView: View {
 
                 Spacer()
 
-                if isFlipped {
+                if !isFlipped {
                     Text(term.spelling ?? "")
                         .font(.title3)
                         .fontWeight(.bold)
