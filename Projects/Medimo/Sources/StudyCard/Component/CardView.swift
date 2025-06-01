@@ -9,6 +9,11 @@ import SwiftUI
 
 struct CardView: View {
     let term: Term
+    
+    @State private var isPlaying = false
+    @State private var isBookmarked = false
+    @State private var isFlipped = false
+
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -18,34 +23,59 @@ struct CardView: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    Image(systemName: "speaker.fill")
-                        .resizable()
-                        .frame(width: 18, height: 28)
-                        .foregroundColor(Color("Navy"))
+                    Button(action: {
+                    isPlaying.toggle()
+                    }) {
+                        Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
+                            .imageScale(.large)
+                            .font(.system(size: 24))
+                            .foregroundColor(Color("Navy"))
+                    }
+                    .onTapGesture {
+                        isPlaying.toggle()
+                        
+                    }
 
                     Spacer()
-
-                    Image(systemName: "bookmark")
-                        .resizable()
-                        .frame(width: 18, height: 28)
-                        .foregroundColor(Color("Navy"))
+                    
+                    Button(action: {
+                        isBookmarked.toggle()
+                    }) {
+                        Image(systemName: isBookmarked ? "bookmark.fill" :"bookmark")
+                            .imageScale(.large)
+                            .font(.system(size: 20))
+                            .foregroundColor(Color("Navy"))
+                    }
+                    .onTapGesture {
+                        isBookmarked.toggle()
+                    }
                 }
 
                 Spacer()
 
-                Text(term.spelling ?? "")
-                    .font(.title3)
-                    .fontWeight(.bold)
-
-                Text(term.abbreviation ?? "")
-                    .font(.caption)
-                    .fontWeight(.medium)
+                if isFlipped {
+                    Text(term.spelling ?? "")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    
+                    Text(term.abbreviation ?? "")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                } else {
+                    Text(term.meaning ?? "")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("Navy"))
+                }
 
                 Spacer()
             }
             .padding(24)
         }
         .frame(width: 300, height: 180)
+        .onTapGesture {
+            isFlipped.toggle()
+        }
     }
 }
 
