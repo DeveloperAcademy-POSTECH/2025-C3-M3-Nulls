@@ -40,6 +40,12 @@ extension Glossary {
 
 }
 
+extension Glossary {
+    public var termsArray: [Term] {
+        return Array(terms as! Set<Term>)
+    }
+}
+
 extension Glossary : Identifiable {
 
 }
