@@ -11,15 +11,45 @@ struct StudyCardView: View {
     @Environment(\.managedObjectContext) private var context
     
     @State private var viewModel: StudyCardViewModel
+    @State private var index: Int
     
     init(glossary: Glossary) {
         _viewModel = State(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
+        index = 1
     }
     
     var body: some View {
-        List(viewModel.studyTerms) { studyTerm in
-            Text(studyTerm.spelling ?? "")
+        VStack {
+            Spacer()
+            
+            Text("\(index) / \(viewModel.studyTermSize)")
+            
+            CardView(term: viewModel.studyTerms[0])//index - 1])
+                .padding(20)
+            
+            HStack(spacing: 6) {
+                ForEach(0..<viewModel.studyTermSize, id: \.self) { i in
+                    Circle()
+                        .fill(i == index - 1 ? Color.indigo : Color.gray.opacity(0.3))
+                        .frame(width: 8, height: 8)
+                }
+            }
+
+            Spacer()
+
+            if viewModel.studyTermSize == index {
+                Button("문제 풀기") {
+                    // TODO: 액션 정의
+                }
+                .frame(width: 220)
+                .padding(20)
+                .background(Color.indigo)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .shadow(radius: 3)
+            }
         }
+        .padding(20)
     }
 }
 
