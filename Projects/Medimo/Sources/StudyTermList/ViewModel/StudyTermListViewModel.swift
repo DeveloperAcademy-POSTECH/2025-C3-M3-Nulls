@@ -12,20 +12,23 @@ import Observation
 @Observable
 class StudyTermListViewModel {
     var studyTerms: [Term] = []
-    var glossary = "Anatomy Terms"
-    var splitSize = 5
+    var glossary: Glossary
+    var splitSize: Int
     
     private let context: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext) {
+    init(context: NSManagedObjectContext, glossary: Glossary, splitSize: Int) {
         self.context = context
-        fetchStudyTerms(splitSize, glossary)
+        self.glossary = glossary
+        self.splitSize = splitSize
+        fetchStudyTerms()
     }
     
-    func fetchStudyTerms(_ splitBy: Int, _ glossary: String) {
+    func fetchStudyTerms() {
         let request: NSFetchRequest<Term> = Term.fetchRequest()
+        
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Term.spelling, ascending: true)]
-        request.predicate = NSPredicate(format: "ANY glossarys.title == %@", glossary)
+        request.predicate = NSPredicate(format: "ANY glossarys == %@", glossary)
         request.fetchLimit = splitSize
         
         do {
