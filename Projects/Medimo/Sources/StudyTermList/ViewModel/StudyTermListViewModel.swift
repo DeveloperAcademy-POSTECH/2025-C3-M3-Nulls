@@ -13,30 +13,22 @@ import Observation
 class StudyTermListViewModel {
     var studyTerms: [Term] = []
     var glossary: Glossary
-    var splitSize: Int
+    var studyTermSize: Int
     
-    private let context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext, glossary: Glossary, splitSize: Int) {
-        self.context = context
+    init(glossary: Glossary, studyTermSize: Int) {
         self.glossary = glossary
-        self.splitSize = splitSize
-        fetchStudyTerms()
+        self.studyTermSize = studyTermSize
+        self.studyTerms = getStudyTerms(glossary.termsArray, studyTermSize: studyTermSize)
     }
-    
-    func fetchStudyTerms() {
-        let request: NSFetchRequest<Term> = Term.fetchRequest()
-        
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Term.spelling, ascending: true)]
-        request.predicate = NSPredicate(format: "ANY glossarys == %@", glossary)
-        request.fetchLimit = splitSize
-        
-        do {
-            studyTerms = try context.fetch(request)
-        } catch {
-            #if DEBUG
-            print("Failed to fetch studyTerms: \(error)")
-            #endif
+
+    func getStudyTerms(_ terms: [Term], studyTermSize: Int) -> [Term] {
+        // TODO: getStudyTerms 고도화
+        // 현재는 그냥 앞에서부터 studyTermSize 만큼 반환하도록 되어 있는데, 학습여부 등을 고려한 로직이 필요.
+        var studyTerms: [Term] = []
+        for i in stride(from: 0, to: terms.count, by: studyTermSize) {
+            let endIndex = min(i + studyTermSize, terms.count)
+            studyTerms.append(contentsOf: terms[i..<endIndex])
         }
+        return studyTerms
     }
 }

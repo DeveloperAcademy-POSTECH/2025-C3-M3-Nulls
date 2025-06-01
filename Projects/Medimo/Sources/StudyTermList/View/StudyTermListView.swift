@@ -12,8 +12,8 @@ struct StudyTermListView: View {
     
     @State private var viewModel: StudyTermListViewModel
     
-    init(glossary: Glossary, context: NSManagedObjectContext) {
-        _viewModel = State(wrappedValue: StudyTermListViewModel(context: context, glossary: glossary, splitSize: 5))
+    init(glossary: Glossary) {
+        _viewModel = State(wrappedValue: StudyTermListViewModel(glossary: glossary, studyTermSize: 5))
     }
     
     var body: some View {
@@ -27,6 +27,6 @@ struct StudyTermListView: View {
     let context = PersistenceController.preview.container.viewContext
     let glossary = try! context.fetch(Glossary.fetchRequest())[0]
     
-    return StudyTermListView(glossary: glossary, context: context)
+    return StudyTermListView(glossary: glossary)
         .environment(\.managedObjectContext, context)
 }
