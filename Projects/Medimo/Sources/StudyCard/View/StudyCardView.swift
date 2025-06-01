@@ -50,16 +50,17 @@ struct StudyCardView: View {
                 
                 Spacer()
                 
-                Button("문제 풀기") {
-                    // TODO: 액션 정의
+                if viewModel.studyTermSize == index {
+                    Button("문제 풀기") {
+                        // TODO: 액션 정의
+                    }
+                    .frame(width: 220)
+                    .padding(20)
+                    .background(Color("Navy"))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 3)
                 }
-                .frame(width: 220)
-                .padding(20)
-                .background(Color("Navy"))
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                .shadow(radius: 3)
-                .opacity(viewModel.studyTermSize == index ? 1 : 0)
             }
             .padding(20)
         }
