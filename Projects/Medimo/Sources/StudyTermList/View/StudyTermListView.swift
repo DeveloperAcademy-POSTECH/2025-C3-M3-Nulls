@@ -13,7 +13,7 @@ struct StudyTermListView: View {
     @State var viewModel: StudyTermListViewModel
     
     init(context: NSManagedObjectContext) {
-        _viewModel = State(wrappedValue: StudyTermㅎListViewModel(context: context))
+        _viewModel = State(wrappedValue: StudyTermListViewModel(context: context))
     }
     
     var body: some View {
