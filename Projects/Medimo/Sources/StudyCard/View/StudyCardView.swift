@@ -7,13 +7,13 @@
 import SwiftUI
 import CoreData
 
-struct StudyTermListView: View {
+struct StudyCardView: View {
     @Environment(\.managedObjectContext) private var context
     
-    @State private var viewModel: StudyTermListViewModel
+    @State private var viewModel: StudyCardViewModel
     
     init(glossary: Glossary) {
-        _viewModel = State(wrappedValue: StudyTermListViewModel(glossary: glossary, studyTermSize: 5))
+        _viewModel = State(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
     }
     
     var body: some View {
@@ -27,6 +27,6 @@ struct StudyTermListView: View {
     let context = PersistenceController.preview.container.viewContext
     let glossary = try! context.fetch(Glossary.fetchRequest())[0]
     
-    return StudyTermListView(glossary: glossary)
+    return StudyCardView(glossary: glossary)
         .environment(\.managedObjectContext, context)
 }
