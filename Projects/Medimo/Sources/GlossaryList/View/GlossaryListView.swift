@@ -10,21 +10,29 @@ import CoreData
 
 struct GlossaryListView: View {
     @Environment(\.managedObjectContext) var context
-    @State var viewModel: GlossaryListViewModel
+    @State private var viewModel: GlossaryListViewModel
     
     init(context: NSManagedObjectContext) {
         _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
     }
     
     var body: some View {
-        List {
-            ForEach(viewModel.glossaries) { glossary in
-                Text(glossary.title ?? "")
+        NavigationStack {
+            List {
+                ForEach(viewModel.glossaries) { glossary in
+                    NavigationLink(destination: GlossaryDetailView(glossary: glossary)) {
+                        Text(glossary.title ?? "")
+                    }
+                }
             }
+            .navigationTitle(Text("Glossary List"))
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
 
 #Preview {
-    GlossaryListView(context: PersistenceController.preview.container.viewContext)
+    let context = PersistenceController.preview.container.viewContext
+    GlossaryListView(context: context)
+        .environment(\.managedObjectContext, context)
 }

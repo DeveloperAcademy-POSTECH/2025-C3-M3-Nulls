@@ -11,16 +11,14 @@ import Observation
 
 @Observable
 class GlossaryListViewModel {
-    var glossaries: [Glossary] = []
+    var glossaries: [Glossary]
     
-    private let context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.context = context
-        fetchGlossaries()
+    init(context: NSManagedObjectContext, glossaries: [Glossary] = []) {
+        self.glossaries = glossaries
+        fetchGlossaries(context: context)
     }
     
-    func fetchGlossaries() {
+    func fetchGlossaries(context: NSManagedObjectContext) {
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Glossary.title, ascending: true)]
         
