@@ -30,7 +30,7 @@ struct StudyCardView: View {
             HStack(spacing: 6) {
                 ForEach(0..<viewModel.studyTermSize, id: \.self) { i in
                     Circle()
-                        .fill(i == index - 1 ? Color.indigo : Color.gray.opacity(0.3))
+                        .fill(i == index - 1 ? Color("Navy") : Color.gray.opacity(0.3))
                         .frame(width: 8, height: 8)
                 }
             }
@@ -43,7 +43,7 @@ struct StudyCardView: View {
                 }
                 .frame(width: 220)
                 .padding(20)
-                .background(Color.indigo)
+                .background(Color("Navy"))
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .shadow(radius: 3)

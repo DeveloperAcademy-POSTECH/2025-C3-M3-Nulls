@@ -21,14 +21,14 @@ struct CardView: View {
                     Image(systemName: "speaker.fill")
                         .resizable()
                         .frame(width: 18, height: 28)
-                        .foregroundColor(.indigo)
+                        .foregroundColor(Color("Navy"))
 
                     Spacer()
 
                     Image(systemName: "bookmark")
                         .resizable()
                         .frame(width: 18, height: 28)
-                        .foregroundColor(.indigo)
+                        .foregroundColor(Color("Navy"))
                 }
 
                 Spacer()
