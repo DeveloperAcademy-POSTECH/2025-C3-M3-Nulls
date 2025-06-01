@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Glossary" representedClassName="Glossary" syncable="YES">
-        <attribute name="grossaryKey" optional="YES" attributeType="String"/>
+        <attribute name="glossaryKey" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="glossarys" inverseEntity="Term"/>

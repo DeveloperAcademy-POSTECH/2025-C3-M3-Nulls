@@ -1,0 +1,30 @@
+[
+  {
+    "termKey": "neuron",
+    "spelling": "Neuron",
+    "abbreviation": null,
+    "meaning": "신경세포",
+    "explanation": "뉴런은 신경계의 기본 단위로, 전기 신호를 전달합니다."
+  },
+  {
+    "termKey": "aspirin",
+    "spelling": "Aspirin",
+    "abbreviation": "ASA",
+    "meaning": "진통·해열·소염제",
+    "explanation": null
+  },
+  {
+    "termKey": "infarction",
+    "spelling": "Infarction",
+    "abbreviation": null,
+    "meaning": "경색, 조직 괴사",
+    "explanation": "혈류 공급이 차단되어 조직이 죽는 현상입니다."
+  },
+  {
+    "termKey": "hepatitis",
+    "spelling": "Hepatitis",
+    "abbreviation": null,
+    "meaning": "간염",
+    "explanation": "간에 염증이 생긴 상태로, 바이러스 또는 알코올에 의해 유발됩니다."
+  }
+]

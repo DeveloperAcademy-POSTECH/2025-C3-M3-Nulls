@@ -1,24 +1,30 @@
 //
-//  Glossary.swift
-//  Projects
+//  Glossary+CoreDataProperties.swift
+//  Medimo
 //
-//  Created by 양시준 on 5/30/25.
+//  Created by 양시준 on 6/1/25.
+//
 //
 
 import Foundation
 import CoreData
 
-@objc(Glossary)
-public class Glossary: NSManagedObject, Identifiable {
-    
+
+extension Glossary {
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Glossary> {
         return NSFetchRequest<Glossary>(entityName: "Glossary")
     }
 
-    @NSManaged public var id: UUID
     @NSManaged public var glossaryKey: String?
-    @NSManaged public var title: String
+    @NSManaged public var id: UUID?
+    @NSManaged public var title: String?
     @NSManaged public var terms: NSSet?
+
+}
+
+// MARK: Generated accessors for terms
+extension Glossary {
 
     @objc(addTermsObject:)
     @NSManaged public func addToTerms(_ value: Term)
@@ -31,4 +37,9 @@ public class Glossary: NSManagedObject, Identifiable {
 
     @objc(removeTerms:)
     @NSManaged public func removeFromTerms(_ values: NSSet)
+
+}
+
+extension Glossary : Identifiable {
+
 }
