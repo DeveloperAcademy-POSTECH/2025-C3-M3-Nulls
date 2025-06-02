@@ -2,7 +2,7 @@
 //  Term+CoreDataProperties.swift
 //  Medimo
 //
-//  Created by 양시준 on 6/1/25.
+//  Created by 이서현 on 6/2/25.
 //
 //
 
@@ -22,6 +22,7 @@ extension Term {
     @NSManaged public var meaning: String?
     @NSManaged public var spelling: String?
     @NSManaged public var termKey: String?
+    @NSManaged public var isBookmarked: Bool
     @NSManaged public var glossarys: NSSet?
     @NSManaged public var morphemes: NSSet?
 

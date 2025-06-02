@@ -10,11 +10,11 @@ import CoreData
 struct StudyCardView: View {
     @Environment(\.managedObjectContext) private var context
     
-    @State private var viewModel: StudyCardViewModel
+    @Bindable private var viewModel: StudyCardViewModel
     @State private var index: Int
     
     init(glossary: Glossary) {
-        _viewModel = State(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
+        _viewModel = .init(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
         index = 5
     }
     
