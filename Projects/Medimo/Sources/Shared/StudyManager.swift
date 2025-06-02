@@ -28,7 +28,7 @@ public class StudyManager {
     
     var studyingGlossaryId: UUID? {
         didSet {
-            _cachedStudyGlossary = nil
+            _cachedStudyingGlossary = nil
             _cachedTermLearningStatusList = nil
         }
     }
