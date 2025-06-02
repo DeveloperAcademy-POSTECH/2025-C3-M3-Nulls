@@ -15,7 +15,7 @@ struct StudyTermListView: View {
     
     init(glossary: Glossary) {
         _viewModel = State(wrappedValue: StudyTermListViewModel(glossary: glossary, studyTermSize: 5))
-        index = 1
+        index = 5
     }
     
     var body: some View {
@@ -23,30 +23,28 @@ struct StudyTermListView: View {
             VStack {
                 Spacer()
                 
-                Text("\(index) / \(viewModel.studyTermSize)")
+                HStack {
+                    ProgressView(value: Double(index) / Double(viewModel.studyTermSize))
+                                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                                .padding(.trailing)
+                    
+                    Text("\(String(format: "%02d", index)) / \(viewModel.studyTermSize)")
+                }
+                .padding(.vertical)
                 
                 StudyTermCardView(term: viewModel.studyTerms[index - 1])
-                    .padding(20)
                     .gesture(
                         DragGesture()
                             .onEnded { value in
                                 let horizontalAmount = value.translation.width
                                 
-                                if horizontalAmount < -50 {
+                                if horizontalAmount < -50, index < viewModel.studyTermSize {
                                     index += 1
-                                } else if horizontalAmount > 50 {
+                                } else if horizontalAmount > 50, index > 1 {
                                     index -= 1
                                 }
                             }
                     )
-                
-                HStack(spacing: 6) {
-                    ForEach(0..<viewModel.studyTermSize, id: \.self) { i in
-                        Circle()
-                            .fill(i == index - 1 ? Color("Navy") : Color.gray.opacity(0.3))
-                            .frame(width: 8, height: 8)
-                    }
-                }
                 
                 Spacer()
                 
@@ -61,7 +59,7 @@ struct StudyTermListView: View {
                 .shadow(radius: 3)
                 .opacity(viewModel.studyTermSize == index ? 1 : 0)
             }
-            .padding(20)
+            .padding(40)
         }
     }
 }
