@@ -21,8 +21,6 @@ struct StudyTermListView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Spacer()
-                
                 HStack {
                     ProgressView(value: Double(index) / Double(viewModel.studyTermSize))
                                 .progressViewStyle(LinearProgressViewStyle(tint: .blue))
@@ -30,7 +28,7 @@ struct StudyTermListView: View {
                     
                     Text("\(String(format: "%02d", index)) / \(viewModel.studyTermSize)")
                 }
-                .padding(.vertical)
+                .padding(.bottom)
                 
                 StudyTermCardView(term: viewModel.studyTerms[index - 1])
                     .gesture(
@@ -52,14 +50,18 @@ struct StudyTermListView: View {
                     // TODO: 액션 정의
                 }
                 .frame(width: 220)
-                .padding(20)
+                .padding(.vertical, 14)
+                .padding(.horizontal, 20)
                 .background(Color("Navy"))
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .shadow(radius: 3)
                 .opacity(viewModel.studyTermSize == index ? 1 : 0)
+                
+                Spacer()
             }
-            .padding(40)
+            .padding(.horizontal, 40)
+            .padding(.bottom, 20)
         }
     }
 }

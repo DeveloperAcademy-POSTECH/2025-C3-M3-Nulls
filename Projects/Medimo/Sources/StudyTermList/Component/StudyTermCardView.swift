@@ -54,40 +54,88 @@ struct StudyTermCardView: View {
                         isBookmarked.toggle()
                     }
                 }
+                .padding(20)
 
-                Spacer()
-
-                if !isFlipped {
-                    Text(term.spelling ?? "")
-                        .font(.title3)
+                VStack(alignment: .leading) {
+                    Text((isFlipped ? term.meaning : term.spelling) ?? "")
+                        .font(.title)
                         .fontWeight(.bold)
+                        .padding(.vertical)
                     
-                    Text(term.abbreviation ?? "")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                } else {
-                    Text(term.meaning ?? "")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("Navy"))
+                    if !isFlipped, term.abbreviation != nil {
+                        Text("[\(String(term.abbreviation!))]")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                    }
                 }
+                .foregroundColor(Color("Navy"))
+                .padding(20)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
+                
+                VStack(alignment: .leading) {
+                    if isFlipped {
+                        Text(term.explanation ?? "")
+                    } else {
+                        if let morphemes = term.morphemes as? Set<Morpheme> {
+                            let morphemeArray = morphemes.sorted { ($0.spelling ?? "") < ($1.spelling ?? "") }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                ForEach(morphemeArray, id: \.self) { morpheme in
+                                    Text("\(morpheme.spelling ?? "") \(morpheme.meaning ?? "")")
+                                        .font(.caption)
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 40)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(24)
+            .padding(28)
         }
-        .frame(width: 300, height: 180)
+        .frame(height: 480)
         .onTapGesture {
             isFlipped.toggle()
         }
     }
 }
 
+//#Preview {
+//    let context = PersistenceController.preview.container.viewContext
+//    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+//    
+//    let term = (glossary.terms?.allObjects as? [Term])?.first ?? Term()
+//
+//    StudyTermCardView(term: term)
+//}
+
 #Preview {
     let context = PersistenceController.preview.container.viewContext
-    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
-    
-    let term = (glossary.terms?.allObjects as? [Term])?.first ?? Term()
 
-    StudyTermCardView(term: term)
+    // 예시 Morpheme 객체 생성 (context 포함)
+    let morpheme1 = Morpheme(context: context)
+    morpheme1.spelling = "neur"
+    morpheme1.meaning = "신경"
+
+    let morpheme2 = Morpheme(context: context)
+    morpheme2.spelling = "itis"
+    morpheme2.meaning = "~의 염증"
+
+    // 예시 Term 객체 생성 (context 포함)
+    let term = Term(context: context)
+    term.spelling = "Neuritis"
+    term.abbreviation = "NT"
+    term.meaning = "신경의 염증"
+    term.morphemes = NSSet(array: [morpheme1, morpheme2])
+    term.explanation = """
+    Neuritis는 신경에 염증이 생긴 상태를 의미합니다.  
+    이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.  
+    주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
+    """
+
+    return StudyTermCardView(term: term)
+        .environment(\.managedObjectContext, context)
 }
