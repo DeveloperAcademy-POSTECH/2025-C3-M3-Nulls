@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StudyTermCardView: View {
+struct TermCardView: View {
     let term: Term
     
     @State private var isPlaying = false

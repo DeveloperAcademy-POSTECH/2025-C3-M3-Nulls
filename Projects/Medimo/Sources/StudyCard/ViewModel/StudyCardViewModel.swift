@@ -10,7 +10,7 @@ import CoreData
 import Observation
 
 @Observable
-class StudyTermListViewModel {
+class StudyCardViewModel {
     var studyTerms: [Term] = []
     var glossary: Glossary
     var studyTermSize: Int
