@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct TermCardView: View {
-    let term: Term
+    @ObservedObject var term: Term
     
     @State private var isPlaying = false
-    @State private var isBookmarked = false
     @State private var isFlipped = false
 
 
@@ -43,15 +42,12 @@ struct TermCardView: View {
                     Spacer()
                     
                     Button(action: {
-                        isBookmarked.toggle()
+                        term.isBookmarked.toggle()
                     }) {
-                        Image(systemName: isBookmarked ? "bookmark.fill" :"bookmark")
+                        Image(systemName: term.isBookmarked ? "bookmark.fill" :"bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
                             .foregroundColor(Color("Navy"))
-                    }
-                    .onTapGesture {
-                        isBookmarked.toggle()
                     }
                 }
                 .padding(20)
@@ -103,39 +99,29 @@ struct TermCardView: View {
     }
 }
 
-//#Preview {
-//    let context = PersistenceController.preview.container.viewContext
-//    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
-//    
-//    let term = (glossary.terms?.allObjects as? [Term])?.first ?? Term()
-//
-//    StudyTermCardView(term: term)
-//}
-
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-
-    // 예시 Morpheme 객체 생성 (context 포함)
+    var context = PersistenceController.preview.container.viewContext
+    var term = Term(context: context)
+    
     let morpheme1 = Morpheme(context: context)
     morpheme1.spelling = "neur"
     morpheme1.meaning = "신경"
-
+    
     let morpheme2 = Morpheme(context: context)
     morpheme2.spelling = "itis"
     morpheme2.meaning = "~의 염증"
-
-    // 예시 Term 객체 생성 (context 포함)
-    let term = Term(context: context)
+    
+    term = Term(context: context)
     term.spelling = "Neuritis"
     term.abbreviation = "NT"
     term.meaning = "신경의 염증"
     term.morphemes = NSSet(array: [morpheme1, morpheme2])
     term.explanation = """
-    Neuritis는 신경에 염증이 생긴 상태를 의미합니다.  
-    이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.  
+    Neuritis는 신경에 염증이 생긴 상태를 의미합니다.
+    이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.
     주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
     """
-
-    return StudyTermCardView(term: term)
+    
+    return TermCardView(term: term)
         .environment(\.managedObjectContext, context)
 }

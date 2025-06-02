@@ -35,6 +35,7 @@ struct PersistenceController {
             newTerm.meaning = "meaning\(i)"
             newTerm.abbreviation = "abbreviation\(i)"
             newTerm.explanation = "explanation\(i)"
+            newTerm.isBookmarked = false
             mockTerms.append(newTerm)
         }
 //        
@@ -81,6 +82,8 @@ struct PersistenceController {
                 fatalError("Unresolved error loading store \(error), \(error.userInfo)")
             }
         })
+        container.persistentStoreDescriptions.first?.shouldMigrateStoreAutomatically = true
+        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
         
         let context = container.viewContext
         if isFirstLaunch() {
