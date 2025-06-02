@@ -22,6 +22,71 @@
   {
     "morphemeKey": "infarct",
     "spelling": "infarct",
-    "meaning": "막힘, 채워짐"
+    "meaning": "막힘; 채워짐"
+  },
+  {
+    "morphemeKey": "acid",
+    "spelling": "acid",
+    "meaning": "산"
+  },
+  {
+    "morphemeKey": "anti",
+    "spelling": "anti",
+    "meaning": "반대; 억제"
+  },
+  {
+    "morphemeKey": "arteri",
+    "spelling": "arteri",
+    "meaning": "동맥"
+  },
+  {
+    "morphemeKey": "bio",
+    "spelling": "bio",
+    "meaning": "생명"
+  },
+  {
+    "morphemeKey": "emia",
+    "spelling": "emia",
+    "meaning": "혈액 상태"
+  },
+  {
+    "morphemeKey": "hepat",
+    "spelling": "hepat",
+    "meaning": "간"
+  },
+  {
+    "morphemeKey": "infect",
+    "spelling": "infect",
+    "meaning": "감염"
+  },
+  {
+    "morphemeKey": "infarct",
+    "spelling": "infarct",
+    "meaning": "막힘, 경색"
+  },
+  {
+    "morphemeKey": "itis",
+    "spelling": "itis",
+    "meaning": "~의 염증"
+  },
+  {
+    "morphemeKey": "myo",
+    "spelling": "myo",
+    "meaning": "근육"
+  },
+  {
+    "morphemeKey": "neur",
+    "spelling": "neur",
+    "meaning": "신경"
+  },
+  {
+    "morphemeKey": "oma",
+    "spelling": "oma",
+    "meaning": "종양"
+  },
+  {
+    "morphemeKey": "oste",
+    "spelling": "oste",
+    "meaning": "뼈"
   }
 ]

@@ -7,12 +7,70 @@
     "explanation": "뉴런은 신경계의 기본 단위로, 전기 신호를 전달합니다."
   },
   {
+    "termKey": "muscle",
+    "spelling": "Muscle",
+    "abbreviation": null,
+    "meaning": "근육",
+    "explanation": "수축과 이완을 통해 신체를 움직이는 조직입니다."
+  },
+  {
+    "termKey": "artery",
+    "spelling": "Artery",
+    "abbreviation": null,
+    "meaning": "동맥",
+    "explanation": "심장에서 혈액을 운반하는 혈관입니다."
+  },
+  {
+    "termKey": "bone",
+    "spelling": "Bone",
+    "abbreviation": null,
+    "meaning": "뼈",
+    "explanation": "신체의 구조를 지지하고 보호하는 조직입니다."
+  },
+  {
+    "termKey": "nerve",
+    "spelling": "Nerve",
+    "abbreviation": null,
+    "meaning": "신경",
+    "explanation": "신호를 전달하는 세포의 다발입니다."
+  },
+
+  {
     "termKey": "aspirin",
     "spelling": "Aspirin",
     "abbreviation": "ASA",
     "meaning": "진통·해열·소염제",
     "explanation": null
   },
+  {
+    "termKey": "acetaminophen",
+    "spelling": "Acetaminophen",
+    "abbreviation": "APAP",
+    "meaning": "진통제, 해열제",
+    "explanation": "통증 완화 및 열을 내리는 데 사용됩니다."
+  },
+  {
+    "termKey": "ibuprofen",
+    "spelling": "Ibuprofen",
+    "abbreviation": null,
+    "meaning": "소염진통제",
+    "explanation": "염증, 통증, 열을 완화합니다."
+  },
+  {
+    "termKey": "antibiotic",
+    "spelling": "Antibiotic",
+    "abbreviation": null,
+    "meaning": "항생제",
+    "explanation": "세균 감염을 치료합니다."
+  },
+  {
+    "termKey": "antacid",
+    "spelling": "Antacid",
+    "abbreviation": null,
+    "meaning": "제산제",
+    "explanation": "위산을 중화하여 속쓰림을 완화합니다."
+  },
+
   {
     "termKey": "infarction",
     "spelling": "Infarction",
@@ -25,6 +83,27 @@
     "spelling": "Hepatitis",
     "abbreviation": null,
     "meaning": "간염",
-    "explanation": "간에 염증이 생긴 상태로, 바이러스 또는 알코올에 의해 유발됩니다."
+    "explanation": "간에 염증이 생긴 상태입니다."
+  },
+  {
+    "termKey": "anemia",
+    "spelling": "Anemia",
+    "abbreviation": null,
+    "meaning": "빈혈",
+    "explanation": "혈액 내 적혈구 또는 헤모글로빈 부족 상태입니다."
+  },
+  {
+    "termKey": "tumor",
+    "spelling": "Tumor",
+    "abbreviation": null,
+    "meaning": "종양",
+    "explanation": "세포의 비정상적인 성장입니다."
+  },
+  {
+    "termKey": "infection",
+    "spelling": "Infection",
+    "abbreviation": null,
+    "meaning": "감염",
+    "explanation": "병원체에 의해 신체 조직이 손상된 상태입니다."
   }
 ]
