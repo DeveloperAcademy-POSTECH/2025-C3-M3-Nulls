@@ -16,7 +16,7 @@ struct StudyView: View {
     
     var body: some View {
         NavigationStack {
-            NavigationLink(destination: StudyTermListView(glossary: viewModel.studyingGlossary)) {
+            NavigationLink(destination: StudyCardView(glossary: viewModel.studyingGlossary)) {
                 Text("Study")
                     .font(.headline)
                     .fontWeight(.bold)

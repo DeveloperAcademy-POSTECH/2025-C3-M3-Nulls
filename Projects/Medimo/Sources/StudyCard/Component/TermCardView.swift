@@ -136,6 +136,6 @@ struct TermCardView: View {
     주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
     """
 
-    return StudyTermCardView(term: term)
+    return TermCardView(term: term)
         .environment(\.managedObjectContext, context)
 }
