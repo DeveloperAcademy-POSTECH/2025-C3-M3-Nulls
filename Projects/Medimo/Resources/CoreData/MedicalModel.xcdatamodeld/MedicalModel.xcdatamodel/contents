@@ -24,4 +24,12 @@
         <relationship name="glossarys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
         <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
     </entity>
+    <entity name="TermLearningStatus" representedClassName="TermLearningStatus" syncable="YES">
+        <attribute name="glossaryId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastReviewedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="nextReviewAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="termId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
 </model>
