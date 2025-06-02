@@ -6,7 +6,7 @@
 //
 
 enum TabType {
-    case glossary
-    case study
-    case dictionary
+  case glossary
+  case study
+  case dictionary
 }

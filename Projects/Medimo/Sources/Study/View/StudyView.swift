@@ -8,32 +8,34 @@
 import SwiftUI
 
 struct StudyView: View {
-    var viewModel: StudyViewModel
-    
-    init(glossary: Glossary) {
-        viewModel = .init(studyingGlossary: glossary)
+  @EnvironmentObject var navigationManager: NavigationManager
+  var viewModel: StudyViewModel
+
+  init(glossary: Glossary) {
+    viewModel = .init(studyingGlossary: glossary)
+  }
+
+  var body: some View {
+    Button {
+      navigationManager.push(to: .StudyTermList(glossary: viewModel.studyingGlossary))
+    } label: {
+      Text("Study")
+        .font(.headline)
+        .fontWeight(.bold)
+        .foregroundColor(.white)
+        .padding()
+        .background(
+          RoundedRectangle(cornerRadius: 10)
+            .fill(Color.blue)
+        )
     }
-    
-    var body: some View {
-        NavigationStack {
-            NavigationLink(destination: StudyTermListView(glossary: viewModel.studyingGlossary)) {
-                Text("Study")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.blue)
-                    )
-            }
-        }
-    }
+  }
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
-    
-    StudyView(glossary: glossary)
+  let context = PersistenceController.preview.container.viewContext
+  let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+
+  StudyView(glossary: glossary)
+    .environmentObject(NavigationManager())
 }
