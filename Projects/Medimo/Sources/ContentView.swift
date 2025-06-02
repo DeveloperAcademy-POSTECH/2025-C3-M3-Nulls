@@ -1,13 +1,12 @@
 import SwiftUI
 
-// ContentView.swift
-struct ContentView: View {
-    @Environment(\.managedObjectContext) var context
+  public struct ContentView: View {
+      @Environment(\.managedObjectContext) var context
 
-    var body: some View {
-        let request = Glossary.fetchRequest()
-        let glossary = (try? context.fetch(request).first) ?? Glossary(context: context)
+      public init() {}
 
-        GlossaryListView(context: context)
-    }
+      public var body: some View {
+          GlossaryListView(context: context)
+      }
+  }
 }
