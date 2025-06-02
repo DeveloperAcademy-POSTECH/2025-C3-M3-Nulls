@@ -51,7 +51,7 @@ public class StudyManager {
     }
     
     private var _cachedTermLearningStatusList: [TermLearningStatus]?
-    var termLearngingStatusList: [TermLearningStatus]? {
+    var termLearnStatusList: [TermLearningStatus]? {
         if let cached = _cachedTermLearningStatusList {
             return cached
         }
@@ -82,19 +82,19 @@ public class StudyManager {
     }
     
     func getNextStudyTerms() -> [Term] {
-        guard let studyingGlossaryId else {
-            fatalError("StudyManager: studyingGlossaryId is nil")
+        guard studyingGlossaryId != nil else {
+            return []
         }
         
-        guard let termLearningStatusList = termLearngingStatusList else {
-            fatalError("StudyManager: termLearningStatusList is nil")
+        guard termLearnStatusList != nil else {
+            return []
         }
         
         var termIdList: [UUID] = []
-        var inProgressTermIdList: [UUID] = termLearningStatusList.filter { $0.status == LearningStatus.inProgress.rawValue }.map { $0.termId! }
+        let inProgressTermIdList: [UUID] = termLearnStatusList!.filter { $0.status == LearningStatus.inProgress.rawValue }.map { $0.termId! }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
         if termIdList.count < studyTermSize {
-            let notStartedTermIdList = termLearningStatusList.filter { $0.status == LearningStatus.notStarted.rawValue }.map { $0.termId! }
+            let notStartedTermIdList = termLearnStatusList!.filter { $0.status == LearningStatus.notStarted.rawValue }.map { $0.termId! }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
         
