@@ -7,14 +7,14 @@
 import SwiftUI
 import CoreData
 
-struct StudyCardView: View {
+struct StudyTermListView: View {
     @Environment(\.managedObjectContext) private var context
     
-    @State private var viewModel: StudyCardViewModel
+    @State private var viewModel: StudyTermListViewModel
     @State private var index: Int
     
     init(glossary: Glossary) {
-        _viewModel = State(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
+        _viewModel = State(wrappedValue: StudyTermListViewModel(glossary: glossary, studyTermSize: 5))
         index = 1
     }
     
@@ -25,7 +25,7 @@ struct StudyCardView: View {
                 
                 Text("\(index) / \(viewModel.studyTermSize)")
                 
-                CardView(term: viewModel.studyTerms[index - 1])
+                StudyTermCardView(term: viewModel.studyTerms[index - 1])
                     .padding(20)
                     .gesture(
                         DragGesture()
@@ -70,6 +70,6 @@ struct StudyCardView: View {
     let context = PersistenceController.preview.container.viewContext
     let glossary = try! context.fetch(Glossary.fetchRequest())[0]
     
-    return StudyCardView(glossary: glossary)
+    StudyTermListView(glossary: glossary)
         .environment(\.managedObjectContext, context)
 }

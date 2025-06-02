@@ -1,13 +1,28 @@
 import SwiftUI
 
-// ContentView.swift
-struct ContentView: View {
-    @Environment(\.managedObjectContext) var context
+ public struct ContentView: View {
+     @Environment(\.managedObjectContext) var context
+     @State private var selectedTab: TabType = .study
 
-    var body: some View {
-        let request = Glossary.fetchRequest()
-        let glossary = (try? context.fetch(request).first) ?? Glossary(context: context)
+      public var body: some View {
+          TabView(selection: $selectedTab) {
+              Tab("용어집", systemImage: "book", value: .glossary) {
+                  GlossaryListView(context: context)
+              }
 
-        StudyCardView(glossary: glossary)
-    }
-}
+              Tab("학습", systemImage: "book", value: .study) {
+                  // TODO: StudyManager 구현하여 수정해야 함
+                  StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+              }
+
+              Tab("사전", systemImage: "book", value: .dictionary) {
+                  DictionaryView()
+              }
+          }
+      }
+  }
+
+ #Preview {
+     ContentView()
+         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+ }

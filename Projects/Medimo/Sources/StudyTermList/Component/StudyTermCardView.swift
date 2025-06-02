@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardView: View {
+struct StudyTermCardView: View {
     let term: Term
     
     @State private var isPlaying = false
@@ -89,5 +89,5 @@ struct CardView: View {
     
     let term = (glossary.terms?.allObjects as? [Term])?.first ?? Term()
 
-    CardView(term: term)
+    StudyTermCardView(term: term)
 }
