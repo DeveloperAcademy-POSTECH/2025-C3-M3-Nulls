@@ -1,0 +1,12 @@
+//
+//  LearningStatus.swift
+//  Projects
+//
+//  Created by 양시준 on 6/2/25.
+//
+
+enum LearningStatus: String, CaseIterable {
+    case notStarted = "Not Started"
+    case inProgress = "In Progress"
+    case completed = "Completed"
+}
