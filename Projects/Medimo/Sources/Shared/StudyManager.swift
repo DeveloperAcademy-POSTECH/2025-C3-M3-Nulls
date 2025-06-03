@@ -10,13 +10,15 @@ import CoreData
 
 @Observable
 public class StudyManager {
-    var shared = StudyManager()
+    static let shared = StudyManager()
     
     private var context: NSManagedObjectContext?
     
     init() { }
     
-    var studyTermSize: Int = 10
+    // TODO: sutdyTermSize 설정
+    // 하루에 몇 개씩 공부할 건 지 정할 수 있는 뷰가 생기면 그 쪽에서 데이터 받아와서 설정해야 함.
+    var studyTermSize: Int = 5
     
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context
@@ -24,6 +26,8 @@ public class StudyManager {
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
         request.fetchLimit = 1
         studyingGlossaryId = try? context.fetch(request).first?.id
+        
+        initializeLearningStatus()
     }
     
     var studyingGlossaryId: UUID? {
@@ -81,6 +85,35 @@ public class StudyManager {
         }
     }
     
+    func initializeLearningStatus() {
+        guard let context = context,
+              let glossary = studyingGlossary else { return }
+        
+        let existingStatusList = termLearnStatusList ?? []
+
+        let existingTermIds = Set(existingStatusList.map { $0.termId! })
+
+        for term in glossary.termsArray {
+            if !existingTermIds.contains(term.id!) {
+                let newStatus = TermLearningStatus(context: context)
+                newStatus.termId = term.id
+                newStatus.glossaryId = glossary.id
+                newStatus.status = LearningStatus.notStarted.rawValue
+                newStatus.lastReviewedAt = nil
+                newStatus.nextReviewAt = nil
+            }
+        }
+
+        do {
+            try context.save()
+            _cachedTermLearningStatusList = nil
+        } catch {
+            #if DEBUG
+            print("Failed to initialize learning statuses: \(error)")
+            #endif
+        }
+    }
+    
     func getNextStudyTerms() -> [Term] {
         guard studyingGlossaryId != nil else {
             return []
@@ -113,4 +146,5 @@ public class StudyManager {
         
         return result
     }
+
 }
