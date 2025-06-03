@@ -33,7 +33,7 @@ struct TermCardView: View {
                         Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
                             .imageScale(.large)
                             .font(.system(size: 24))
-                            .foregroundColor(Color("Navy"))
+                            .foregroundColor(Color("MM_Navy"))
                     }
                     .onTapGesture {
                         isPlaying.toggle()
@@ -47,24 +47,22 @@ struct TermCardView: View {
                         Image(systemName: term.isBookmarked ? "bookmark.fill" :"bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
-                            .foregroundColor(Color("Navy"))
+                            .foregroundColor(Color("MM_Navy"))
                     }
                 }
                 .padding(20)
 
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.vertical)
+                        .font(isFlipped ? .MM_H2 : .MM_EH2)
                     
                     if !isFlipped, term.abbreviation != nil {
                         Text("[\(String(term.abbreviation!))]")
-                            .font(.title3)
-                            .fontWeight(.medium)
+                            .font(.MM_EH3)
+                            .padding(.vertical)
                     }
                 }
-                .foregroundColor(Color("Navy"))
+                .foregroundColor(Color("MM_Text"))
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -80,12 +78,13 @@ struct TermCardView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 ForEach(morphemeArray, id: \.self) { morpheme in
                                     Text("\(morpheme.spelling ?? "") \(morpheme.meaning ?? "")")
-                                        .font(.caption)
                                 }
                             }
                         }
                     }
                 }
+                .font(.MM_AT)
+                .foregroundColor(Color("MM_Grey4"))
                 .padding(.horizontal, 20)
                 .padding(.vertical, 40)
                 .frame(maxWidth: .infinity, alignment: .leading)
