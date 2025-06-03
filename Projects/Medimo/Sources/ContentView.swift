@@ -38,14 +38,14 @@ public struct ContentView: View {
                                 StudyCardView(glossary: glossary)
                                     .environmentObject(studyNavigationManager)
 
-                            case let .StudyTest(glossary):
-                                EmptyView()
-
-                            case let .ReviewTest(glossary):
-                                EmptyView()
-
-                            case .TestCompletion:
-                                EmptyView()
+//                            case let .StudyTest(glossary):
+//                                EmptyView()
+//
+//                            case let .ReviewTest(glossary):
+//                                EmptyView()
+//
+//                            case .TestCompletion:
+//                                EmptyView()
 
                             default:
                                 EmptyView()
