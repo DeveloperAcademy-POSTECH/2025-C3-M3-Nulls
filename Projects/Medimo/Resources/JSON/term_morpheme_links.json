@@ -1,7 +1,27 @@
 [
   {
-    "termKey": "neuron",
-    "morphemeKey": "neur"
+    "termKey": "anemia",
+    "morphemeKey": "emia"
+  },
+  {
+    "termKey": "tumor",
+    "morphemeKey": "oma"
+  },
+  {
+    "termKey": "infection",
+    "morphemeKey": "infect"
+  },
+  {
+    "termKey": "antacid",
+    "morphemeKey": "anti"
+  },
+  {
+    "termKey": "antacid",
+    "morphemeKey": "acid"
+  },
+  {
+    "termKey": "artery",
+    "morphemeKey": "arteri"
   },
   {
     "termKey": "hepatitis",
@@ -12,7 +32,23 @@
     "morphemeKey": "itis"
   },
   {
-    "termKey": "infarction",
-    "morphemeKey": "infarct"
+    "termKey": "neuron",
+    "morphemeKey": "neur"
+  },
+  {
+    "termKey": "muscle",
+    "morphemeKey": "myo"
+  },
+  {
+    "termKey": "bone",
+    "morphemeKey": "oste"
+  },
+  {
+    "termKey": "cardiology",
+    "morphemeKey": "cardi"
+  },
+  {
+    "termKey": "cardiology",
+    "morphemeKey": "logy"
   }
 ]
