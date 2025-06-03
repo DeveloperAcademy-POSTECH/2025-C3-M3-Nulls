@@ -31,13 +31,15 @@ struct DictionaryDetailView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24)
-                                .foregroundStyle(Color.black)
+                                .foregroundStyle(Color("MM_Navy"))
+                                
                         }
                         Spacer()
                         Image(systemName: "bookmark")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22.5, height: 17.5)
+                            .foregroundStyle(Color("MM_Navy"))
                     }
                     .padding(.horizontal,32)
                     .padding(.top, 48)
@@ -47,7 +49,7 @@ struct DictionaryDetailView: View {
                             .font(.MM_EH2)
                             .foregroundColor(Color("MM_Navy"))
 
-                        Text(viewModel.term.abbreviation ?? "[no abbreviation]")
+                        Text("[\(viewModel.term.abbreviation ?? "no abbreviation")]")
                             .font(.MM_EH2)
                             .foregroundColor(Color("MM_Navy"))
 
@@ -58,6 +60,7 @@ struct DictionaryDetailView: View {
                         )
                         .font(.MM_AT)
                         .foregroundColor(Color("MM_Blue"))
+                        .padding(.top, 20)
 
                         Rectangle()
                             .frame(height: 1)
@@ -65,10 +68,13 @@ struct DictionaryDetailView: View {
                     }
                     .padding(.horizontal,32)
 
+                    
+                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("의미")
                             .font(.MM_AT)
                             .foregroundColor(Color("MM_Grey3"))
+                            
 
                         Rectangle()
                             .frame(height: 1)
@@ -79,6 +85,7 @@ struct DictionaryDetailView: View {
                             .foregroundColor(Color("MM_Navy"))
                     }
                     .padding(.horizontal,32)
+                    .padding(.top, 20)
 
                     VStack(alignment: .leading, spacing: 10) {
                         Text("어원")
@@ -107,6 +114,7 @@ struct DictionaryDetailView: View {
                         }
                     }
                     .padding(.horizontal,32)
+                    .padding(.top, 20)
 
                     VStack(alignment: .leading, spacing: 10) {
                         Text("설명")
@@ -122,6 +130,7 @@ struct DictionaryDetailView: View {
                             .foregroundColor(Color("MM_Navy"))
                     }
                     .padding(.horizontal,32)
+                    .padding(.top, 20)
 
                     Spacer()
                 }
@@ -138,7 +147,7 @@ struct DictionaryDetailView: View {
 
 #Preview {
     DictionaryDetailView(
-        term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[1]
+        term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[0]
     )
     .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
