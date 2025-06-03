@@ -27,6 +27,8 @@ struct StudyCardView: View {
                                 .padding(.trailing)
                     
                     Text("\(String(format: "%02d", index)) / \(viewModel.studyTermSize)")
+                        .font(.MM_AT)
+                        .foregroundColor(Color("MM_Navy"))
                 }
                 .padding(.bottom)
                 
@@ -46,15 +48,16 @@ struct StudyCardView: View {
                 
                 Spacer()
                 
-                Button("문제 풀기") {
+                Button("용어 테스트 시작") {
                     // TODO: 액션 정의
                 }
-                .frame(width: 220)
+                .font(.MM_Pr)
+                .frame(width: 262, height: 40)
                 .padding(.vertical, 14)
                 .padding(.horizontal, 20)
-                .background(Color("Navy"))
-                .foregroundColor(.white)
-                .cornerRadius(10)
+                .background(Color("MM_Navy"))
+                .foregroundColor(Color("MM_White"))
+                .cornerRadius(16)
                 .shadow(radius: 3)
                 .opacity(viewModel.studyTermSize == index ? 1 : 0)
                 
