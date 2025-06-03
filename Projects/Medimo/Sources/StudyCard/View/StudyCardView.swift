@@ -27,7 +27,7 @@ struct StudyCardView: View {
     var body: some View {
         VStack {
             HStack {
-                ProgressView(value: Double(index) / Double(studyTermSize))
+                ProgressView(value: Double(min(max(1, index), studyTermSize)), total: Double(studyTermSize))
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                     .padding(.trailing)
 
