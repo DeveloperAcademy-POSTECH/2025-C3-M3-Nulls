@@ -115,33 +115,30 @@ public class StudyManager {
     }
     
     func getNextStudyTerms() -> [Term] {
-        guard studyingGlossaryId != nil else {
-            return []
-        }
-        
-        guard termLearnStatusList != nil else {
-            return []
-        }
+        guard studyingGlossaryId != nil else { return [] }
+        guard termLearnStatusList != nil else { return [] }
         
         var termIdList: [UUID] = []
-        let inProgressTermIdList: [UUID] = termLearnStatusList!.filter { $0.status == LearningStatus.inProgress.rawValue }.map { $0.termId! }
+        
+        let inProgressTermIdList = termLearnStatusList!
+            .filter { $0.status == LearningStatus.inProgress.rawValue }
+            .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+            .map { $0.termId! }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
+        
         if termIdList.count < studyTermSize {
-            let notStartedTermIdList = termLearnStatusList!.filter { $0.status == LearningStatus.notStarted.rawValue }.map { $0.termId! }
+            let notStartedTermIdList = termLearnStatusList!
+                .filter { $0.status == LearningStatus.notStarted.rawValue }
+                .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+                .map { $0.termId! }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
         
         var result: [Term] = []
-        while result.count < studyTermSize {
-            if termIdList.isEmpty {
-                break
-            }
-            
-            let randomIndex = Int.random(in: 0..<termIdList.count)
-            let termId = termIdList.remove(at: randomIndex)
-            
+        for termId in termIdList {
             guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
             result.append(term)
+            if result.count >= studyTermSize { break }
         }
         
         return result
