@@ -12,6 +12,7 @@ import Observation
 @Observable
 class StudyCardViewModel {
     private let studyManager = StudyManager.shared
+    var studyTerm: [Term] = []
     
     var studyTermSize: Int {
         StudyManager.shared.studyTermSize
@@ -20,6 +21,7 @@ class StudyCardViewModel {
     init() { }
 
     func getStudyTerms() -> [Term] {
-        return studyManager.getNextStudyTerms()
+        studyTerm = studyManager.getNextStudyTerms()
+        return studyTerm
     }
 }

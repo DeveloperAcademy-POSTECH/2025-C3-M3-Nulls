@@ -13,6 +13,8 @@ struct StudyCardView: View {
     @Bindable private var viewModel: StudyCardViewModel
     @State private var index: Int = 1
     
+    @State private var isTestActive = false
+    
     var terms: [Term] {
         viewModel.getStudyTerms()
     }
@@ -25,54 +27,58 @@ struct StudyCardView: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                ProgressView(value: Double(min(max(1, index), studyTermSize)), total: Double(studyTermSize))
-                    .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                    .padding(.trailing)
-
-                Text("\(String(format: "%02d", index)) / \(studyTermSize)")
-                    .font(.MM_AT)
-                    .foregroundColor(Color("MM_Navy"))
-            }
-            .padding(.bottom)
-            if terms.indices.contains(index - 1) {
-                TermCardView(term: terms[index - 1])
-                    .gesture(
-                        DragGesture()
-                            .onEnded { value in
-                                let horizontalAmount = value.translation.width
-                                
-                                if horizontalAmount < -50, index < studyTermSize {
-                                    index += 1
-                                } else if horizontalAmount > 50, index > 1 {
-                                    index -= 1
+        NavigationStack {
+            VStack {
+                HStack {
+                    ProgressView(value: Double(index), total: Double(studyTermSize))
+                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                        .padding(.trailing)
+                    Text("\(String(format: "%02d", index)) / \(studyTermSize)")
+                        .font(.MM_AT)
+                        .foregroundColor(Color("MM_Navy"))
+                }
+                .padding(.bottom)
+                if terms.indices.contains(index - 1) {
+                    TermCardView(term: terms[index - 1])
+                        .gesture(
+                            DragGesture()
+                                .onEnded { value in
+                                    let horizontalAmount = value.translation.width
+                                    
+                                    if horizontalAmount < -50, index < studyTermSize {
+                                        index += 1
+                                    } else if horizontalAmount > 50, index > 1 {
+                                        index -= 1
+                                    }
                                 }
-                            }
-                    )
+                        )
+                }
+                
+                Spacer()
+                
+                Button("용어 테스트 시작") {
+                    isTestActive = true
+                }
+                .font(.MM_Pr)
+                .frame(width: 262, height: 40)
+                .padding(.vertical, 14)
+                .padding(.horizontal, 20)
+                .background(Color("MM_Navy"))
+                .foregroundColor(Color("MM_White"))
+                .cornerRadius(16)
+                .shadow(radius: 3)
+                .opacity(studyTermSize == index ? 1 : 0)
+                
+                Spacer()
             }
-
-            Spacer()
-
-            Button("용어 테스트 시작") {
-                // TODO: 액션 정의
+            .padding(.horizontal, 40)
+            .padding(.bottom, 20)
+            .onAppear {
+                StudyManager.shared.setContext(context)
             }
-            .font(.MM_Pr)
-            .frame(width: 262, height: 40)
-            .padding(.vertical, 14)
-            .padding(.horizontal, 20)
-            .background(Color("MM_Navy"))
-            .foregroundColor(Color("MM_White"))
-            .cornerRadius(16)
-            .shadow(radius: 3)
-            .opacity(studyTermSize == index ? 1 : 0)
-
-            Spacer()
-        }
-        .padding(.horizontal, 40)
-        .padding(.bottom, 20)
-        .onAppear {
-            StudyManager.shared.setContext(context)
+            .navigationDestination(isPresented: $isTestActive) {
+                StudyTestView(terms: terms)
+            }
         }
     }
 }
