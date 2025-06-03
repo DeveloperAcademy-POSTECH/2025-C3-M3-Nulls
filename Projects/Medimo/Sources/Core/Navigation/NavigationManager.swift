@@ -8,22 +8,22 @@
 import SwiftUI
 
 class NavigationManager: ObservableObject {
-  @Published var path: NavigationPath = .init()
+    @Published var path: NavigationPath = .init()
 
-  func push(to destination: PathType) {
-    path.append(destination)
-  }
+    func push(to destination: PathType) {
+        path.append(destination)
+    }
 
-  func pop() {
-    path.removeLast()
-  }
+    func pop() {
+        path.removeLast()
+    }
 
-  func popToRoot() {
-    path.removeLast(path.count)
-  }
+    func popToRoot() {
+        path.removeLast(path.count)
+    }
 
-  func setRootAndPush(to destination: PathType) {
-    path.removeLast(path.count)
-    path.append(destination)
-  }
+    func setRootAndPush(to destination: PathType) {
+        path.removeLast(path.count)
+        path.append(destination)
+    }
 }

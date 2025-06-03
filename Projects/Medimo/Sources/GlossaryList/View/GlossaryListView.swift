@@ -9,30 +9,30 @@ import CoreData
 import SwiftUI
 
 struct GlossaryListView: View {
-  @EnvironmentObject var navigationManager: NavigationManager
-  @Environment(\.managedObjectContext) var context
-  @State private var viewModel: GlossaryListViewModel
+    @EnvironmentObject var navigationManager: NavigationManager
+    @Environment(\.managedObjectContext) var context
+    @State private var viewModel: GlossaryListViewModel
 
-  init(context: NSManagedObjectContext) {
-    _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
-  }
-
-  var body: some View {
-    List {
-      ForEach(viewModel.glossaries) { glossary in
-        Button {
-          navigationManager.push(to: .GlossaryDetail(glossary: glossary))
-        } label: {
-          Text(glossary.title ?? "")
-        }
-      }
+    init(context: NSManagedObjectContext) {
+        _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
     }
-  }
+
+    var body: some View {
+        List {
+            ForEach(viewModel.glossaries) { glossary in
+                Button {
+                    navigationManager.push(to: .GlossaryDetail(glossary: glossary))
+                } label: {
+                    Text(glossary.title ?? "")
+                }
+            }
+        }
+    }
 }
 
 #Preview {
-  let context = PersistenceController.preview.container.viewContext
-  GlossaryListView(context: context)
-    .environmentObject(NavigationManager())
-    .environment(\.managedObjectContext, context)
+    let context = PersistenceController.preview.container.viewContext
+    GlossaryListView(context: context)
+        .environmentObject(NavigationManager())
+        .environment(\.managedObjectContext, context)
 }

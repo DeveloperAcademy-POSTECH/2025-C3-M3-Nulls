@@ -8,11 +8,11 @@
 import SwiftUI
 
 enum PathType: Hashable {
-  // 단어장
-  case GlossaryDetail(glossary: Glossary)
-  // 학습
-  case StudyTermList(glossary: Glossary),
-       StudyTest(glossary: Glossary),
-       ReviewTest(glossary: Glossary),
-       TestCompletion
+    // 단어장
+    case GlossaryDetail(glossary: Glossary)
+    // 학습
+    case StudyTermList(glossary: Glossary),
+         StudyTest(glossary: Glossary),
+         ReviewTest(glossary: Glossary),
+         TestCompletion
 }
