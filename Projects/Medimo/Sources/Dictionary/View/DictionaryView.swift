@@ -21,7 +21,7 @@ struct DictionaryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.9, green: 0.94, blue: 1.0)
+                Color(.MM_BG)
                     .ignoresSafeArea(edges: .top)
                 VStack {
                     Text("의학용어 사전")
@@ -38,12 +38,6 @@ struct DictionaryView: View {
                             .foregroundStyle(Color.white)
                             .frame(height: 60)
                         
-//                        TextField("단어를 입력하세요", text: $searchText)
-//                            .frame(height: 60)
-//                            .padding(.leading, 13)
-//                            .background(Color.white)
-//                            .cornerRadius(20)
-                        
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.white)
                             .padding(10)
@@ -54,18 +48,34 @@ struct DictionaryView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 24)
 
-                    
-                    
                     List {
                         ForEach(viewModel.term.filter { searchText.isEmpty || ($0.spelling?.localizedCaseInsensitiveContains(searchText) ?? false) }) { term in
                             Button(action: {
                                 selectedTerm = term
                             }) {
-                                HStack {
-                                    Text(term.spelling ?? "")
-                                    Text(term.meaning ?? "")
-                                }
+                                HStack{
+                                        Text(term.spelling ?? "")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 16)
+                                    
+                                        Text(term.meaning ?? "")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                            .padding(.trailing, 17)
+                                    }
+                                
+                                .frame(width: 361, height: 60)
+                                .background(Color.white)
+                                .cornerRadius(16)
+                                .padding(4)
                             }
+                            
+                            .listStyle(.plain)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            
                         }
                     }
                 }

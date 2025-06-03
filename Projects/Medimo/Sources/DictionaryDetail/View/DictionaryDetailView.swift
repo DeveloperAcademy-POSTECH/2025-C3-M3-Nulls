@@ -19,43 +19,123 @@ struct DictionaryDetailView: View {
     
     var body: some View {
         NavigationStack {
-                    VStack {
-                        Text(viewModel.term.abbreviation ?? "[no abbreviation]")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.title2)
-                            .padding(.horizontal,32)
-                            
-                        
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Button(action: {
+                            if let spelling = viewModel.term.spelling {
+                                viewModel.speak(spelling)
+                            }
+                        }) {
+                            Image(systemName:"speaker.wave.3")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24)
+                                .foregroundStyle(Color.black)
+                        }
                         Spacer()
-                        
+                        Image(systemName: "bookmark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22.5, height: 17.5)
+                    }
+                    .padding(.horizontal,32)
+                    .padding(.top, 48)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(viewModel.term.spelling ?? "")
+                            .font(.MM_EH2)
+                            .foregroundColor(Color("MM_Navy"))
+
+                        Text(viewModel.term.abbreviation ?? "[no abbreviation]")
+                            .font(.MM_EH2)
+                            .foregroundColor(Color("MM_Navy"))
+
                         Text(
                             (viewModel.term.glossarys as? Set<Glossary>)?
                                 .compactMap { $0.title }
                                 .joined(separator:  ", ") ?? ""
                         )
-                        Text(viewModel.term.meaning ?? "")
-                        HStack {
-                            Text(
-                                (viewModel.term.morphemes as? Set<Morpheme>)?
-                                    .compactMap { $0.meaning }
-                                    .joined(separator: ", ") ?? ""
-                            )
-                            Text(
-                                (viewModel.term.morphemes as? Set<Morpheme>)?
-                                    .compactMap { $0.spelling }
-                                    .joined(separator: ", ") ?? ""
-                            )
-                        }
-                        Text(viewModel.term.explanation ?? "")
-                        
-                        Spacer()
-                        
+                        .font(.MM_AT)
+                        .foregroundColor(Color("MM_Blue"))
+
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(Color.gray)
                     }
-                    .navigationTitle(viewModel.term.spelling ?? "")
-                    .navigationBarTitleDisplayMode(.large)
+                    .padding(.horizontal,32)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("의미")
+                            .font(.MM_AT)
+                            .foregroundColor(Color("MM_Grey3"))
+
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(Color.gray)
+
+                        Text(viewModel.term.meaning ?? "")
+                            .font(.MM_Pr)
+                            .foregroundColor(Color("MM_Navy"))
+                    }
+                    .padding(.horizontal,32)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("어원")
+                            .font(.MM_AT)
+                            .foregroundColor(Color("MM_Grey3"))
+
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(Color.gray)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            if let morphemes = viewModel.term.morphemes as? Set<Morpheme> {
+                                ForEach(Array(morphemes), id: \.self) { morpheme in
+                                    HStack {
+                                        Text(morpheme.spelling ?? "")
+                                            .font(.MM_AT)
+                                            .foregroundColor(Color("MM_Navy"))
+                                        Text("-")
+                                            .foregroundColor(.gray)
+                                        Text(morpheme.meaning ?? "")
+                                            .font(.MM_AT)
+                                            .foregroundColor(Color("MM_Navy"))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal,32)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("설명")
+                            .font(.MM_AT)
+                            .foregroundColor(Color("MM_Grey3"))
+
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(Color.gray)
+
+                        Text(viewModel.term.explanation ?? "")
+                            .font(.MM_AT)
+                            .foregroundColor(Color("MM_Navy"))
+                    }
+                    .padding(.horizontal,32)
+
+                    Spacer()
                 }
             }
         }
+    }
+    
+   
+}
+
+//                    .navigationTitle(viewModel.term.spelling ?? "")
+//                    .navigationBarTitleDisplayMode(.large)
+
+
 #Preview {
     DictionaryDetailView(
         term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[1]
