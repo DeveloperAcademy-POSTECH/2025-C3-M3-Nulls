@@ -5,28 +5,27 @@
 //  Created by 양시준 on 5/30/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct GlossaryListView: View {
     @Environment(\.managedObjectContext) var context
     @State private var viewModel: GlossaryListViewModel
-    
+    @EnvironmentObject var navigationManager: NavigationManager
+
     init(context: NSManagedObjectContext) {
         _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
     }
-    
+
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(viewModel.glossaries) { glossary in
-                    NavigationLink(destination: GlossaryDetailView(glossary: glossary)) {
-                        Text(glossary.title ?? "")
-                    }
+        List {
+            ForEach(viewModel.glossaries) { glossary in
+                Button {
+                    navigationManager.push(to: .GlossaryDetail(glossary: glossary))
+                } label: {
+                    Text(glossary.title ?? "")
                 }
             }
-            .navigationTitle(Text("Glossary List"))
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
@@ -34,5 +33,6 @@ struct GlossaryListView: View {
 #Preview {
     let context = PersistenceController.preview.container.viewContext
     GlossaryListView(context: context)
+        .environmentObject(NavigationManager())
         .environment(\.managedObjectContext, context)
 }
