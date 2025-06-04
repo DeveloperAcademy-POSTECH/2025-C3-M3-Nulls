@@ -16,18 +16,24 @@ struct StudyView: View {
     }
 
     var body: some View {
-        Button {
-            navigationManager.push(to: .StudyCard(glossary: viewModel.studyingGlossary))
-        } label: {
-            Text("Study")
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.blue)
-                )
+        ScrollView {
+            StudyHeaderView(streak: viewModel.streak)
+                .padding(.horizontal, 24)
+                .padding(.top, 48)
+            
+            Button {
+                navigationManager.push(to: .StudyCard(glossary: viewModel.studyingGlossary))
+            } label: {
+                Text("Study")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.blue)
+                    )
+            }
         }
     }
 }
