@@ -6,10 +6,13 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Glossary)
 public class Glossary: NSManagedObject {
-
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        id = UUID()
+    }
 }

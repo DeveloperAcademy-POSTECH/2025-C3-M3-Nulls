@@ -6,10 +6,13 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Morpheme)
 public class Morpheme: NSManagedObject {
-
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        id = UUID()
+    }
 }

@@ -6,10 +6,13 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Term)
 public class Term: NSManagedObject {
-
+    override public func awakeFromInsert() {
+        super.awakeFromInsert()
+        id = UUID()
+    }
 }
