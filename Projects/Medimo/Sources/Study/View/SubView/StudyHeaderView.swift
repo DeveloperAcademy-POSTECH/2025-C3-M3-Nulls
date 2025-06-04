@@ -13,7 +13,7 @@ struct StudyHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("\(streak)일 째")
+                Text("\(streak)일째")
                     .font(.largeTitle)
                     .foregroundStyle(AppColor.label)
                 Spacer()
@@ -25,11 +25,15 @@ struct StudyHeaderView: View {
                 Spacer()
             }
         }
-        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 24)
+        .padding(.top, 82)
     }
 }
 
 #Preview {
     var streak: Int = 5
-    StudyHeaderView(streak: streak)
+    ScrollView {
+        StudyHeaderView(streak: streak)
+    }
+    .ignoresSafeArea(edges: .top)
 }

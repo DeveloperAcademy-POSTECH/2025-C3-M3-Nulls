@@ -9,31 +9,36 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    var viewModel: StudyViewModel
+    @Bindable var viewModel: StudyViewModel
+    @Bindable var studyManager = StudyManager.shared
+    
+    @State private var isAtTop: Bool = true
 
     init(glossary: Glossary) {
         viewModel = .init(studyingGlossary: glossary)
     }
 
     var body: some View {
-        ScrollView {
-            StudyHeaderView(streak: viewModel.streak)
-                .padding(.horizontal, 24)
-                .padding(.top, 48)
-            
-            Button {
-                navigationManager.push(to: .StudyCard(glossary: viewModel.studyingGlossary))
-            } label: {
-                Text("Study")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.blue)
+        ZStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    StudyHeaderView(streak: viewModel.streak)
+                    StudyMainCardView(
+                        studyingGlossary: $viewModel.studyingGlossary,
+                        studyTermSize: $studyManager.studyTermSize
                     )
+                    .padding(.top, 42)
+                    .padding(.horizontal, 16)
+                    StudyCalendarCardView()
+                        .padding(16)
+                }
+                .background(
+                    StudyHeaderBackgroundView()
+                )
             }
+            .scrollIndicators(.hidden)
+            .ignoresSafeArea(edges: .top)
+            .background(AppColor.systemGroupedBackground)
         }
     }
 }
