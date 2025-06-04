@@ -67,6 +67,7 @@ struct DictionaryDetailView: View {
                         .font(.caption)
                         .foregroundColor(AppColor.secondary)
                         .padding(.top, 16)
+                        .padding(.leading, 8)
                         
 
                         Rectangle()
@@ -94,6 +95,7 @@ struct DictionaryDetailView: View {
                             .font(.body)
                             .foregroundColor(AppColor.label)
                             .padding(.leading, 8)
+                            .padding(.top, 2)
                     }
                     .padding(.horizontal,32)
                     .padding(.top, 24)
@@ -129,6 +131,7 @@ struct DictionaryDetailView: View {
                                     .padding(.leading, 8)
                                 }
                             }
+                            .padding(.top, 2)
                         }
                         .padding(.horizontal,32)
                         .padding(.top, 24)
@@ -152,6 +155,7 @@ struct DictionaryDetailView: View {
                             .font(.caption)
                             .foregroundColor(AppColor.label)
                             .padding(.leading, 8)
+                            .padding(.top, 2)
                     }
                     .padding(.horizontal,32)
                     .padding(.top, 24)
@@ -173,12 +177,9 @@ struct DictionaryDetailView: View {
     }
 }
 
-
-
-
 #Preview {
     DictionaryDetailView(
-        term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[0]
+        term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[4]
     )
     .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
