@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Glossary" representedClassName="Glossary" syncable="YES">
         <attribute name="glossaryKey" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="title" optional="YES" attributeType="String" defaultValueString="Untitled"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String"/>
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="glossarys" inverseEntity="Term"/>
     </entity>
     <entity name="Morpheme" representedClassName="Morpheme" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="meaning" attributeType="String" defaultValueString="Untitled"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="meaning" attributeType="String"/>
         <attribute name="morphemeKey" optional="YES" attributeType="String"/>
-        <attribute name="spelling" attributeType="String" defaultValueString="Untitled"/>
+        <attribute name="spelling" attributeType="String"/>
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="morphemes" inverseEntity="Term"/>
     </entity>
     <entity name="Term" representedClassName="Term" syncable="YES">
         <attribute name="abbreviation" optional="YES" attributeType="String"/>
         <attribute name="explanation" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isBookmarked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="meaning" attributeType="String" defaultValueString="Untitled"/>
-        <attribute name="spelling" attributeType="String" defaultValueString="Untitled"/>
+        <attribute name="meaning" attributeType="String"/>
+        <attribute name="spelling" attributeType="String"/>
         <attribute name="termKey" optional="YES" attributeType="String"/>
         <relationship name="glossarys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
         <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
