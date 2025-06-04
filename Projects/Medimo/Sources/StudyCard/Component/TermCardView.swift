@@ -99,7 +99,7 @@ struct TermCardView: View {
 }
 
 #Preview {
-    var context = PersistenceController.preview.container.viewContext
+    let context = PersistenceController.preview.container.viewContext
     var term = Term(context: context)
     
     let morpheme1 = Morpheme(context: context)
