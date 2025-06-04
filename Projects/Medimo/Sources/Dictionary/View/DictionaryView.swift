@@ -21,7 +21,7 @@ struct DictionaryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(AppColor.bgColor)
+                Color(AppColor.secondarySystemFill)
                     .ignoresSafeArea(edges: .top)
                 VStack {
                     Text("의학용어 사전")
@@ -51,25 +51,25 @@ struct DictionaryView: View {
                             .padding(10)
                             .background(AppColor.secondary)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .frame(width: 348, height: 60, alignment: .trailing)
+                            .frame(width: 361, height: 50, alignment: .trailing)
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 20)
-                    
+        
                     List {
                         ForEach(viewModel.term.filter { searchText.isEmpty || ($0.spelling?.localizedCaseInsensitiveContains(searchText) ?? false) }) { term in
                             Button(action: {
                                 selectedTerm = term
                             }) {
                                 
-                                VStack{
+                                VStack(spacing: 0){
                                     Text(term.spelling ?? "")
                                         .font(.subheadlineEng)
                                         .foregroundColor(AppColor.label)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.top, 10)
-                                        .padding(.bottom, 2)
-                                    
+                                        .padding(.top, 16)
+                                        .padding(.bottom, 8)
+                                        
                                     HStack(spacing: 10) {
                                         if term.abbreviation != nil {
                                             Text("[ \(term.abbreviation ?? "") ]")
@@ -82,12 +82,14 @@ struct DictionaryView: View {
                                         
                                         Spacer()
                                     }
+                                    .padding(.bottom, 8)
                                 }
-                                .padding(.leading, 16)
-                                .frame(width: 361, height: 70)
-                                .background(Color.white)
+                                .padding(.horizontal, 16)
+                                
                                 Rectangle()
-                                    .frame(width: 332, height: 1)
+                                    .frame(height: 1)
+                                    .padding(.horizontal, 12)
+                                    .cornerRadius(2)
                                     .foregroundColor(AppColor.grey2)
                                 
                             }
@@ -97,6 +99,7 @@ struct DictionaryView: View {
                             .listRowBackground(Color.clear)
                         }
                     }
+                    .padding(.top, -16)
                     .scrollContentBackground(.hidden)
                     .background(Color.white)
                 }

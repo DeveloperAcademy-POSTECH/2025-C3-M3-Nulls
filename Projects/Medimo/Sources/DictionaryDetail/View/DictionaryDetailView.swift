@@ -19,8 +19,9 @@ struct DictionaryDetailView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading) {
                     //MARK: -- 사운드, 북마크
                     HStack {
                         Button(action: {
@@ -28,7 +29,7 @@ struct DictionaryDetailView: View {
                                 viewModel.speak(spelling)
                             }
                         }) {
-                            Image(systemName:"speaker.wave.3.fill")
+                            Image(systemName:"speaker.wave.2.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24)
@@ -36,10 +37,10 @@ struct DictionaryDetailView: View {
                                 
                         }
                         Spacer()
-                        Image(systemName: "bookmark")
+                        Image("bookmark")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 22.5, height: 17.5)
+                            .frame(width: 17.5, height: 22.5)
                             .foregroundStyle(AppColor.primary)
                     }
                     .padding(.horizontal,32)
@@ -53,10 +54,11 @@ struct DictionaryDetailView: View {
                             .foregroundColor(AppColor.primary)
                             .padding(.bottom, 8)
 
-                        Text("[\(viewModel.term.abbreviation ?? "no abbreviation")]")
-                            .font(.titleEng)
-                            .foregroundColor(AppColor.primary)
-
+                        if viewModel.term.abbreviation != nil {
+                            Text("[ \(viewModel.term.abbreviation ?? "") ]")
+                                .font(.titleEng)
+                                .foregroundColor(AppColor.primary)
+                        }
                         Text(
                             (viewModel.term.glossarys as? Set<Glossary>)?
                                 .compactMap { $0.title }
@@ -65,7 +67,7 @@ struct DictionaryDetailView: View {
                         .font(.caption)
                         .foregroundColor(AppColor.secondary)
                         .padding(.top, 16)
-                        .padding(.bottom, 10)
+                        
 
                         Rectangle()
                             .frame(height: 1)
@@ -74,13 +76,12 @@ struct DictionaryDetailView: View {
                     }
                     .padding(.horizontal,32)
                     
-                    //MARK: -- 뜻
+                    //MARK: -- 의미
                     VStack(alignment: .leading) {
                         Text("의미")
                             .font(.caption)
                             .foregroundColor(AppColor.tertiaryLabel)
                             .padding(.leading, 8)
-                            .padding(.bottom, -8)
                             
                         LinearGradient(
                             gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
@@ -98,49 +99,48 @@ struct DictionaryDetailView: View {
                     .padding(.top, 24)
 
                     //MARK: -- 어원
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("어원")
-                            .font(.caption)
-                            .foregroundColor(AppColor.tertiaryLabel)
-                            .padding(.leading, 8)
-                            .padding(.bottom, -8)
-
-                        LinearGradient(
-                            gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                        .frame(height: 1)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            if let morphemes = viewModel.term.morphemes as? Set<Morpheme> {
+                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
+                        VStack(alignment: .leading) {
+                            Text("어원")
+                                .font(.caption)
+                                .foregroundColor(AppColor.tertiaryLabel)
+                                .padding(.leading, 8)
+                            
+                            LinearGradient(
+                                gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                            .frame(height: 1)
+                            
+                            VStack(alignment: .leading) {
                                 ForEach(Array(morphemes), id: \.self) { morpheme in
                                     HStack {
                                         Text(morpheme.spelling ?? "")
-                                            .font(.MM_AT)
+                                            .font(.caption)
                                             .foregroundColor(AppColor.label)
                                         Text("-")
+                                            .font(.caption)
                                             .foregroundColor(AppColor.grey4)
                                         Text(morpheme.meaning ?? "")
-                                            .font(.MM_AT)
+                                            .font(.caption)
                                             .foregroundColor(AppColor.label)
                                     }
                                     .padding(.leading, 8)
                                 }
                             }
                         }
+                        .padding(.horizontal,32)
+                        .padding(.top, 24)
                     }
-                    .padding(.horizontal,32)
-                    .padding(.top, 24)
+                    
 
                     //MARK: -- 설명
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading) {
                         Text("설명")
                             .font(.caption)
                             .foregroundColor(AppColor.tertiaryLabel)
                             .padding(.leading, 8)
-                            .padding(.bottom, -8)
-
                         LinearGradient(
                             gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
                             startPoint: .leading,
@@ -159,14 +159,21 @@ struct DictionaryDetailView: View {
                     Spacer()
                 }
             }
+
+                Image("modalcharacter")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .padding(.trailing, 32)
+                    .padding(.bottom, -60)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .edgesIgnoringSafeArea(.all)
+            }
         }
     }
-    
-   
 }
 
-//                    .navigationTitle(viewModel.term.spelling ?? "")
-//                    .navigationBarTitleDisplayMode(.large)
+
 
 
 #Preview {
