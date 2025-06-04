@@ -8,12 +8,11 @@ import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
+    @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-
+    
     @Bindable private var viewModel: StudyCardViewModel
     @State private var index: Int = 1
-    
-    @State private var isTestActive = false
     
     var terms: [Term] {
         viewModel.getStudyTerms()
@@ -25,64 +24,66 @@ struct StudyCardView: View {
     init(glossary: Glossary) {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
     }
-
+    
     var body: some View {
-        NavigationStack {
-            VStack {
-                HStack {
+        //        NavigationStack(path: $navigationManager.path) {
+        VStack {
+            HStack {
+                if studyTermSize > 0 {
                     ProgressView(value: Double(index), total: Double(studyTermSize))
                         .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                         .padding(.trailing)
+                    
                     Text("\(String(format: "%02d", index)) / \(studyTermSize)")
                         .font(.MM_AT)
                         .foregroundColor(Color("MM_Navy"))
+                } else {
+                    Text("학습할 용어가 없습니다.")
+                        .font(.MM_AT)
+                        .foregroundColor(.gray)
                 }
-                .padding(.bottom)
-                if terms.indices.contains(index - 1) {
-                    TermCardView(term: terms[index - 1])
-                        .gesture(
-                            DragGesture()
-                                .onEnded { value in
-                                    let horizontalAmount = value.translation.width
-                                    
-                                    if horizontalAmount < -50, index < studyTermSize {
-                                        index += 1
-                                    } else if horizontalAmount > 50, index > 1 {
-                                        index -= 1
-                                    }
+            }
+            .padding(.bottom)
+            if terms.indices.contains(index - 1) {
+                TermCardView(term: terms[index - 1])
+                    .gesture(
+                        DragGesture()
+                            .onEnded { value in
+                                let horizontalAmount = value.translation.width
+                                
+                                if horizontalAmount < -50, index < studyTermSize {
+                                    index += 1
+                                } else if horizontalAmount > 50, index > 1 {
+                                    index -= 1
                                 }
-                        )
-                }
-                
-                Spacer()
-                
-                Button("용어 테스트 시작") {
-                    isTestActive = true
-                }
-                .font(.MM_Pr)
-                .frame(width: 262, height: 40)
-                .padding(.vertical, 14)
-                .padding(.horizontal, 20)
-                .background(Color("MM_Navy"))
-                .foregroundColor(Color("MM_White"))
-                .cornerRadius(16)
-                .shadow(radius: 3)
-                .opacity(studyTermSize == index ? 1 : 0)
-                
-                Spacer()
+                            }
+                    )
             }
-            .padding(.horizontal, 40)
-            .padding(.bottom, 20)
-            .onAppear {
-                StudyManager.shared.setContext(context)
+            
+            Spacer()
+            
+            Button("용어 테스트 시작") {
+                navigationManager.push(to: .StudyTest(terms: terms))
             }
-            .navigationDestination(isPresented: $isTestActive) {
-                StudyTestView(terms: terms)
-            }
+            .font(.MM_Pr)
+            .frame(width: 262, height: 40)
+            .padding(.vertical, 14)
+            .padding(.horizontal, 20)
+            .background(Color("MM_Navy"))
+            .foregroundColor(Color("MM_White"))
+            .cornerRadius(16)
+            .shadow(radius: 3)
+            .opacity(studyTermSize == index ? 1 : 0)
+            
+            Spacer()
+        }
+        .padding(.horizontal, 40)
+        .padding(.bottom, 20)
+        .onAppear {
+            StudyManager.shared.setContext(context)
         }
     }
 }
-
 #Preview {
     let context = PersistenceController.preview.container.viewContext
 
@@ -104,4 +105,5 @@ struct StudyCardView: View {
 
     return StudyCardView(glossary: glossary)
         .environment(\.managedObjectContext, context)
+        .environmentObject(NavigationManager())
 }

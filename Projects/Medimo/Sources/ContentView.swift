@@ -34,12 +34,12 @@ public struct ContentView: View {
                         .environmentObject(studyNavigationManager)
                         .navigationDestination(for: PathType.self) { path in
                             switch path {
-                            case let .StudyCard(glossary):
+                            case .StudyCard(let glossary):
                                 StudyCardView(glossary: glossary)
                                     .environmentObject(studyNavigationManager)
 
-//                            case let .StudyTest(glossary):
-//                                EmptyView()
+                            case let .StudyTest(terms):
+                                StudyTestView(terms: terms)
 //
 //                            case let .ReviewTest(glossary):
 //                                EmptyView()
@@ -52,6 +52,7 @@ public struct ContentView: View {
                             }
                         }
                 }
+                .navigationBarBackButtonHidden()
             }
 
             Tab("사전", systemImage: "book", value: .dictionary) {
