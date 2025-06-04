@@ -30,7 +30,7 @@ struct TermCardView: View {
                             isPlaying = false
                         }
                     }) {
-                        Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
+                        Image(systemName: "speaker.wave.2.fill")
                             .imageScale(.large)
                             .font(.system(size: 24))
                             .foregroundColor(Color("MM_Navy"))
@@ -44,7 +44,7 @@ struct TermCardView: View {
                     Button(action: {
                         term.isBookmarked.toggle()
                     }) {
-                        Image(systemName: term.isBookmarked ? "bookmark.fill" :"bookmark")
+                        Image(systemName: term.isBookmarked ? "bookmark.fill" : "bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
                             .foregroundColor(Color("MM_Navy"))
