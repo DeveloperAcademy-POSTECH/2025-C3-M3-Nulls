@@ -40,4 +40,5 @@ class DictionaryDetailViewModel {
         DictionaryDetailViewModel.synthesizer.stopSpeaking(at: .immediate)
         DictionaryDetailViewModel.synthesizer.speak(utterance)
     }
+    
 }
