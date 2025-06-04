@@ -27,7 +27,7 @@ public class StudyManager {
         request.fetchLimit = 1
         studyingGlossaryId = try? context.fetch(request).first?.id
         
-        initializeLearningStatus()
+//        initializeLearningStatus()
     }
     
     var studyingGlossaryId: UUID? {
@@ -85,34 +85,34 @@ public class StudyManager {
         }
     }
     
-    func initializeLearningStatus() {
-        guard let context = context,
-              let glossary = studyingGlossary else { return }
-        
-        let existingStatusList = termLearnStatusList ?? []
-
-        let existingTermIds = Set(existingStatusList.map { $0.termId! })
-
-        for term in glossary.termsArray {
-            if !existingTermIds.contains(term.id!) {
-                let newStatus = TermLearningStatus(context: context)
-                newStatus.termId = term.id
-                newStatus.glossaryId = glossary.id
-                newStatus.status = LearningStatus.notStarted.rawValue
-                newStatus.lastReviewedAt = nil
-                newStatus.nextReviewAt = nil
-            }
-        }
-
-        do {
-            try context.save()
-            _cachedTermLearningStatusList = nil
-        } catch {
-            #if DEBUG
-            print("Failed to initialize learning statuses: \(error)")
-            #endif
-        }
-    }
+//    func initializeLearningStatus() {
+//        guard let context = context,
+//              let glossary = studyingGlossary else { return }
+//        
+//        let existingStatusList = termLearnStatusList ?? []
+//
+//        let existingTermIds = Set(existingStatusList.map { $0.termId! })
+//
+//        for term in glossary.termsArray {
+//            if !existingTermIds.contains(term.id!) {
+//                let newStatus = TermLearningStatus(context: context)
+//                newStatus.termId = term.id
+//                newStatus.glossaryId = glossary.id
+//                newStatus.status = LearningStatus.notStarted.rawValue
+//                newStatus.lastReviewedAt = nil
+//                newStatus.nextReviewAt = nil
+//            }
+//        }
+//
+//        do {
+//            try context.save()
+//            _cachedTermLearningStatusList = nil
+//        } catch {
+//            #if DEBUG
+//            print("Failed to initialize learning statuses: \(error)")
+//            #endif
+//        }
+//    }
     
     func getNextStudyTerms() -> [Term] {
         guard studyingGlossaryId != nil else { return [] }

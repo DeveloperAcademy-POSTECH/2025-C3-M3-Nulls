@@ -24,6 +24,8 @@ class InitialDataLoader {
         try loadMorphemes()
         try linkGlossaryToTerm()
         try linkTermToMorpheme()
+        
+        makeTermLearningStatus()
     }
     
     private func loadGlossaries() throws {
@@ -80,6 +82,18 @@ class InitialDataLoader {
             guard let term = termMap[link.termKey],
                   let morpheme = morphemeMap[link.morphemeKey] else { continue }
             term.addToMorphemes(morpheme)
+        }
+    }
+    
+    private func makeTermLearningStatus() {
+        for glossary in glossaryMap.values {
+            for term in glossary.termsArray {
+                let termLearningStatus = TermLearningStatus(context: context)
+                termLearningStatus.id = UUID()
+                termLearningStatus.glossaryId = glossary.id
+                termLearningStatus.termId = term.id
+                termLearningStatus.status = LearningStatus.notStarted.rawValue
+            }
         }
     }
     
