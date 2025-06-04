@@ -21,34 +21,40 @@ struct DictionaryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.MM_BG)
+                Color(AppColor.bgColor)
                     .ignoresSafeArea(edges: .top)
                 VStack {
                     Text("의학용어 사전")
-                        .font(.MM_H1)
-                        .foregroundStyle(Color("MM_Text"))
-                        .padding(.top, 16)
+                        .font(.largeTitle)
+                        .foregroundStyle(AppColor.label)
+                        .padding(.top, 33)
                         .padding(.leading, 26)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: 13)
                             .overlay(
-                                TextField("단어를 입력하세요", text: $searchText)
-                                    .foregroundStyle(Color("MM_Grey3"))
-                                    .padding(21)
+                                TextField(
+                                    "",
+                                    text: $searchText,
+                                    prompt: Text("단어를 입력하세요")
+                                        .font(.caption)
+                                )
+                                .foregroundColor(AppColor.label)
+                                .padding(21)
+                                
                             )
                             .foregroundStyle(Color.white)
-                            .frame(height: 60)
+                            .frame(height: 50)
                         
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.white)
                             .padding(10)
-                            .background(Color("MM_Blue"))
+                            .background(AppColor.secondary)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .frame(width: 348, height: 60, alignment: .trailing)
                     }
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 20)
                     
                     List {
                         ForEach(viewModel.term.filter { searchText.isEmpty || ($0.spelling?.localizedCaseInsensitiveContains(searchText) ?? false) }) { term in
@@ -57,41 +63,32 @@ struct DictionaryView: View {
                             }) {
                                 
                                 VStack{
-                                    HStack {
-                                        Text(term.spelling ?? "")
-                                            .font(.MM_EAt)
-                                            .foregroundColor(Color("MM_Text"))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading, 41)
-                                        
-                                        Image(systemName: "bookmark")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 24, height: 24)
-                                            .foregroundStyle(Color("MM_Navy"))
-                                            .padding(.trailing, 38)
-                                    }.padding(.top, 10)
+                                    Text(term.spelling ?? "")
+                                        .font(.subheadlineEng)
+                                        .foregroundColor(AppColor.label)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.top, 10)
+                                        .padding(.bottom, 2)
                                     
-                                    HStack(spacing: 8) {
-                                        Text("[ \(term.abbreviation ?? "") ]")
-                                            .font(.MM_EAt)
-                                            .foregroundColor(Color("MM_Text"))
-
+                                    HStack(spacing: 10) {
+                                        if term.abbreviation != nil {
+                                            Text("[ \(term.abbreviation ?? "") ]")
+                                                .font(.subheadlineEng)
+                                                .foregroundColor(AppColor.label)
+                                        }
                                         Text(term.meaning ?? "")
-                                            .font(.MM_AT)
-                                            .foregroundColor(Color("MM_Grey4"))
-
+                                            .font(.caption)
+                                            .foregroundColor(AppColor.secondaryLabel)
+                                        
                                         Spacer()
                                     }
-                                    .padding(.leading, 41)
-                                    .padding(.bottom, 10)
-                                    
                                 }
-                                .frame(width: 361, height: 73)
+                                .padding(.leading, 16)
+                                .frame(width: 361, height: 70)
                                 .background(Color.white)
                                 Rectangle()
-                                    .frame(width: 331, height: 1)
-                                    .foregroundColor(Color.gray)
+                                    .frame(width: 332, height: 1)
+                                    .foregroundColor(AppColor.grey2)
                                 
                             }
                             .listStyle(.plain)
