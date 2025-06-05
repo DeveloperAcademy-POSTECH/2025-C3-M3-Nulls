@@ -56,7 +56,7 @@ public struct ContentView: View {
             }
 
             Tab("사전", systemImage: "book", value: .dictionary) {
-                DictionaryView()
+                DictionaryView(context: context)
                     .environmentObject(dictionaryNavigationManager)
             }
         }
