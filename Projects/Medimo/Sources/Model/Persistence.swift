@@ -69,6 +69,8 @@ struct PersistenceController {
 
     let container: NSPersistentCloudKitContainer
 
+    // MARK: - CoreData Init
+
     // inMemory가 true일 경우 디스크에 저장되지 않음 (테스트, 프리뷰 용)
     init(inMemory: Bool = false) {
         print("Initializing PersistenceController with inMemory: \(inMemory)")
@@ -79,45 +81,32 @@ struct PersistenceController {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
 
-        container.loadPersistentStores(completionHandler: { _, error in
+        container.loadPersistentStores { _, error in
             if let error = error as NSError? {
-                fatalError("Unresolved error loading store \(error), \(error.userInfo)")
-            }
-        })
-        container.persistentStoreDescriptions.first?.shouldMigrateStoreAutomatically = true
-        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
-
-        let context = container.viewContext
-        if isFirstLaunch() {
-            let loader = InitialDataLoader(context: context)
-            do {
-                Task {
-                    try await loader.loadInitialData()
-                }
-
-                try context.save()
-                #if DEBUG
-                    print("Initial data loaded.")
-                #endif
-            } catch {
-                #if DEBUG
-                    print("Failed to load initial data: \(error)")
-                #endif
+                fatalError("Container load failed: \(error)")
             }
         }
+
+//        container.persistentStoreDescriptions.first?.shouldMigrateStoreAutomatically = true
+//        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
 
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
+}
 
-    private func isFirstLaunch() -> Bool {
-        // Glossary가 1개 이상 존재하는지 여부로 최초 실행 여부 판단
-        let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
-        do {
-            let count = try container.viewContext.count(for: fetchRequest)
-            return count == 0
-        } catch {
-            return true
+// MARK: - CoreData CRUD
+
+extension PersistenceController {
+    func saveContext() {
+        let context = container.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
         }
     }
 }

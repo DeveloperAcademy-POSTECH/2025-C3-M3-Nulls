@@ -63,6 +63,10 @@ class InitialDataLoader {
             term.explanation = t.explanation
             termMap[t.termKey] = term
         }
+
+        let fetchRequest = Term.fetchRequest()
+        let count = try context.count(for: fetchRequest)
+        print("✅ Core Data 내 Term 개수: \(count)")
     }
 
     private func loadMorphemes() async throws {
