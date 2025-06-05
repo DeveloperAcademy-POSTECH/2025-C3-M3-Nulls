@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct TermCardView: View {
-    @ObservedObject var term: Term
+    var term: Term
     
     @State private var isPlaying = false
     @State private var isFlipped = false
+
+    var backgroundColor: Color = .white
     
     @State var viewModel: DictionaryDetailViewModel
     
@@ -23,7 +25,7 @@ struct TermCardView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
+                .fill(backgroundColor)
                 .shadow(color: .black.opacity(0.2), radius: 5)
 
             VStack(spacing: 8) {
@@ -33,6 +35,14 @@ struct TermCardView: View {
                         if let spelling = viewModel.term.spelling {
                             viewModel.speak(spelling)
                         }
+                    }) {
+                        Image(systemName: "speaker.wave.2.fill")
+                            .imageScale(.large)
+                            .font(.system(size: 24))
+                            .foregroundStyle(AppColor.primary)
+                    }
+                    .onTapGesture {
+                        isPlaying.toggle()
                     }
 
                     Spacer()
@@ -43,22 +53,22 @@ struct TermCardView: View {
                         Image(systemName: term.isBookmarked ? "bookmark.fill" : "bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
-                            .foregroundStyle(Color("MM_Navy"))
+                            .foregroundStyle(AppColor.primary)
                     }
                 }
                 .padding(20)
 
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
-                        .font(isFlipped ? .MM_H2 : .MM_EH2)
+                        .font(isFlipped ? .title : .titleEng)
                     
                     if !isFlipped, term.abbreviation != nil {
                         Text("[\(String(term.abbreviation!))]")
-                            .font(.MM_EH3)
+                            .font(.headlineEng)
                             .padding(.vertical)
                     }
                 }
-                .foregroundStyle(Color("MM_Text"))
+                .foregroundStyle(AppColor.label)
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -79,8 +89,8 @@ struct TermCardView: View {
                         }
                     }
                 }
-                .font(.MM_AT)
-                .foregroundStyle(Color("MM_Grey4"))
+                .font(.caption)
+                .foregroundStyle(AppColor.grey4)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 40)
                 .frame(maxWidth: .infinity, alignment: .leading)
