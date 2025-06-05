@@ -18,6 +18,7 @@ struct StudyTestView: View {
     var studyTermSize: Int {
         terms.count
     }
+    var answer: String = ""
     
     init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
@@ -35,6 +36,8 @@ struct StudyTestView: View {
 //            MeaningTestView(term: terms[0])
 //            AbbreviationTestView(term: terms[0])
             PronounciationTestView(term: terms[0])
+            
+            AnswerTextBox(answer: answer)
             
             CorrectAnswer()
             // TODO: 문제 유형에 따라 다른 답 넘기기

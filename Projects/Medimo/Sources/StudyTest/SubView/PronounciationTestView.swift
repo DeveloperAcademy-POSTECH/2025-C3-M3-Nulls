@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PronounciationTestView: View {
     var term: Term
-    var answer: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -39,7 +38,6 @@ struct PronounciationTestView: View {
                 
                 Spacer()
             }
-            AnswerTextBox(answer: answer)
         }
         .background(AppColor.bgColor)
     }

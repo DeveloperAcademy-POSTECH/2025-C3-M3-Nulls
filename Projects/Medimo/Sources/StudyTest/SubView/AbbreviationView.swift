@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AbbreviationTestView: View {
     var term: Term
-    var answer: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,7 +18,6 @@ struct AbbreviationTestView: View {
                 .padding(.leading, 8)
             TestTermBox(term: term.spelling ?? "No Abbreviation")
                 .padding(.bottom, 40)
-            AnswerTextBox(answer: answer)
         }
     }
 }
