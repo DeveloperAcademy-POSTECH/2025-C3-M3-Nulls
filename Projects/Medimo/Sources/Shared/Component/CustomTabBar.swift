@@ -27,11 +27,12 @@ struct CustomTabBar: View {
                     Spacer()
                 }
             }
-            .frame(height: 70)
+            .frame(height: 60)
             .background(
                 TopRoundedRectangle(radius: 20)
                     .fill(Color.white)
-                    .frame(height: 70)
+                    .frame(height: 60)
+                    .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: -12)
             )
         }
     }
