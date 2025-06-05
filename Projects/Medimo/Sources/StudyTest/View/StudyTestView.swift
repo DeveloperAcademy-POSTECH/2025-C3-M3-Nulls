@@ -25,13 +25,18 @@ struct StudyTestView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack() {
             ProgressBar(index: index, total: terms.count)
-            List(terms, id: \.self) { term in
-                Text(term.spelling ?? "")
-            }
+                .padding(.bottom, 48)
+                .padding(.horizontal, 8)
+            // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
+            //            SpellingTestView(term: terms[0])
+//            MeaningTestView(term: terms[0])
+            AbbreviationTestView(term: terms[0])
+            Spacer()
         }
-        .padding(32)
+        .padding(24)
+        .background(AppColor.bgColor.ignoresSafeArea())
     }
 }
 

@@ -27,10 +27,16 @@ struct ProgressBar: View {
             }
             .frame(height: 8)
             .clipShape(RoundedRectangle(cornerRadius: 7))
+            .padding(.trailing, 12)
             
             Text("\(String(format: "%02d", index)) / \(total)")
                 .font(.caption)
                 .foregroundStyle(AppColor.navy)
         }
     }
+}
+
+#Preview {
+    ProgressBar(index: 1, total: 15)
+        .padding()
 }
