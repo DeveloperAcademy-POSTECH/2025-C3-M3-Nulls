@@ -14,13 +14,6 @@ struct TermCardView: View {
     @State private var isFlipped = false
 
     var backgroundColor: Color = .white
-    
-    @State var viewModel: DictionaryDetailViewModel
-    
-    init(term: Term) {
-        self.term = term
-        _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
-    }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -29,11 +22,13 @@ struct TermCardView: View {
                 .shadow(color: .black.opacity(0.2), radius: 5)
 
             VStack(spacing: 8) {
-                HStack {DictionaryDetailViewComponents.soundButton(
-                        spelling: viewModel.term.spelling
-                    ) {
-                        if let spelling = viewModel.term.spelling {
-                            viewModel.speak(spelling)
+                HStack {
+                    Button(action: {
+                        isPlaying.toggle()
+                        
+                        // TODO: 1초가 아니라 사운드 재생 시간만큼 재생 이미지 띄우기
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            isPlaying = false
                         }
                     }) {
                         Image(systemName: "speaker.wave.2.fill")
