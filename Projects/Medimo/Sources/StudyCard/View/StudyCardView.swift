@@ -1,9 +1,3 @@
-//
-//  StudyTermListView.swift
-//  Projects
-//
-//  Created by 이서현 on 6/1/25.
-//
 import CoreData
 import SwiftUI
 
@@ -12,12 +6,11 @@ import SwiftUI
 struct StudyCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-    
+
     @Bindable private var viewModel: StudyCardViewModel
-    @State private var currentCardIndex: Int? = 0
+  
+    @State private var currentCardIndex: Int = 0
     @State private var index: Int = 1
-    
-    
     var terms: [Term] {
         viewModel.getStudyTerms()
     }
@@ -25,7 +18,7 @@ struct StudyCardView: View {
     var studyTermSize: Int {
         terms.count
     }
-    
+  
     init(glossary: Glossary) {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
     }
@@ -94,7 +87,7 @@ struct StudyCardView: View {
                 .foregroundStyle(AppColor.systemBackground)
                 .cornerRadius(16)
                 .shadow(radius: 3)
-                .opacity(index == studyTermSize ? 1 : 0)
+                .opacity(index == studyTermSize ? 1 : 0) // 마지막 카드에서만 보이도록
             } else {
                 Text("학습할 용어가 없습니다.")
                     .font(.caption)
@@ -103,14 +96,13 @@ struct StudyCardView: View {
             
             Spacer()
         }
-//        .padding(.horizontal, 15)
         .padding(.bottom, 20)
         .onAppear {
             StudyManager.shared.setContext(context)
             if studyTermSize == 0 {
                 index = 0
             } else {
-                index = 1
+                index = 1 // 첫 번째 카드를 1로 표시
             }
             currentCardIndex = 0
         }
@@ -119,17 +111,24 @@ struct StudyCardView: View {
                 index = newIndex + 1
             }
         }
-        .onChange(of: index) {
-            // 범위 초과 시 자동 조정
-            if index > studyTermSize {
-                index = studyTermSize
-            } else if index < 1 {
-                index = 1
+        // index 범위 초과 방지 로직은 유지하는 것이 좋습니다.
+        .onChange(of: index) { newValue in
+            if studyTermSize > 0 { // 용어가 있을 때만 범위 조정
+                if newValue > studyTermSize {
+                    index = studyTermSize
+                } else if newValue < 1 {
+                    index = 1
+                }
+            } else {
+                if newValue != 0 { // 용어가 없으면 index는 0이어야 함
+                    index = 0
+                }
             }
         }
     }
 }
 
+// Preview는 그대로 유지됩니다.
 #Preview {
     let context = PersistenceController.preview.container.viewContext
     
@@ -142,13 +141,10 @@ struct StudyCardView: View {
     term.spelling = "Preview"
     term.meaning = "미리보기"
     glossary.addToTerms(term)
-    
     try? context.save()
-    
+
     StudyManager.shared.setContext(context)
-    
-    print("terms count:", StudyManager.shared.getNextStudyTerms().count)
-    
+  
     return StudyCardView(glossary: glossary)
         .environment(\.managedObjectContext, context)
         .environmentObject(NavigationManager())
