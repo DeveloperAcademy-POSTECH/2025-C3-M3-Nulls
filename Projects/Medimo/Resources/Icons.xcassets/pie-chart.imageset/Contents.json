@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pie-chart.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "pie-chart.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "smile.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "smile.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

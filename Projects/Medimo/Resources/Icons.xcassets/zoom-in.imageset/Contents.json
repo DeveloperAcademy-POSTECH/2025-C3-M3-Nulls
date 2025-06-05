@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "zoom-in.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "zoom-in.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

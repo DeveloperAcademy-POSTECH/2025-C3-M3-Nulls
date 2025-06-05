@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "git-merge.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "git-merge.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

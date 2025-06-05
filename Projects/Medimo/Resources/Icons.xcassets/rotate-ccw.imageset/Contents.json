@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "rotate-ccw.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "rotate-ccw.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

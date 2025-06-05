@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "wind.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "wind.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

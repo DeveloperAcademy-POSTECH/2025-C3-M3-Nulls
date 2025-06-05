@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "meh.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "meh.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

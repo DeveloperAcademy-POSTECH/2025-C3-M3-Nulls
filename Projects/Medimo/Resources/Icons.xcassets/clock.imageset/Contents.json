@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "clock.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "clock.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

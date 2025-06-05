@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "paperclip.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "paperclip.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

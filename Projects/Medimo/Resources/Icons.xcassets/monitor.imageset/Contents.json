@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "monitor.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "monitor.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

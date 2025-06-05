@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "hash.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "hash.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "battery.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "battery.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

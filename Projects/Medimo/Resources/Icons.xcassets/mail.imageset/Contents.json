@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "mail.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "mail.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

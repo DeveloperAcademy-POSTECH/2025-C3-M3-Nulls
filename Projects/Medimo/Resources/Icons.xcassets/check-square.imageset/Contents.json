@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "check-square.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "check-square.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

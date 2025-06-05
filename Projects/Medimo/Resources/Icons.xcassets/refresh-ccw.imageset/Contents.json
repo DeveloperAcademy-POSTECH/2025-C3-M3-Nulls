@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "refresh-ccw.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "refresh-ccw.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

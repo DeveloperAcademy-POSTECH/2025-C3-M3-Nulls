@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "phone-forwarded.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "phone-forwarded.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

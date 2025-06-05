@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "zap-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "zap-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

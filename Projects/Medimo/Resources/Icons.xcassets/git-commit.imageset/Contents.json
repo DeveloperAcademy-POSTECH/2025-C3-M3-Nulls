@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "git-commit.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "git-commit.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "columns.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "columns.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

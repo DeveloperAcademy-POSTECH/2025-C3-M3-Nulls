@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "corner-left-up.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "corner-left-up.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

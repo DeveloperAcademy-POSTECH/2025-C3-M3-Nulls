@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "trello.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "trello.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

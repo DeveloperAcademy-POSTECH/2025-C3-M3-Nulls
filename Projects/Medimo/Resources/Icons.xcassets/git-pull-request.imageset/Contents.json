@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "git-pull-request.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "git-pull-request.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

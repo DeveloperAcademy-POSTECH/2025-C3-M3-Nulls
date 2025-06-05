@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cloud-rain.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "cloud-rain.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

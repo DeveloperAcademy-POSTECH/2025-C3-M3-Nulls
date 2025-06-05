@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "trending-up.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "trending-up.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

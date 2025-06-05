@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "umbrella.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "umbrella.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

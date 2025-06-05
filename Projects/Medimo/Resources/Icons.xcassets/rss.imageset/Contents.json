@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "rss.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "rss.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

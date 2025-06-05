@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cloud-drizzle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "cloud-drizzle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

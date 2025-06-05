@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "triangle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "triangle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

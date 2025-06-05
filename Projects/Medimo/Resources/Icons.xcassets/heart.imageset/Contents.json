@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "heart.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "heart.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

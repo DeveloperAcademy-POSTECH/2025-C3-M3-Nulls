@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "sunrise.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "sunrise.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

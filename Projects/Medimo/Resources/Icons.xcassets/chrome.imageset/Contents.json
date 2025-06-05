@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "chrome.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "chrome.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

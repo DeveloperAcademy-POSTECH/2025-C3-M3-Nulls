@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "camera.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "camera.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

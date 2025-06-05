@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "headphones.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "headphones.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

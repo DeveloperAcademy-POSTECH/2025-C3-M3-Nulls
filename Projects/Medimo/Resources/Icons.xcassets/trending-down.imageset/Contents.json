@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "trending-down.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "trending-down.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

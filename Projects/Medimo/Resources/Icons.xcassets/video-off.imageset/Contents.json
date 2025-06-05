@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "video-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "video-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

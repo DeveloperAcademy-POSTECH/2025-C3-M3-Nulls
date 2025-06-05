@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "italic.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "italic.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "voicemail.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "voicemail.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

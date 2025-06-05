@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "wifi.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "wifi.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

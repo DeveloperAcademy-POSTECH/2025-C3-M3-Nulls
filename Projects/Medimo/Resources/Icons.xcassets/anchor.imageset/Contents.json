@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "anchor.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "anchor.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

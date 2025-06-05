@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "phone-missed.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "phone-missed.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "linkedin.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "linkedin.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "terminal.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "terminal.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

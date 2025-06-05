@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "framer.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "framer.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "aperture.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "aperture.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

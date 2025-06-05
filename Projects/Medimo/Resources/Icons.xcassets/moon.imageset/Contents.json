@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "moon.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "moon.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

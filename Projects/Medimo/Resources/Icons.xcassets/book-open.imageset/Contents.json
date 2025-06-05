@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "book-open.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "book-open.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

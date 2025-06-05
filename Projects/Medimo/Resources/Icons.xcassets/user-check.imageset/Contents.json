@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "user-check.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "user-check.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

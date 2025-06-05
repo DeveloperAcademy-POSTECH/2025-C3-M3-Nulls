@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "map-pin.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "map-pin.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cpu.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "cpu.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

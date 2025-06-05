@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "mic.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "mic.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "settings.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "settings.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

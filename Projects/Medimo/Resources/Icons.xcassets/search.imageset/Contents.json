@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "search.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "search.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

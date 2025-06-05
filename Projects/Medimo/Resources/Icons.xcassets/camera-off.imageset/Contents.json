@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "camera-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "camera-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

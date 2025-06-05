@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "shield-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "shield-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

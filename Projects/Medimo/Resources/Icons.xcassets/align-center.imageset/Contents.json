@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "align-center.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "align-center.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

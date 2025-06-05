@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "bluetooth.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "bluetooth.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

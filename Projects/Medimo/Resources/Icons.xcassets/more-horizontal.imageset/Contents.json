@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "more-horizontal.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "more-horizontal.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

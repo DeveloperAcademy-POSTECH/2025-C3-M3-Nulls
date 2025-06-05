@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "play-circle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "play-circle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

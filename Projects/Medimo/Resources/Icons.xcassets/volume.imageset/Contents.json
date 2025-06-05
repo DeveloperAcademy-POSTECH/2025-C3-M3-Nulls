@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "volume.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "volume.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

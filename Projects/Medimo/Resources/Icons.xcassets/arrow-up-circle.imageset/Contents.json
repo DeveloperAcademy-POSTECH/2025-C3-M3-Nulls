@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "arrow-up-circle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "arrow-up-circle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "gitlab.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "gitlab.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

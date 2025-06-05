@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "unlock.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "unlock.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

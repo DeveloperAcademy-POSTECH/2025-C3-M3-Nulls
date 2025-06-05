@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "grid.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "grid.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

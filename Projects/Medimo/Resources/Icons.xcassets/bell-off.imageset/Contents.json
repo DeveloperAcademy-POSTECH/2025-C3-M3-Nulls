@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "bell-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "bell-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

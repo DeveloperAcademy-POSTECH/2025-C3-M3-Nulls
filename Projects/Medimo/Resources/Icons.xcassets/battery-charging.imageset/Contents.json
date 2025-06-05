@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "battery-charging.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "battery-charging.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

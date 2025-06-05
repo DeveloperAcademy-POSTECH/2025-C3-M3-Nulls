@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "delete.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "delete.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

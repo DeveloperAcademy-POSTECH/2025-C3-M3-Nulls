@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "arrow-down.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "arrow-down.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

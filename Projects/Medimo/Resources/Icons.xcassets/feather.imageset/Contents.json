@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "feather.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "feather.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

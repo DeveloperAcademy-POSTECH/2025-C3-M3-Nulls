@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "sunset.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "sunset.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

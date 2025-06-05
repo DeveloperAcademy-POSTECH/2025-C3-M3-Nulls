@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pause.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "pause.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

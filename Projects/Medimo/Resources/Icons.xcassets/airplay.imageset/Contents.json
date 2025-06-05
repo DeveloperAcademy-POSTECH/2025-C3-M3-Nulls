@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "airplay.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "airplay.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "crosshair.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "crosshair.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

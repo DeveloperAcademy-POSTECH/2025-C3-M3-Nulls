@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "share-2.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "share-2.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

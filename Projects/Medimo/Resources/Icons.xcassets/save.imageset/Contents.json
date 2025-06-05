@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "save.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "save.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "chevrons-right.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "chevrons-right.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "log-out.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "log-out.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

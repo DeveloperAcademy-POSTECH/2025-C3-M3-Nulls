@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "film.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "film.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "divide-square.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "divide-square.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

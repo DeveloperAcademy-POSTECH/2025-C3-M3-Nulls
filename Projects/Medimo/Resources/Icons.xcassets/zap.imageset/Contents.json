@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "zap.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "zap.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

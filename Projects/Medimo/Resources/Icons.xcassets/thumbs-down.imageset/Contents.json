@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "thumbs-down.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "thumbs-down.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

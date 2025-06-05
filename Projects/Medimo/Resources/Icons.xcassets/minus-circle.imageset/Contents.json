@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "minus-circle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "minus-circle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "skip-forward.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "skip-forward.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

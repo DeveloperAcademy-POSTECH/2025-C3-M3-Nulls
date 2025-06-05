@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pocket.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "pocket.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

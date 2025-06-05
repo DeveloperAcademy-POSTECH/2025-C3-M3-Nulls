@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "minimize-2.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "minimize-2.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

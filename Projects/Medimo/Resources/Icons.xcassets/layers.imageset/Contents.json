@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "layers.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "layers.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

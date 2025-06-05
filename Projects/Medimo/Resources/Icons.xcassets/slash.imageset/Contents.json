@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "slash.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "slash.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

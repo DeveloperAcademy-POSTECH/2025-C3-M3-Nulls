@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "coffee.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "coffee.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "twitch.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "twitch.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

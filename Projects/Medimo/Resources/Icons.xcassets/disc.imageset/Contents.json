@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "disc.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "disc.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

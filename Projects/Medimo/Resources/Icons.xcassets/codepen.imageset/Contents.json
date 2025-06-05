@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "codepen.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "codepen.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

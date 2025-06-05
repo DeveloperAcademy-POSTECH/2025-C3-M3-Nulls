@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "hexagon.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "hexagon.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

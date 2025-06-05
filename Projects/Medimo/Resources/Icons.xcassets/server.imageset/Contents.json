@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "server.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "server.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "flag.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "flag.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

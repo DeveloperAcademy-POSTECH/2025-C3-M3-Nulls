@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "facebook.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "facebook.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

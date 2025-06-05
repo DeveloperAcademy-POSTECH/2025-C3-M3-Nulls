@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "command.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "command.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

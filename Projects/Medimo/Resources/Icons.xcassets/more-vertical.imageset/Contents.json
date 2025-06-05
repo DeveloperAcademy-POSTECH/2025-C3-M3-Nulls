@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "more-vertical.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "more-vertical.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

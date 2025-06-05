@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "shopping-bag.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "shopping-bag.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

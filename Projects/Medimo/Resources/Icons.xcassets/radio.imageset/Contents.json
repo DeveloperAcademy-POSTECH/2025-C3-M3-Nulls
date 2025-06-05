@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "radio.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "radio.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

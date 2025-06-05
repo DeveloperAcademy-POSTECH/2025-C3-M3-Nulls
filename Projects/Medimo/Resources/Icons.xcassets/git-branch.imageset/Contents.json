@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "git-branch.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "git-branch.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

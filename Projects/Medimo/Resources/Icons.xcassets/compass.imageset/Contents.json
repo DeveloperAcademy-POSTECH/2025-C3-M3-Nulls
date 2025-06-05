@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "compass.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "compass.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "trash.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "trash.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

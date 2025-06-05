@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "clipboard.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "clipboard.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "wifi-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "wifi-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

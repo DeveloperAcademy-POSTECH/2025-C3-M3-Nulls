@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "dribbble.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "dribbble.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "truck.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "truck.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

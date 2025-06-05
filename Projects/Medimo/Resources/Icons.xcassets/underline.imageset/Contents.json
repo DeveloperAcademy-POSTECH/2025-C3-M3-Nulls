@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "underline.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "underline.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

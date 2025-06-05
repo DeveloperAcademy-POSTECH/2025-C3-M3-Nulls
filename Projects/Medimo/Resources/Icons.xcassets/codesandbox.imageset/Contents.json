@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "codesandbox.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "codesandbox.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

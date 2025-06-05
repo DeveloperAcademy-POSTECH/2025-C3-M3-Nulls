@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tv.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "tv.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

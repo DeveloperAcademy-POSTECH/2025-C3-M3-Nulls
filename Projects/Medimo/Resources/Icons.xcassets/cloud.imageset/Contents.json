@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cloud.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "cloud.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

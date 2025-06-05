@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "map.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "map.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

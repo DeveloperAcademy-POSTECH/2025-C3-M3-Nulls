@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "dollar-sign.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "dollar-sign.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

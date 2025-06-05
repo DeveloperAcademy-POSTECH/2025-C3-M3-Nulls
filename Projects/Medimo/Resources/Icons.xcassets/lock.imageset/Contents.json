@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "lock.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "lock.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

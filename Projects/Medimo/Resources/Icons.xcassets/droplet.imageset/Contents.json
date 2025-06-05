@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "droplet.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "droplet.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

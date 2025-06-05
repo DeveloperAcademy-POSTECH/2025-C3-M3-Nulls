@@ -11,6 +11,9 @@ import Foundation
 class StudyViewModel {
     var studyingGlossary: Glossary
     
+    // TODO: 연속 학습일 처리
+    var streak: Int = 0
+    
     init(studyingGlossary: Glossary) {
         self.studyingGlossary = studyingGlossary
     }

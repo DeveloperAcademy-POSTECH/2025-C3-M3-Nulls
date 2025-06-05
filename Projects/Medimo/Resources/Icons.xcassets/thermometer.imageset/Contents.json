@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "thermometer.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "thermometer.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

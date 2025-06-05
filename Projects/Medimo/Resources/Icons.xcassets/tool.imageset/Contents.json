@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tool.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "tool.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "eye-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "eye-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

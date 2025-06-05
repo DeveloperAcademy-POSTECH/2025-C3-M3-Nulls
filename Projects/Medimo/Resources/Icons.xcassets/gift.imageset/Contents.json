@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "gift.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "gift.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

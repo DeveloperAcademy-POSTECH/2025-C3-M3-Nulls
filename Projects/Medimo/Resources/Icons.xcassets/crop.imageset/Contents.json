@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "crop.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "crop.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

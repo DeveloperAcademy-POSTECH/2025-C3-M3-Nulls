@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "figma.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "figma.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

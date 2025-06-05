@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "chevron-up.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "chevron-up.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

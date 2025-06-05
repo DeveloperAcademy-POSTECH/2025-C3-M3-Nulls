@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "sun.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "sun.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

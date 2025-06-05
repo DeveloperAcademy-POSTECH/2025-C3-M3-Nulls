@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "life-buoy.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "life-buoy.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

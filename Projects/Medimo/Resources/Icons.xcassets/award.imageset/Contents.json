@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "award.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "award.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

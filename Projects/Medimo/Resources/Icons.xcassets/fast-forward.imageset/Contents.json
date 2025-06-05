@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "fast-forward.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "fast-forward.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

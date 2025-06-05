@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "at-sign.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "at-sign.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

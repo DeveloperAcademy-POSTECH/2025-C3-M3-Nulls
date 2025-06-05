@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "refresh-cw.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "refresh-cw.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "log-in.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "log-in.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

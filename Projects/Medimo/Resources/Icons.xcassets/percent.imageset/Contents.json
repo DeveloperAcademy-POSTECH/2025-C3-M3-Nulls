@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "percent.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "percent.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

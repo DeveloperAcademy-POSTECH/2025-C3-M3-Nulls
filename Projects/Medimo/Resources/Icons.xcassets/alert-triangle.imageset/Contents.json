@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "alert-triangle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "alert-triangle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

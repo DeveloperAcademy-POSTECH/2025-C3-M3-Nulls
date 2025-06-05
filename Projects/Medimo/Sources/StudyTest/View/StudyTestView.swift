@@ -34,6 +34,9 @@ struct StudyTestView: View {
 //            MeaningTestView(term: terms[0])
 //            AbbreviationTestView(term: terms[0])
             PronounciationTestView(term: terms[0])
+            CorrectAnswer()
+            // TODO: 문제 유형에 따라 다른 답 넘기기
+            WrongAnswer(correctAnswer: terms[0].spelling ?? "")
             Spacer()
         }
         .padding(24)

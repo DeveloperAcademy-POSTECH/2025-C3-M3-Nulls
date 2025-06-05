@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "divide.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "divide.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

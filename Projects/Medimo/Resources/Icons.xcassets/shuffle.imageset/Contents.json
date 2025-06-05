@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "shuffle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "shuffle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

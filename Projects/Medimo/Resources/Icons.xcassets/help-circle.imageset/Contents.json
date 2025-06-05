@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "help-circle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "help-circle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

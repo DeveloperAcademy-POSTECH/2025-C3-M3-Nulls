@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "x-octagon.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "x-octagon.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

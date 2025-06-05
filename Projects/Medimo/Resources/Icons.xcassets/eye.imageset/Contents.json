@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "eye.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "eye.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

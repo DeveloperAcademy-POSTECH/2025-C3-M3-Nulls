@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "rewind.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "rewind.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

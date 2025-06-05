@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "mic-off.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "mic-off.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pause-circle.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "pause-circle.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

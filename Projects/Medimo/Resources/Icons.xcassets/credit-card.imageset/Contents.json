@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "credit-card.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "credit-card.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

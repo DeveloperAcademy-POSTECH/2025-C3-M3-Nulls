@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cast.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "cast.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

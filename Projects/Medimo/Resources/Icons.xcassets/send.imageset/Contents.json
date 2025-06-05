@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "send.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "send.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

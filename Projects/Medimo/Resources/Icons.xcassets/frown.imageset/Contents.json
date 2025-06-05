@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "frown.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "frown.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

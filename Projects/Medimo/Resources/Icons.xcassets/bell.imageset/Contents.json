@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "bell.pdf",
-      "idiom" : "universal"
-    },
-    {
+      "filename" : "bell.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
