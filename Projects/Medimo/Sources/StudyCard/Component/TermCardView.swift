@@ -8,12 +8,20 @@
 import SwiftUI
 
 struct TermCardView: View {
-    var term: Term
+    @ObservedObject var term: Term
     
     @State private var isPlaying = false
     @State private var isFlipped = false
-
-    var backgroundColor: Color = .white
+    
+    @State var viewModel: DictionaryDetailViewModel
+    
+    var backgroundColor: Color = AppColor.white
+    
+    init(term: Term, backgroundColor: Color) {
+        self.term = term
+        self.backgroundColor = backgroundColor
+        _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+    }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -23,21 +31,12 @@ struct TermCardView: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    Button(action: {
-                        isPlaying.toggle()
-                        
-                        // TODO: 1초가 아니라 사운드 재생 시간만큼 재생 이미지 띄우기
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            isPlaying = false
+                    DictionaryDetailViewComponents.soundButton(
+                        spelling: viewModel.term.spelling
+                    ) {
+                        if let spelling = viewModel.term.spelling {
+                            viewModel.speak(spelling)
                         }
-                    }) {
-                        Image(systemName: "speaker.wave.2.fill")
-                            .imageScale(.large)
-                            .font(.system(size: 24))
-                            .foregroundStyle(AppColor.primary)
-                    }
-                    .onTapGesture {
-                        isPlaying.toggle()
                     }
 
                     Spacer()
@@ -122,6 +121,6 @@ struct TermCardView: View {
     주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
     """
     
-    return TermCardView(term: term)
+    return TermCardView(term: term, backgroundColor: AppColor.white)
         .environment(\.managedObjectContext, context)
 }
