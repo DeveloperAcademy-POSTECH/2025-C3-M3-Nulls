@@ -134,10 +134,10 @@ struct DictionaryDetailViewComponents {
         Image("character5")
             .resizable()
             .scaledToFit()
-            .frame(width: 200, height: 200)
-            .padding(.trailing, 32)
-            .padding(.bottom, -35)
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(width: 180, height: 180)
+            .padding(.bottom, -25)
+            .padding(.trailing, 15)
+            .frame(maxWidth: .infinity, alignment: .center)
             .edgesIgnoringSafeArea(.all)
     }
 
