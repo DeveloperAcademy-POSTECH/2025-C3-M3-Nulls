@@ -30,17 +30,6 @@ struct DictionaryDetailViewComponents {
             .foregroundStyle(AppColor.primary)
     }
 
-//    static func sectionGlossary(_ title: String) -> some View {
-//        Text(
-//            (viewModel.term.glossarys as? Set<Glossary>)?
-//                .compactMap { $0.title }
-//                .joined(separator:  ", ") ?? ""
-//        )
-//        .font(.caption)
-//        .foregroundColor(AppColor.secondary)
-//        .padding(.top, 16)
-//        .padding(.leading, 8)
-//    }
     static func sectionGlossary(_ glossarys: NSSet?) -> some View {
         Text(
             (glossarys as? Set<Glossary>)?

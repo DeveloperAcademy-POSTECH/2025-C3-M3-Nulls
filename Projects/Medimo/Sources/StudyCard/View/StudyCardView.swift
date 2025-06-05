@@ -33,7 +33,7 @@ struct StudyCardView: View {
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
         case .center:
-            return Color.white
+            return AppColor.white
         case .left:
             return AppColor.blue
         case .right:
@@ -103,7 +103,6 @@ struct StudyCardView: View {
             
             Spacer()
         }
-//        .padding(.horizontal, 15)
         .padding(.bottom, 20)
         .onAppear {
             StudyManager.shared.setContext(context)
