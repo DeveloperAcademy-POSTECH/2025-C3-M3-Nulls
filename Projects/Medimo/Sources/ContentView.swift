@@ -39,7 +39,7 @@ public struct ContentView: View {
                                     .environmentObject(studyNavigationManager)
 
                             case let .StudyTest(terms):
-                                StudyTestView(terms: terms)
+                                StudyTestView(terms: terms, index: .constant(1))
 //
 //                            case let .ReviewTest(glossary):
 //                                EmptyView()

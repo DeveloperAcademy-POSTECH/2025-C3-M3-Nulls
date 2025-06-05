@@ -12,7 +12,7 @@ struct StudyTestView: View {
     @Environment(\.managedObjectContext) private var context
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 4
+    @State var index: Int = 1
     
     @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
@@ -24,43 +24,37 @@ struct StudyTestView: View {
     var answer: String = ""
     @State var buttonText = "다음 문제로"
     
-    init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
+    init(terms: [Term], index: Binding<Int>, viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
         self.viewModel = viewModel
     }
     
     var body: some View {
-        VStack() {
+        VStack {
             ProgressBar(index: index, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-            
-            switch currentTestType {
-            case .spelling:
-                SpellingTestView(term: terms[0])
-            case .meaning:
-                MeaningTestView(term: terms[0])
-            case .abbreviation:
-                AbbreviationTestView(term: terms[0])
-            case .pronunciation:
-                PronounciationTestView(term: terms[0])
+
+            if terms.indices.contains(index - 1) {
+                StudyTestDetailView(
+                    term: terms[index - 1],
+                    testType: currentTestType,
+                    // TODO: 테스트마다 정답 다르게 하기
+                    correctAnswer: terms[index - 1].spelling ?? "",
+                    buttonText: buttonText,
+                    index: $index
+                )
             }
-            AnswerView(correctAnswer: terms[0].spelling ?? "", answer: answer, buttonText: buttonText)
-//                SpellingTestView(term: terms[0])
-                //            MeaningTestView(term: terms[0])
-                //            AbbreviationTestView(term: terms[0])
-                //            PronounciationTestView(term: terms[0])
-                
-//                AnswerView(correctAnswer: terms[0].spelling ?? "", answer: answer, buttonText: buttonText)
         }
         .padding(24)
-        .background(AppColor.bgColor.ignoresSafeArea())
-        .onChange(of: index) { oldIndex, newIndex in
-            if newIndex == studyTermSize {
+        .background(AppColor.bgColor)
+        .onChange(of: index) { _, newValue in
+            if newValue == studyTermSize {
                 buttonText = "학습 결과 보러가기"
             } else {
                 buttonText = "다음 문제로"
             }
+            currentTestType = TestType.allCases.randomElement()!
         }
     }
 }
@@ -76,6 +70,9 @@ struct StudyTestView: View {
     StudyManager.shared.setContext(context)
     let terms = StudyManager.shared.getNextStudyTerms()
 
-    return StudyTestView(terms: terms.isEmpty ? [fallbackTerm] : terms)
-        .environment(\.managedObjectContext, context)
+    return StudyTestView(
+        terms: terms.isEmpty ? [fallbackTerm] : terms,
+        index: .constant(1)
+    )
+    .environment(\.managedObjectContext, context)
 }

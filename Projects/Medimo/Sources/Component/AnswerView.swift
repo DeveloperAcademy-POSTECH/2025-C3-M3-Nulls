@@ -9,11 +9,14 @@ import SwiftUI
 
 struct AnswerView: View {
     let correctAnswer: String
-    @State var answer: String
+    @Binding var index: Int
+    
+    @State private var answer: String = ""
     @State private var isAnswered: Bool = false
     @State private var isCorrect: Bool = false
+
     var buttonText: String
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -22,7 +25,7 @@ struct AnswerView: View {
                     .foregroundStyle(AppColor.grey3)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
-                
+
                 Button(action: {
                     isCorrect = answer == correctAnswer
                     isAnswered = true
@@ -39,25 +42,25 @@ struct AnswerView: View {
             .padding(8)
             .background(AppColor.white)
             .cornerRadius(15)
-            
+
             if isAnswered {
                 if isCorrect {
                     CorrectAnswer()
-                    
                 } else {
                     WrongAnswer(correctAnswer: correctAnswer)
                 }
+
                 Spacer()
-                
-                NextButton(buttonText: buttonText)
+
+                NextButton(buttonText: buttonText, action: {
+                    isAnswered = false
+                    isCorrect = false
+                    answer = ""
+                    index += 1
+                })
             } else {
                 Spacer()
             }
-            
         }
     }
-}
-
-#Preview {
-    AnswerView(correctAnswer: "test", answer: "test", buttonText: "Next")
 }
