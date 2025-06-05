@@ -9,10 +9,10 @@ import SwiftUI
 
 struct StudyMainCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    
+
     @Binding var studyingGlossary: Glossary
     @Binding var studyTermSize: Int
-    
+
     var body: some View {
         ZStack {
             StudyMainCardBackgroundView()
@@ -26,10 +26,12 @@ struct StudyMainCardView: View {
                     .padding(.top, 28)
                     .padding(.bottom, 32)
                 VStack(spacing: 16) {
-                    StudyStartButtonView(action: {
-                        navigationManager.push(to: .StudyCard(glossary: studyingGlossary))
-                    })
-                        .padding(.horizontal, 20)
+                    StudyStartButtonView {
+                        navigationManager.studyPath.append(.StudyCard(glossary: studyingGlossary))
+//                        navigationManager.push(to: .StudyCard(glossary: studyingGlossary))
+                    }
+                    .padding(.horizontal, 20)
+
                     ReviewStartButtonView()
                         .padding(.horizontal, 20)
                 }
@@ -51,6 +53,6 @@ struct StudyMainCardView: View {
             studyingGlossary: $viewModel.studyingGlossary,
             studyTermSize: $studyManager.studyTermSize
         )
-            .padding(16)
+        .padding(16)
     }
 }

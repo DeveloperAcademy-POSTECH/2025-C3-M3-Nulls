@@ -7,29 +7,26 @@
 import CoreData
 import SwiftUI
 
-
-
 struct StudyCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-    
-    @Bindable private var viewModel: StudyCardViewModel
+
+    @StateObject private var viewModel: StudyCardViewModel
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
-    
-    
+
     var terms: [Term] {
         viewModel.getStudyTerms()
     }
-    
+
     var studyTermSize: Int {
         terms.count
     }
-    
-    init(glossary: Glossary) {
+
+    init(glossary _: Glossary) {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
     }
-    
+
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
         case .center:
@@ -40,7 +37,7 @@ struct StudyCardView: View {
             return AppColor.skyBlue
         }
     }
-    
+
     var body: some View {
         VStack {
             if studyTermSize > 0 {
@@ -55,7 +52,7 @@ struct StudyCardView: View {
                 .padding(.bottom)
                 .padding(.horizontal, 15)
                 .padding(.top, 30)
-                
+
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 10) {
                         ForEach(Array(terms.enumerated()), id: \.offset) { idx, term in
@@ -80,11 +77,12 @@ struct StudyCardView: View {
                 .scrollTargetBehavior(.viewAligned)
                 .scrollIndicators(.hidden)
                 .scrollPosition(id: $currentCardIndex, anchor: .center)
-                
+
                 Spacer()
-                
+
                 Button("용어 테스트 시작") {
-                    navigationManager.push(to: .StudyTest(terms: terms))
+                    navigationManager.studyPath.append(.StudyTest(terms: terms))
+//                    navigationManager.push(to: .StudyTest(terms: terms))
                 }
                 .font(.body)
                 .frame(width: 262, height: 40)
@@ -100,7 +98,7 @@ struct StudyCardView: View {
                     .font(.caption)
                     .foregroundStyle(AppColor.grey1)
             }
-            
+
             Spacer()
         }
         .padding(.bottom, 20)
@@ -131,23 +129,23 @@ struct StudyCardView: View {
 
 #Preview {
     let context = PersistenceController.preview.container.viewContext
-    
+
     let glossary = Glossary(context: context)
     glossary.id = UUID()
     glossary.title = "프리뷰 용어집"
-    
+
     let term = Term(context: context)
     term.id = UUID()
     term.spelling = "Preview"
     term.meaning = "미리보기"
     glossary.addToTerms(term)
-    
+
     try? context.save()
-    
+
     StudyManager.shared.setContext(context)
-    
+
     print("terms count:", StudyManager.shared.getNextStudyTerms().count)
-    
+
     return StudyCardView(glossary: glossary)
         .environment(\.managedObjectContext, context)
         .environmentObject(NavigationManager())

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+
     @Bindable var viewModel: StudyViewModel
     @Bindable var studyManager = StudyManager.shared
-    
+
     @State private var isAtTop: Bool = true
 
     init(glossary: Glossary) {
@@ -29,6 +30,7 @@ struct StudyView: View {
                     )
                     .padding(.top, 42)
                     .padding(.horizontal, 16)
+
                     StudyCalendarCardView()
                         .padding(16)
                 }
