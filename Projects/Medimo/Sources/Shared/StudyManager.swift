@@ -26,14 +26,12 @@ public class StudyManager {
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
         request.fetchLimit = 1
         studyingGlossaryId = try? context.fetch(request).first?.id
-        
-//        initializeLearningStatus()
     }
     
     var studyingGlossaryId: UUID? {
         didSet {
             _cachedStudyingGlossary = nil
-            _cachedTermLearningStatusList = nil
+            _cachedTermLearningMetadataList = nil
         }
     }
     
@@ -54,27 +52,27 @@ public class StudyManager {
         return result
     }
     
-    private var _cachedTermLearningStatusList: [TermLearningStatus]?
-    var termLearnStatusList: [TermLearningStatus]? {
-        if let cached = _cachedTermLearningStatusList {
+    private var _cachedTermLearningMetadataList: [TermLearningMetadata]?
+    var termLearnMetadataList: [TermLearningMetadata]? {
+        if let cached = _cachedTermLearningMetadataList {
             return cached
         }
         
         guard let studyingGlossaryId else { return nil }
         
-        let request: NSFetchRequest<TermLearningStatus> = TermLearningStatus.fetchRequest()
+        let request: NSFetchRequest<TermLearningMetadata> = TermLearningMetadata.fetchRequest()
         request.predicate = NSPredicate(format: "glossaryId == %@", studyingGlossaryId as CVarArg)
         
         let result = try? context?.fetch(request)
-        _cachedTermLearningStatusList = result
+        _cachedTermLearningMetadataList = result
         return result
     }
     
-    func updateLearningStatus(of status: TermLearningStatus, to newStatus: LearningStatus) {
-        status.status = newStatus.rawValue
-        status.lastReviewedAt = Date()
+    func updateLearningStatus(of termLearningMetadata: TermLearningMetadata, to newStatus: LearningStatus) {
+        termLearningMetadata.status = newStatus.rawValue
+        termLearningMetadata.lastReviewedAt = Date()
         // TODO: 현재 1일 뒤 복습으로 적용되어 있으나 추후 업데이트 예정
-        status.nextReviewAt = Date().addingTimeInterval(60 * 60 * 24 * 1)
+        termLearningMetadata.nextReviewAt = Date().addingTimeInterval(60 * 60 * 24 * 1)
         
         do {
             try context!.save()
@@ -85,49 +83,20 @@ public class StudyManager {
         }
     }
     
-//    func initializeLearningStatus() {
-//        guard let context = context,
-//              let glossary = studyingGlossary else { return }
-//        
-//        let existingStatusList = termLearnStatusList ?? []
-//
-//        let existingTermIds = Set(existingStatusList.map { $0.termId! })
-//
-//        for term in glossary.termsArray {
-//            if !existingTermIds.contains(term.id!) {
-//                let newStatus = TermLearningStatus(context: context)
-//                newStatus.termId = term.id
-//                newStatus.glossaryId = glossary.id
-//                newStatus.status = LearningStatus.notStarted.rawValue
-//                newStatus.lastReviewedAt = nil
-//                newStatus.nextReviewAt = nil
-//            }
-//        }
-//
-//        do {
-//            try context.save()
-//            _cachedTermLearningStatusList = nil
-//        } catch {
-//            #if DEBUG
-//            print("Failed to initialize learning statuses: \(error)")
-//            #endif
-//        }
-//    }
-    
     func getNextStudyTerms() -> [Term] {
         guard studyingGlossaryId != nil else { return [] }
-        guard termLearnStatusList != nil else { return [] }
+        guard termLearnMetadataList != nil else { return [] }
         
         var termIdList: [UUID] = []
         
-        let inProgressTermIdList = termLearnStatusList!
+        let inProgressTermIdList = termLearnMetadataList!
             .filter { $0.status == LearningStatus.inProgress.rawValue }
             .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
             .map { $0.termId! }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
         
         if termIdList.count < studyTermSize {
-            let notStartedTermIdList = termLearnStatusList!
+            let notStartedTermIdList = termLearnMetadataList!
                 .filter { $0.status == LearningStatus.notStarted.rawValue }
                 .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
                 .map { $0.termId! }
@@ -143,5 +112,55 @@ public class StudyManager {
         
         return result
     }
-
+    
+    func updateReview(of term: Term, result: QuizResult) {
+        let now = Date()
+        
+        var meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        
+        switch result {
+        case .correct:
+            meta.repetitions += 1
+            if meta.repetitions == 1 {
+                meta.interval = 1
+            } else if meta.repetitions == 2 {
+                meta.interval = 3
+            } else {
+                // SM-2: I(n) = I(n-1) * EF
+                meta.interval = Int32(Double(meta.interval) * meta.easeFactor)
+            }
+            meta.easeFactor = max(1.3, meta.easeFactor)
+        case .incorrect:
+            meta.interval = 1
+            meta.repetitions = 0
+            meta.easeFactor = 0.15
+            meta.easeFactor = max(1.3, meta.easeFactor - 0.2)
+        }
+        
+        meta.lastReviewedAt = now
+        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+    }
+    
+    func getTodayReviewTerms() -> [Term] {
+        guard studyingGlossaryId != nil else { return [] }
+        guard termLearnMetadataList != nil else { return [] }
+        
+        var termIdList: [UUID] = []
+        
+        let today = Date()
+        
+        let todayReviewTermIdList = termLearnMetadataList!
+            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today}
+            .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+            .map { $0.termId! }
+        termIdList.append(contentsOf: todayReviewTermIdList)
+        
+        var result: [Term] = []
+        for termId in termIdList {
+            guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
+            result.append(term)
+        }
+        
+        return result
+    }
 }
