@@ -34,7 +34,7 @@ public struct ContentView: View {
                         .environmentObject(studyNavigationManager)
                         .navigationDestination(for: PathType.self) { path in
                             switch path {
-                            case .StudyCard(let glossary):
+                            case let .StudyCard(glossary):
                                 StudyCardView(glossary: glossary)
                                     .environmentObject(studyNavigationManager)
 
@@ -65,5 +65,5 @@ public struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
 }

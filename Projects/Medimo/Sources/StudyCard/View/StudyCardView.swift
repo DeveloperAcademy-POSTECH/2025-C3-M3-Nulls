@@ -12,6 +12,7 @@ struct StudyCardView: View {
     @Environment(\.managedObjectContext) private var context
 
     @Bindable private var viewModel: StudyCardViewModel
+    @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
 
     var terms: [Term] {
@@ -34,54 +35,56 @@ struct StudyCardView: View {
                         .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                         .padding(.trailing)
                     Text("\(String(format: "%02d", index)) / \(studyTermSize)")
-                        .font(.MM_AT)
-                        .foregroundColor(Color("MM_Navy"))
+                        .font(.caption)
+                        .foregroundStyle(AppColor.primary)
                 }
                 .padding(.bottom)
+                .padding(.top, 40)
 
-                if terms.indices.contains(index - 1) {
-                    TermCardView(term: terms[index - 1])
-                        .gesture(
-                            DragGesture()
-                                .onEnded { value in
-                                    let horizontalAmount = value.translation.width
-
-                                    if horizontalAmount < -50 {
-                                        if index < studyTermSize {
-                                            index += 1
-                                        }
-                                    } else if horizontalAmount > 50 {
-                                        if index > 1 {
-                                            index -= 1
-                                        }
-                                    }
+                ScrollView(.horizontal) {
+                    HStack(spacing: 15) {
+                        ForEach(Array(terms.enumerated()), id: \.offset) { idx, term in
+                            TermCardView(term: term)
+                                .id(idx)
+                                .frame(width: UIScreen.main.bounds.width - 100, height: 400)
+                                .scrollTransition { content, phase in
+                                    content
+                                        .opacity(phase.isIdentity ? 1 : 0.5)
+                                        .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
                                 }
-                        )
+                        }
+                    }
+                    .scrollTargetLayout()
                 }
+                .scrollIndicators(.hidden)
+                .padding(.top, 40)
+                .scrollTargetBehavior(.viewAligned)
+                .scrollPosition(id: $currentCardIndex, anchor: .center)
+                .contentMargins(50, for: .scrollContent)
 
                 Spacer()
 
                 Button("용어 테스트 시작") {
                     navigationManager.push(to: .StudyTest(terms: terms))
                 }
-                .font(.MM_Pr)
+                .font(.body)
                 .frame(width: 262, height: 40)
                 .padding(.vertical, 14)
                 .padding(.horizontal, 20)
-                .background(Color("MM_Navy"))
-                .foregroundColor(Color("MM_White"))
+                .background(AppColor.primary)
+                .foregroundStyle(AppColor.systemBackground)
                 .cornerRadius(16)
                 .shadow(radius: 3)
                 .opacity(index == studyTermSize ? 1 : 0)
             } else {
                 Text("학습할 용어가 없습니다.")
-                    .font(.MM_AT)
-                    .foregroundColor(.gray)
+                    .font(.caption)
+                    .foregroundStyle(AppColor.grey1)
             }
 
             Spacer()
         }
-        .padding(.horizontal, 40)
+        .padding(.horizontal, 15)
         .padding(.bottom, 20)
         .onAppear {
             StudyManager.shared.setContext(context)
@@ -89,6 +92,12 @@ struct StudyCardView: View {
                 index = 0
             } else {
                 index = 1
+            }
+            currentCardIndex = 0
+        }
+        .onChange(of: currentCardIndex) {
+            if let newIndex = currentCardIndex {
+                index = newIndex + 1
             }
         }
         .onChange(of: index) {
@@ -103,7 +112,7 @@ struct StudyCardView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = PersistenceController.shared.container.viewContext
 
     let glossary = Glossary(context: context)
     glossary.id = UUID()

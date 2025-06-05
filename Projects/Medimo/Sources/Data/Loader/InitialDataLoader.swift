@@ -9,25 +9,26 @@ import CoreData
 
 class InitialDataLoader {
     let context: NSManagedObjectContext
-    
-    var glossaryMap: [String:Glossary] = [:]
-    var termMap: [String:Term] = [:]
-    var morphemeMap: [String:Morpheme] = [:]
-    
+    let cloudKitManager = CloudKitManager.shared
+
+    var glossaryMap: [String: Glossary] = [:]
+    var termMap: [String: Term] = [:]
+    var morphemeMap: [String: Morpheme] = [:]
+
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
-    func loadInitialData() throws {
+
+    func loadInitialData() async throws {
         try loadGlossaries()
-        try loadTerms()
-        try loadMorphemes()
+        try await loadTerms()
+        try await loadMorphemes()
         try linkGlossaryToTerm()
         try linkTermToMorpheme()
-        
+
         makeTermLearningStatus()
     }
-    
+
     private func loadGlossaries() throws {
         let glossaries: [GlossaryDto] = try loadJsonData("glossaries.json")
         for g in glossaries {
@@ -36,11 +37,22 @@ class InitialDataLoader {
             glossary.glossaryKey = g.glossaryKey
             glossary.title = g.title
             glossaryMap[g.glossaryKey] = glossary
-        }
+        }   
     }
-    
-    private func loadTerms() throws {
-        let terms: [TermDto] = try loadJsonData("terms.json")
+
+    private func loadTerms() async throws {
+        var terms: [TermDto] = []
+
+        let result = await cloudKitManager.fetchAllTerms()
+        switch result {
+        case let .success(loadedTerms):
+            print("✏️ Number of terms fetched: \(loadedTerms.count)")
+            terms = loadedTerms
+
+        case let .failure(error):
+            print("Error fetching terms: \(error)")
+        }
+
         for t in terms {
             let term = Term(context: context)
             term.id = UUID()
@@ -52,9 +64,20 @@ class InitialDataLoader {
             termMap[t.termKey] = term
         }
     }
-    
-    private func loadMorphemes() throws {
-        let morphemes: [MorphemeDto] = try loadJsonData("morphemes.json")
+
+    private func loadMorphemes() async throws {
+        var morphemes: [MorphemeDto] = []
+
+        let result = await cloudKitManager.fetchAllMorphemes()
+        switch result {
+        case let .success(loadedMorphemes):
+            print("✏️ Number of morphemes fetched: \(loadedMorphemes.count)")
+            morphemes = loadedMorphemes
+
+        case let .failure(error):
+            print("Error fetching: \(error)")
+        }
+
         for m in morphemes {
             let morpheme = Morpheme(context: context)
             morpheme.id = UUID()
@@ -64,18 +87,18 @@ class InitialDataLoader {
             morphemeMap[m.morphemeKey] = morpheme
         }
     }
-    
+
     private func linkGlossaryToTerm() throws {
         let links: [GlossaryTermLinkDto] = try loadJsonData("glossary_term_links.json")
         for link in links {
             guard let glossary = glossaryMap[link.glossaryKey],
                   let term = termMap[link.termKey] else { continue }
-            
+
             glossary.addToTerms(term)
             term.addToGlossarys(glossary)
         }
     }
-    
+
     private func linkTermToMorpheme() throws {
         let links: [TermMorphemeLinkDto] = try loadJsonData("term_morpheme_links.json")
         for link in links {
@@ -84,7 +107,7 @@ class InitialDataLoader {
             term.addToMorphemes(morpheme)
         }
     }
-    
+
     private func makeTermLearningStatus() {
         for glossary in glossaryMap.values {
             for term in glossary.termsArray {
@@ -96,7 +119,7 @@ class InitialDataLoader {
             }
         }
     }
-    
+
     private func loadJsonData<T: Decodable>(_ filename: String) throws -> [T] {
         guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
             throw NSError(domain: "File not found: \(filename)", code: 404)

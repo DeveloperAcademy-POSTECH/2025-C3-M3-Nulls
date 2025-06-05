@@ -31,7 +31,7 @@ struct GlossaryListView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = PersistenceController.shared.container.viewContext
     GlossaryListView(context: context)
         .environmentObject(NavigationManager())
         .environment(\.managedObjectContext, context)

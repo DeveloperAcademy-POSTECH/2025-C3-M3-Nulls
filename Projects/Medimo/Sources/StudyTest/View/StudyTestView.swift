@@ -17,7 +17,7 @@ struct StudyTestView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = PersistenceController.shared.container.viewContext
 
     // 테스트용 임시 Term 생성
     let fallbackTerm = Term(context: context)

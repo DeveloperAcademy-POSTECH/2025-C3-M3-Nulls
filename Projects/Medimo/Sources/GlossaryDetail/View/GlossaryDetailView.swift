@@ -35,9 +35,11 @@ struct GlossaryDetailView: View {
 }
 
 #Preview {
+    let context = PersistenceController.shared.container.viewContext
+
     GlossaryDetailView(
-        glossary: try! PersistenceController.preview.container.viewContext.fetch(Glossary.fetchRequest())[0]
+        glossary: try! context.fetch(Glossary.fetchRequest())[0]
     )
     .environmentObject(NavigationManager())
-    .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    .environment(\.managedObjectContext, context)
 }

@@ -5,18 +5,18 @@
 //  Created by 양시준 on 6/1/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct TermDetailView: View {
     @Environment(\.managedObjectContext) var context
-    
+
     @State var viewModel: TermDetailViewModel
-    
+
     init(term: Term) {
         _viewModel = State(wrappedValue: TermDetailViewModel(term: term))
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -38,7 +38,7 @@ struct TermDetailView: View {
 
 #Preview {
     TermDetailView(
-        term: try! PersistenceController.preview.container.viewContext.fetch(Term.fetchRequest())[0]
+        term: try! PersistenceController.shared.container.viewContext.fetch(Term.fetchRequest())[0]
     )
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
 }
