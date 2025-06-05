@@ -33,6 +33,10 @@ public struct ContentView: View {
                             switch path {
                             case let .StudyCard(glossary):
                                 StudyCardView(glossary: glossary)
+                              
+                            case let .StudyTest(terms):
+                                StudyTestView(terms: terms, index: .constant(1))
+ 
                             default:
                                 EmptyView()
                             }

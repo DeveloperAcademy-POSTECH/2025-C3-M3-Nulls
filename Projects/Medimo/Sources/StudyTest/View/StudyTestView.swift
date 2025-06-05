@@ -12,44 +12,50 @@ struct StudyTestView: View {
     @Environment(\.managedObjectContext) private var context
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 1
+    @State var index: Int = 1
+    
+    @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
     var terms: [Term]
     var studyTermSize: Int {
         terms.count
     }
-    var answer: String = ""
     
-    init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
+    var answer: String = ""
+    @State var buttonText = "다음 문제로"
+    
+    init(terms: [Term], index: Binding<Int>, viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
         self.viewModel = viewModel
     }
     
     var body: some View {
-        VStack() {
+        VStack {
             ProgressBar(index: index, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-            
-            // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
-//            SpellingTestView(term: terms[0])
-//            MeaningTestView(term: terms[0])
-            AbbreviationTestView(term: terms[0])
-//            PronounciationTestView(term: terms[0])
-            
-            AnswerTextBox(answer: answer)
-            
-            CorrectAnswer()
-            // TODO: 문제 유형에 따라 다른 답 넘기기
-//            WrongAnswer(correctAnswer: terms[0].spelling ?? "")
-            Spacer()
-            // TODO: 답 입력하면 나타나게 설정
-            NextButton(buttonText: "다음 문제로")
-//            NextButton(buttonText: "학습 결과 보러가기")
-                .opacity(index == studyTermSize ? 1 : 0)
+
+            if terms.indices.contains(index - 1) {
+                StudyTestDetailView(
+                    term: terms[index - 1],
+                    testType: currentTestType,
+                    // TODO: 테스트마다 정답 다르게 하기
+                    correctAnswer: terms[index - 1].spelling ?? "",
+                    buttonText: buttonText,
+                    index: $index
+                )
+            }
         }
         .padding(24)
-        .background(AppColor.bgColor.ignoresSafeArea())
+        .background(AppColor.bgColor)
+        .onChange(of: index) { _, newValue in
+            if newValue == studyTermSize {
+                buttonText = "학습 결과 보러가기"
+            } else {
+                buttonText = "다음 문제로"
+            }
+            currentTestType = TestType.allCases.randomElement()!
+        }
     }
 }
 
@@ -64,6 +70,9 @@ struct StudyTestView: View {
     StudyManager.shared.setContext(context)
     let terms = StudyManager.shared.getNextStudyTerms()
 
-    return StudyTestView(terms: terms.isEmpty ? [fallbackTerm] : terms)
-        .environment(\.managedObjectContext, context)
+    return StudyTestView(
+        terms: terms.isEmpty ? [fallbackTerm] : terms,
+        index: .constant(1)
+    )
+    .environment(\.managedObjectContext, context)
 }
