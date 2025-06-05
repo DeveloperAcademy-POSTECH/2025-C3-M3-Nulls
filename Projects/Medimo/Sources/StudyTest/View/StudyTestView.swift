@@ -12,7 +12,7 @@ struct StudyTestView: View {
     @Environment(\.managedObjectContext) private var context
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 1
+    @State private var index: Int = 5
     
     var terms: [Term]
     var studyTermSize: Int {

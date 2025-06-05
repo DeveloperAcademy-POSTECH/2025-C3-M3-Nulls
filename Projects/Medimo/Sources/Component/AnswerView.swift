@@ -43,14 +43,17 @@ struct AnswerView: View {
             if isAnswered {
                 if isCorrect {
                     CorrectAnswer()
+                    
                 } else {
                     WrongAnswer(correctAnswer: correctAnswer)
                 }
+                Spacer()
+                
+                NextButton(buttonText: buttonText)
+            } else {
+                Spacer()
             }
             
-            Spacer()
-            
-            NextButton(buttonText: buttonText)
         }
     }
 }
