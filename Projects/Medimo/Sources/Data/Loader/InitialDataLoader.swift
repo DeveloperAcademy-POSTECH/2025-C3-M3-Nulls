@@ -24,7 +24,7 @@ class InitialDataLoader {
         try await loadTerms()
         try await loadMorphemes()
         try linkGlossaryToTerm()
-        try linkTermToMorpheme()
+        try await linkTermToMorpheme()
 
         makeTermLearningStatus()
     }
@@ -37,7 +37,7 @@ class InitialDataLoader {
             glossary.glossaryKey = g.glossaryKey
             glossary.title = g.title
             glossaryMap[g.glossaryKey] = glossary
-        }   
+        }
     }
 
     private func loadTerms() async throws {
@@ -99,8 +99,19 @@ class InitialDataLoader {
         }
     }
 
-    private func linkTermToMorpheme() throws {
-        let links: [TermMorphemeLinkDto] = try loadJsonData("term_morpheme_links.json")
+    private func linkTermToMorpheme() async throws {
+        var links: [TermMorphemeLinkDto] = []
+
+        let result = await cloudKitManager.fetchAllTermMorphemeLinks()
+        switch result {
+        case let .success(loadedLinks):
+            print("✏️ Number of links fetched: \(loadedLinks.count)")
+            links = loadedLinks
+
+        case let .failure(error):
+            print("Error fetching: \(error)")
+        }
+
         for link in links {
             guard let term = termMap[link.termKey],
                   let morpheme = morphemeMap[link.morphemeKey] else { continue }

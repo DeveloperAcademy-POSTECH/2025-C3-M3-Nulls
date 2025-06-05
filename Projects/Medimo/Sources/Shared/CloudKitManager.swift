@@ -72,53 +72,6 @@ extension CloudKitManager {
     //    }
 
     // Read
-    func fetchAllMorphemes() async -> Result<[MorphemeDto], CloudKitServiceError> {
-        let predicate = NSPredicate(value: true) // 모든 레코드 조회
-        let query = CKQuery(recordType: "Morphemes", predicate: predicate)
-
-        var allLoadedMorphemes: [MorphemeDto] = []
-
-        func fetchBatch(
-            cursor: CKQueryOperation.Cursor?,
-            continuation: CheckedContinuation<Result<[MorphemeDto], CloudKitServiceError>, Never>
-        ) {
-            let operation: CKQueryOperation
-            if let cursor = cursor {
-                operation = CKQueryOperation(cursor: cursor)
-            } else {
-                operation = CKQueryOperation(query: query)
-            }
-            operation.database = publicDatabase
-
-            operation.recordMatchedBlock = { _, result in
-                if case let .success(record) = result {
-                    let morpheme = MorphemeDto.recordToObj(record: record)
-                    allLoadedMorphemes.append(morpheme)
-                }
-            }
-
-            operation.queryResultBlock = { result in
-                switch result {
-                case let .success(nextCursor):
-                    if let nextCursor = nextCursor {
-                        fetchBatch(cursor: nextCursor, continuation: continuation) // 다음 batch 재귀 호출
-                    } else {
-                        continuation.resume(returning: .success(allLoadedMorphemes)) // 마지막 batch에서만 호출
-                    }
-
-                case let .failure(error):
-                    continuation.resume(returning: .failure(.message(error.localizedDescription)))
-                }
-            }
-
-            publicDatabase.add(operation)
-        }
-        
-        return await withCheckedContinuation { continuation in
-            fetchBatch(cursor: nil, continuation: continuation) // 초기 호출
-        }
-    }
-
     func fetchAllTerms() async -> Result<[TermDto], CloudKitServiceError> {
         let predicate = NSPredicate(value: true) // 모든 레코드 조회
         let query = CKQuery(recordType: "Terms", predicate: predicate)
@@ -166,30 +119,99 @@ extension CloudKitManager {
         }
     }
 
-//            publicDatabase.fetch(
-//                withQuery: query,
-//                inZoneWith: zone.zoneID,
-//                desiredKeys: nil,
-//                resultsLimit: CKQueryOperation.maximumResults
-//            ) { result in
-//                switch result {
-//                case let .success(success):
-//                    let records = success.matchResults.compactMap { try? $0.1.get() }
-//                    var terms: [TermDto] = []
-//
-//                    for record in records {
-//                        let term = TermDto.recordToObj(record: record)
-//                        terms.append(term)
-//                    }
-//
-//                    continuation.resume(returning: .success(terms))
-//
-//                case let .failure(failure):
-//                    continuation.resume(returning: .failure(.message(failure.localizedDescription)))
-//                }
-//            }
-//        }
-//    }
+    func fetchAllMorphemes() async -> Result<[MorphemeDto], CloudKitServiceError> {
+        let predicate = NSPredicate(value: true) // 모든 레코드 조회
+        let query = CKQuery(recordType: "Morphemes", predicate: predicate)
+
+        var allLoadedMorphemes: [MorphemeDto] = []
+
+        func fetchBatch(
+            cursor: CKQueryOperation.Cursor?,
+            continuation: CheckedContinuation<Result<[MorphemeDto], CloudKitServiceError>, Never>
+        ) {
+            let operation: CKQueryOperation
+            if let cursor = cursor {
+                operation = CKQueryOperation(cursor: cursor)
+            } else {
+                operation = CKQueryOperation(query: query)
+            }
+            operation.database = publicDatabase
+
+            operation.recordMatchedBlock = { _, result in
+                if case let .success(record) = result {
+                    let morpheme = MorphemeDto.recordToObj(record: record)
+                    allLoadedMorphemes.append(morpheme)
+                }
+            }
+
+            operation.queryResultBlock = { result in
+                switch result {
+                case let .success(nextCursor):
+                    if let nextCursor = nextCursor {
+                        fetchBatch(cursor: nextCursor, continuation: continuation) // 다음 batch 재귀 호출
+                    } else {
+                        continuation.resume(returning: .success(allLoadedMorphemes)) // 마지막 batch에서만 호출
+                    }
+
+                case let .failure(error):
+                    continuation.resume(returning: .failure(.message(error.localizedDescription)))
+                }
+            }
+
+            publicDatabase.add(operation)
+        }
+
+        return await withCheckedContinuation { continuation in
+            fetchBatch(cursor: nil, continuation: continuation) // 초기 호출
+        }
+    }
+
+    func fetchAllTermMorphemeLinks() async -> Result<[TermMorphemeLinkDto], CloudKitServiceError> {
+        let predicate = NSPredicate(value: true) // 모든 레코드 조회
+        let query = CKQuery(recordType: "TermMorphemeLink", predicate: predicate)
+
+        var allLoadedTermMorphemeLinks: [TermMorphemeLinkDto] = []
+
+        func fetchBatch(
+            cursor: CKQueryOperation.Cursor?,
+            continuation: CheckedContinuation<Result<[TermMorphemeLinkDto], CloudKitServiceError>, Never>
+        ) {
+            let operation: CKQueryOperation
+            if let cursor = cursor {
+                operation = CKQueryOperation(cursor: cursor)
+            } else {
+                operation = CKQueryOperation(query: query)
+            }
+            operation.database = publicDatabase
+
+            operation.recordMatchedBlock = { _, result in
+                if case let .success(record) = result {
+                    let link = TermMorphemeLinkDto.recordToObj(record: record)
+                    allLoadedTermMorphemeLinks.append(link)
+                }
+            }
+
+            operation.queryResultBlock = { result in
+                switch result {
+                case let .success(nextCursor):
+                    if let nextCursor = nextCursor {
+                        fetchBatch(cursor: nextCursor, continuation: continuation) // 다음 batch 재귀 호출
+                    } else {
+                        continuation.resume(returning: .success(allLoadedTermMorphemeLinks)) // 마지막 batch에서만 호출
+                    }
+
+                case let .failure(error):
+                    continuation.resume(returning: .failure(.message(error.localizedDescription)))
+                }
+            }
+
+            publicDatabase.add(operation)
+        }
+
+        return await withCheckedContinuation { continuation in
+            fetchBatch(cursor: nil, continuation: continuation) // 초기 호출
+        }
+    }
 
     // Update
 //    func updateGlossary(_ dto: GlossaryDto) {
