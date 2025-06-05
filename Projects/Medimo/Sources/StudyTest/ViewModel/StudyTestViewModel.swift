@@ -8,4 +8,7 @@
 import SwiftUI
 
 struct StudyTestViewModel {
+    var studyTermSize: Int {
+        StudyManager.shared.studyTermSize
+    }
 }
