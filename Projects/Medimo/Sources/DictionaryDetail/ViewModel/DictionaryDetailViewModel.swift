@@ -34,8 +34,8 @@ class DictionaryDetailViewModel {
 
         let utterance = AVSpeechUtterance(string: trimmedText)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        utterance.rate = 0.45
-        utterance.pitchMultiplier = 1.0
+        utterance.rate = 0.35
+        utterance.pitchMultiplier = 1.2
         utterance.volume = 1.0
 
         DictionaryDetailViewModel.synthesizer.stopSpeaking(at: .immediate)

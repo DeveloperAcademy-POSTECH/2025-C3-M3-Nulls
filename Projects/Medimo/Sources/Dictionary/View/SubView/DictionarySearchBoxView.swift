@@ -19,6 +19,7 @@ struct DictionarySearchBoxView: View {
                         text: $searchText,
                         prompt: Text("단어를 입력하세요")
                             .font(.caption)
+                            .foregroundStyle(AppColor.grey3)
                     )
                     .foregroundStyle(AppColor.label)
                     .padding(21)

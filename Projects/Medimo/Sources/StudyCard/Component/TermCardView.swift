@@ -12,7 +12,13 @@ struct TermCardView: View {
     
     @State private var isPlaying = false
     @State private var isFlipped = false
-
+    
+    @State var viewModel: DictionaryDetailViewModel
+    
+    init(term: Term) {
+        self.term = term
+        _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+    }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -21,22 +27,12 @@ struct TermCardView: View {
                 .shadow(color: .black.opacity(0.2), radius: 5)
 
             VStack(spacing: 8) {
-                HStack {
-                    Button(action: {
-                        isPlaying.toggle()
-                        
-                        // TODO: 1초가 아니라 사운드 재생 시간만큼 재생 이미지 띄우기
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            isPlaying = false
+                HStack {DictionaryDetailViewComponents.soundButton(
+                        spelling: viewModel.term.spelling
+                    ) {
+                        if let spelling = viewModel.term.spelling {
+                            viewModel.speak(spelling)
                         }
-                    }) {
-                        Image(systemName: "speaker.wave.2.fill")
-                            .imageScale(.large)
-                            .font(.system(size: 24))
-                            .foregroundColor(Color("MM_Navy"))
-                    }
-                    .onTapGesture {
-                        isPlaying.toggle()
                     }
 
                     Spacer()
@@ -47,7 +43,7 @@ struct TermCardView: View {
                         Image(systemName: term.isBookmarked ? "bookmark.fill" : "bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
-                            .foregroundColor(Color("MM_Navy"))
+                            .foregroundStyle(Color("MM_Navy"))
                     }
                 }
                 .padding(20)
@@ -62,7 +58,7 @@ struct TermCardView: View {
                             .padding(.vertical)
                     }
                 }
-                .foregroundColor(Color("MM_Text"))
+                .foregroundStyle(Color("MM_Text"))
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -84,7 +80,7 @@ struct TermCardView: View {
                     }
                 }
                 .font(.MM_AT)
-                .foregroundColor(Color("MM_Grey4"))
+                .foregroundStyle(Color("MM_Grey4"))
                 .padding(.horizontal, 20)
                 .padding(.vertical, 40)
                 .frame(maxWidth: .infinity, alignment: .leading)
