@@ -15,53 +15,33 @@ struct GlossaryListView: View {
     @State private var selectedCategory: String = "전체"
 
     private let columns: [GridItem] = [
-        GridItem(.fixed(170)),
-        GridItem(.fixed(170))
+        GridItem(.flexible(), spacing: 24),
+        GridItem(.flexible(), spacing: 24)
     ]
 
     init(context: NSManagedObjectContext) {
         _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
     }
+    
+    @State private var rowHeight: CGFloat = 0
 
     var body: some View {
         ZStack(alignment: .top) {
-            // MARK: - Background Layers
             VStack(spacing: 0) {
-                Color("MM_Skyblue")
-                    .frame(height: 183)
-                Color.white
-            }
-            .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-                // MARK: - Header Section
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 28) {
                     Text("단어장")
-                        .font(.custom("S-Core Dream", size: 28).weight(.bold))
-                        .foregroundColor(Color("MM_Navy"))
-                        .padding(.top, 27)
+                        .font(.largeTitle)
+                        .foregroundStyle(AppColor.label)
+                        .padding(.top, 28)
+                        .padding(.horizontal, 24)
+                    GlossaryCategoryBar(selectedCategory: $selectedCategory)
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 14)
-//
-                    ZStack(alignment: .bottom) {
-                        
-                        GlossaryCategoryBar(selectedCategory: $selectedCategory)
-                        
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(height: 16)
-                            .offset(y: 8)
-                    }
-                    .padding(.horizontal, 19)
-                    .zIndex(1)
-                    
                 }
+                .background(AppColor.secondarySystemFill)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                //.padding(.bottom, 24)
-
-                // MARK: - Glossary Card Grid
+                
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
+                    LazyVGrid(columns: columns, spacing: 24) {
                         ForEach(viewModel.glossaries) { glossary in
                             Button {
                                 navigationManager.push(to: .GlossaryDetail(glossary: glossary))
@@ -75,8 +55,7 @@ struct GlossaryListView: View {
                         }
                     }
                     .padding(.horizontal, 16)
-                    .padding(.top, 20)
-                    .padding(.bottom, 32)
+                    .padding(.vertical, 32)
                 }
             }
         }

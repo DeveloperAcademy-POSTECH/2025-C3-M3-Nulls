@@ -18,33 +18,30 @@ struct GlossaryCategoryBar: View {
     @Binding var selectedCategory: String
 
     var body: some View {
-        HStack(alignment: .center) {
-            GlossaryCategoryButton(
-                title: "전체",
-                isSelected: selectedCategory == "전체",
-                action: { selectedCategory = "전체" }
-            )
-            Spacer()
-            GlossaryCategoryButton(
-                title: "외과",
-                isSelected: selectedCategory == "외과",
-                action: { selectedCategory = "외과" }
-            )
-            Spacer()
-            GlossaryCategoryButton(
-                title: "내과",
-                isSelected: selectedCategory == "내과",
-                action: { selectedCategory = "내과" }
-            )
-            Spacer()
-            GlossaryCategoryButton(
-                title: "기타",
-                isSelected: selectedCategory == "기타",
-                action: { selectedCategory = "기타" }
-            )
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                GlossaryCategoryButton(
+                    title: "전체",
+                    isSelected: selectedCategory == "전체",
+                    action: { selectedCategory = "전체" }
+                )
+                GlossaryCategoryButton(
+                    title: "외과",
+                    isSelected: selectedCategory == "외과",
+                    action: { selectedCategory = "외과" }
+                )
+                GlossaryCategoryButton(
+                    title: "내과",
+                    isSelected: selectedCategory == "내과",
+                    action: { selectedCategory = "내과" }
+                )
+                GlossaryCategoryButton(
+                    title: "기타",
+                    isSelected: selectedCategory == "기타",
+                    action: { selectedCategory = "기타" }
+                )
+            }
         }
-        .frame(width: 361)
-        .padding(0)
     }
 }
 
