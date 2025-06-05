@@ -112,5 +112,55 @@ public class StudyManager {
         
         return result
     }
-
+    
+    func updateReview(of term: Term, result: QuizResult) {
+        let now = Date()
+        
+        var meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        
+        switch result {
+        case .correct:
+            meta.repetitions += 1
+            if meta.repetitions == 1 {
+                meta.interval = 1
+            } else if meta.repetitions == 2 {
+                meta.interval = 3
+            } else {
+                // SM-2: I(n) = I(n-1) * EF
+                meta.interval = Int32(Double(meta.interval) * meta.easeFactor)
+            }
+            meta.easeFactor = max(1.3, meta.easeFactor)
+        case .incorrect:
+            meta.interval = 1
+            meta.repetitions = 0
+            meta.easeFactor = 0.15
+            meta.easeFactor = max(1.3, meta.easeFactor - 0.2)
+        }
+        
+        meta.lastReviewedAt = now
+        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+    }
+    
+    func getTodayReviewTerms() -> [Term] {
+        guard studyingGlossaryId != nil else { return [] }
+        guard termLearnMetadataList != nil else { return [] }
+        
+        var termIdList: [UUID] = []
+        
+        let today = Date()
+        
+        let todayReviewTermIdList = termLearnMetadataList!
+            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today}
+            .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+            .map { $0.termId! }
+        termIdList.append(contentsOf: todayReviewTermIdList)
+        
+        var result: [Term] = []
+        for termId in termIdList {
+            guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
+            result.append(term)
+        }
+        
+        return result
+    }
 }
