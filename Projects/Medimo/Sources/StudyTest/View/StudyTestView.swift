@@ -32,7 +32,8 @@ struct StudyTestView: View {
             // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
             //            SpellingTestView(term: terms[0])
 //            MeaningTestView(term: terms[0])
-            AbbreviationTestView(term: terms[0])
+//            AbbreviationTestView(term: terms[0])
+            PronounciationTestView(term: terms[0])
             Spacer()
         }
         .padding(24)
