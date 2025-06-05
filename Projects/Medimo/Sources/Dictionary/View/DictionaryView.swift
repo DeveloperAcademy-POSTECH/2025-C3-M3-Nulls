@@ -11,32 +11,26 @@ import CoreData
 
 struct DictionaryView: View {
     @Environment(\.managedObjectContext) var context
-    @State private var viewModel: DictionaryViewModel
-    @State private var selectedTerm: Term? = nil
-    @State private var searchText: String = ""
+    @Bindable private var viewModel: DictionaryViewModel
     
     init(context: NSManagedObjectContext) {
-        _viewModel = State(wrappedValue: DictionaryViewModel(context: context))
+        _viewModel = Bindable(wrappedValue: DictionaryViewModel(context: context))
     }
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color(AppColor.secondarySystemFill)
-                    .ignoresSafeArea(edges: .top)
-                
-                VStack {
-                    DictionaryViewComponents.searchHeader(searchText: $searchText)
-
-                    DictionaryViewComponents.termList(viewModel: viewModel, selectedTerm: $selectedTerm, searchText: searchText)
-                        .mask(Rectangle() )
+            VStack(spacing: 0) {
+                ZStack {
+                    DictionaryHeaderView(searchText: $viewModel.searchText)
                 }
-                
-                .sheet(item: $selectedTerm) { term in
-                    DictionaryDetailView(term: term)
-                        .presentationDetents([.height(641)])
-                        .presentationDragIndicator(.visible)
-                }
+                .zIndex(1)
+                DictionaryTermListView(viewModel: viewModel)
+            }
+            
+            .sheet(item: $viewModel.selectedTerm) { term in
+                DictionaryDetailView(term: term)
+                    .presentationDetents([.height(640)])
+                    .presentationDragIndicator(.visible)
             }
         }
     }
@@ -45,6 +39,8 @@ struct DictionaryView: View {
 
 #Preview {
     let context = PersistenceController.preview.container.viewContext
-    DictionaryView(context: context)
-        .environment(\.managedObjectContext, context)
+    NavigationStack {
+        DictionaryView(context: context)
+            .environment(\.managedObjectContext, context)
+    }
 }

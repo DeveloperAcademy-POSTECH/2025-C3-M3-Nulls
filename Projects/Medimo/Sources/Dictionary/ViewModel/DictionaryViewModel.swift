@@ -12,7 +12,16 @@ import Observation
 
 @Observable
 class DictionaryViewModel {
-    var term: [Term]
+    var searchText: String = ""
+    
+    var term: [Term] = []
+    var filteredTerms: [Term] {
+        return term.filter {
+            searchText.isEmpty || ($0.spelling?.localizedCaseInsensitiveContains(searchText) ?? false)
+        }
+    }
+    
+    var selectedTerm: Term?
     
     init(context: NSManagedObjectContext, terms: [Term] = []) {
         self.term = terms
@@ -31,4 +40,5 @@ class DictionaryViewModel {
             #endif
         }
     }
+
 }
