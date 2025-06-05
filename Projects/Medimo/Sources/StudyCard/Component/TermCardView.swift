@@ -29,22 +29,21 @@ struct TermCardView: View {
                 .shadow(color: .black.opacity(0.2), radius: 5)
 
             VStack(spacing: 8) {
-                HStack {
-//                    DictionaryDetailViewComponents.soundButton(
-//                        spelling: viewModel.term.spelling
-//                    ) {
-//                        if let spelling = viewModel.term.spelling {
-//                            viewModel.speak(spelling)
-//                        }
-//                    }) {
-//                        Image(systemName: "speaker.wave.2.fill")
-//                            .imageScale(.large)
-//                            .font(.system(size: 24))
-//                            .foregroundStyle(AppColor.primary)
-//                    }
-//                    .onTapGesture {
-//                        isPlaying.toggle()
-//                    }
+                HStack {DictionaryDetailViewComponents.soundButton(
+                        spelling: viewModel.term.spelling
+                    ) {
+                        if let spelling = viewModel.term.spelling {
+                            viewModel.speak(spelling)
+                        }
+                    }) {
+                        Image(systemName: "speaker.wave.2.fill")
+                            .imageScale(.large)
+                            .font(.system(size: 24))
+                            .foregroundStyle(AppColor.primary)
+                    }
+                    .onTapGesture {
+                        isPlaying.toggle()
+                    }
 
                     Spacer()
                     

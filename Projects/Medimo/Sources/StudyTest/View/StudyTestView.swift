@@ -12,7 +12,7 @@ struct StudyTestView: View {
     @Environment(\.managedObjectContext) private var context
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 5
+    @State private var index: Int = 1
     
     var terms: [Term]
     var studyTermSize: Int {
@@ -34,18 +34,18 @@ struct StudyTestView: View {
             // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
 //            SpellingTestView(term: terms[0])
 //            MeaningTestView(term: terms[0])
-//            AbbreviationTestView(term: terms[0])
-            PronounciationTestView(term: terms[0])
+            AbbreviationTestView(term: terms[0])
+//            PronounciationTestView(term: terms[0])
             
             AnswerTextBox(answer: answer)
             
             CorrectAnswer()
             // TODO: 문제 유형에 따라 다른 답 넘기기
-            WrongAnswer(correctAnswer: terms[0].spelling ?? "")
+//            WrongAnswer(correctAnswer: terms[0].spelling ?? "")
             Spacer()
             // TODO: 답 입력하면 나타나게 설정
-//            NextButton(buttonText: "다음 문제로")
-            NextButton(buttonText: "학습 결과 보러가기")
+            NextButton(buttonText: "다음 문제로")
+//            NextButton(buttonText: "학습 결과 보러가기")
                 .opacity(index == studyTermSize ? 1 : 0)
         }
         .padding(24)
