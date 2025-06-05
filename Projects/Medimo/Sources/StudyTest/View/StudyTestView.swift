@@ -32,16 +32,13 @@ struct StudyTestView: View {
                 .padding(.horizontal, 8)
             
             // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
-//            SpellingTestView(term: terms[0])
+            SpellingTestView(term: terms[0])
 //            MeaningTestView(term: terms[0])
-            AbbreviationTestView(term: terms[0])
+//            AbbreviationTestView(term: terms[0])
 //            PronounciationTestView(term: terms[0])
             
-            AnswerTextBox(answer: answer)
+            AnswerTextBox(correctAnswer: terms[0].spelling ?? "", answer: answer)
             
-            CorrectAnswer()
-            // TODO: 문제 유형에 따라 다른 답 넘기기
-//            WrongAnswer(correctAnswer: terms[0].spelling ?? "")
             Spacer()
             // TODO: 답 입력하면 나타나게 설정
             NextButton(buttonText: "다음 문제로")
