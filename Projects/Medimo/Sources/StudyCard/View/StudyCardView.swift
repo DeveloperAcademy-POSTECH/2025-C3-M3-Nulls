@@ -7,6 +7,8 @@
 import CoreData
 import SwiftUI
 
+
+
 struct StudyCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
@@ -15,18 +17,30 @@ struct StudyCardView: View {
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
     
+    
     var terms: [Term] {
         viewModel.getStudyTerms()
     }
-
+    
     var studyTermSize: Int {
         terms.count
     }
-
+    
     init(glossary: Glossary) {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
     }
-
+    
+    func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
+        switch position {
+        case .center:
+            return Color.white
+        case .left:
+            return AppColor.blue
+        case .right:
+            return AppColor.skyBlue
+        }
+    }
+    
     var body: some View {
         VStack {
             if studyTermSize > 0 {
@@ -39,33 +53,36 @@ struct StudyCardView: View {
                         .foregroundStyle(AppColor.primary)
                 }
                 .padding(.bottom)
-                .padding(.top, 40)
-
+                .padding(.horizontal, 15)
+                .padding(.top, 30)
+                
                 ScrollView(.horizontal) {
-                    HStack(spacing: 15) {
+                    LazyHStack(spacing: 10) {
                         ForEach(Array(terms.enumerated()), id: \.offset) { idx, term in
-                            TermCardView(term: term)
+                            let position = viewModel.cardPosition(for: idx, currentIndex: currentCardIndex)
+                            let color = colorForPosition(position)
+                            TermCardView(term: term, backgroundColor: color)
+                                .modifier(CardBackgroundModifier(position: position))
                                 .id(idx)
-                                .frame(width: UIScreen.main.bounds.width - 100, height: 400)
+                                .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
+                                .frame(width: UIScreen.main.bounds.width - 64)
                                 .scrollTransition { content, phase in
                                     content
-                                        .opacity(phase.isIdentity ? 1 : 0.5 )
-                                        .scaleEffect(y: phase.isIdentity ? 1 : 0.85 )
+                                        .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
                                 }
-                                
                         }
+                        Color.clear
+                            .frame(width: 30) // Add trailing space to prevent clipping
                     }
+                    .padding(.leading, 35)
                     .scrollTargetLayout()
                 }
-                .scrollIndicators(.hidden)
-                .padding(.top, 40)
                 .scrollTargetBehavior(.viewAligned)
+                .scrollIndicators(.hidden)
                 .scrollPosition(id: $currentCardIndex, anchor: .center)
-                .contentMargins(50, for: .scrollContent)
                 
-
                 Spacer()
-
+                
                 Button("용어 테스트 시작") {
                     navigationManager.push(to: .StudyTest(terms: terms))
                 }
@@ -83,10 +100,10 @@ struct StudyCardView: View {
                     .font(.caption)
                     .foregroundStyle(AppColor.grey1)
             }
-
+            
             Spacer()
         }
-        .padding(.horizontal, 15)
+//        .padding(.horizontal, 15)
         .padding(.bottom, 20)
         .onAppear {
             StudyManager.shared.setContext(context)
@@ -115,23 +132,23 @@ struct StudyCardView: View {
 
 #Preview {
     let context = PersistenceController.preview.container.viewContext
-
+    
     let glossary = Glossary(context: context)
     glossary.id = UUID()
     glossary.title = "프리뷰 용어집"
-
+    
     let term = Term(context: context)
     term.id = UUID()
     term.spelling = "Preview"
     term.meaning = "미리보기"
     glossary.addToTerms(term)
-
+    
     try? context.save()
     
     StudyManager.shared.setContext(context)
     
     print("terms count:", StudyManager.shared.getNextStudyTerms().count)
-
+    
     return StudyCardView(glossary: glossary)
         .environment(\.managedObjectContext, context)
         .environmentObject(NavigationManager())
