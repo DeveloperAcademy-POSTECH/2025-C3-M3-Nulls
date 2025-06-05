@@ -5,26 +5,26 @@
 //  Created by 이서현 on 6/1/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import Observation
 
 @Observable
-class StudyCardViewModel {
+class StudyCardViewModel: ObservableObject {
     private let studyManager = StudyManager.shared
     var studyTerm: [Term] = []
-    
+
     var studyTermSize: Int {
         StudyManager.shared.studyTermSize
     }
-    
-    init() { }
+
+    init() {}
 
     func getStudyTerms() -> [Term] {
         studyTerm = studyManager.getNextStudyTerms()
         return studyTerm
     }
-    
+
     func cardPosition(for index: Int, currentIndex: Int?) -> CardBackgroundModifier.CardPosition {
         if index == currentIndex {
             return .center
