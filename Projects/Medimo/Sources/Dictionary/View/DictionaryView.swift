@@ -29,7 +29,7 @@ struct DictionaryView: View {
                     DictionaryViewComponents.searchHeader(searchText: $searchText)
 
                     DictionaryViewComponents.termList(viewModel: viewModel, selectedTerm: $selectedTerm, searchText: searchText)
-                        .mask(Rectangle())
+                        .mask(Rectangle() )
                 }
                 
                 .sheet(item: $selectedTerm) { term in
