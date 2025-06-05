@@ -1,0 +1,155 @@
+//
+//  DictionarySubView.swift
+//  Medimo
+//
+//  Created by bear on 6/5/25.
+//
+
+import SwiftUI
+
+struct DictionaryDetailViewComponents {
+    
+    
+    static func soundButton(spelling: String?, speakAction: @escaping () -> Void) -> some View {
+        Button(action: {
+            speakAction()
+        }) {
+            Image(systemName:"speaker.wave.2.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24)
+                .foregroundStyle(AppColor.primary)
+        }
+    }
+
+    static func bookmarkIcon() -> some View {
+        Image("bookmark")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 25)
+            .foregroundStyle(AppColor.primary)
+    }
+
+//    static func sectionGlossary(_ title: String) -> some View {
+//        Text(
+//            (viewModel.term.glossarys as? Set<Glossary>)?
+//                .compactMap { $0.title }
+//                .joined(separator:  ", ") ?? ""
+//        )
+//        .font(.caption)
+//        .foregroundColor(AppColor.secondary)
+//        .padding(.top, 16)
+//        .padding(.leading, 8)
+//    }
+    static func sectionGlossary(_ glossarys: NSSet?) -> some View {
+        Text(
+            (glossarys as? Set<Glossary>)?
+                .compactMap { $0.title.map { "#\($0)" } }
+                .joined(separator: ", ") ?? ""
+        )
+        .font(.caption)
+        .foregroundColor(AppColor.secondary)
+        .padding(.top, 16)
+        .padding(.leading, 8)
+    }
+    
+    
+    static func sectionTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.caption)
+            .foregroundColor(AppColor.tertiaryLabel)
+            .padding(.leading, 8)
+    }
+
+    static func sectionRectangle() -> some View {
+        Rectangle()
+            .frame(height: 1)
+            .foregroundColor(AppColor.grey3)
+    }
+    
+    static func sectionDivider() -> some View {
+        LinearGradient(
+            gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+        .frame(height: 1)
+    }
+
+    static func meaningSection(_ meaning: String?) -> some View {
+        VStack(alignment: .leading) {
+            sectionTitle("의미")
+            sectionDivider()
+            Text(meaning ?? "")
+                .font(.body)
+                .foregroundColor(AppColor.label)
+                .padding(.leading, 8)
+                .padding(.top, 2)
+        }
+        .padding(.horizontal, 32)
+        .padding(.top, 24)
+    }
+
+    static func morphemeSection(_ morphemes: Set<Morpheme>) -> some View {
+        VStack(alignment: .leading) {
+            sectionTitle("어원")
+            sectionDivider()
+            VStack(alignment: .leading) {
+                ForEach(Array(morphemes), id: \.self) { morpheme in
+                    HStack {
+                        Text(morpheme.spelling ?? "")
+                            .font(.caption)
+                            .foregroundColor(AppColor.label)
+                        Text("-")
+                            .font(.caption)
+                            .foregroundColor(AppColor.grey4)
+                        Text(morpheme.meaning ?? "")
+                            .font(.caption)
+                            .foregroundColor(AppColor.label)
+                    }
+                    .padding(.leading, 8)
+                }
+            }
+            .padding(.top, 2)
+        }
+        .padding(.horizontal, 32)
+        .padding(.top, 24)
+    }
+
+    static func explanationSection(_ explanation: String?) -> some View {
+        VStack(alignment: .leading) {
+            sectionTitle("설명")
+            sectionDivider()
+            Text(explanation ?? "")
+                .font(.caption)
+                .foregroundColor(AppColor.label)
+                .padding(.leading, 8)
+                .padding(.top, 2)
+        }
+        .padding(.horizontal, 32)
+        .padding(.top, 24)
+    }
+    
+    static func characterImage() -> some View {
+        Image("character5")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 200, height: 200)
+            .padding(.trailing, 32)
+            .padding(.bottom, -35)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .edgesIgnoringSafeArea(.all)
+    }
+
+}
+#Preview {
+    Group {
+        DictionaryDetailViewComponents.soundButton(spelling: "example") {
+            print("Speaking")
+        }
+        DictionaryDetailViewComponents.bookmarkIcon()
+        DictionaryDetailViewComponents.meaningSection("예시 의미입니다.")
+        DictionaryDetailViewComponents.explanationSection("설명 텍스트")
+        DictionaryDetailViewComponents.sectionRectangle()
+    }
+}
