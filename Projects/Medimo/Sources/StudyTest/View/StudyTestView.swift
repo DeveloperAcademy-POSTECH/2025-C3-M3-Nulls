@@ -12,7 +12,9 @@ struct StudyTestView: View {
     @Environment(\.managedObjectContext) private var context
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 5
+    @State private var index: Int = 4
+    
+    @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
     var terms: [Term]
     var studyTermSize: Int {
@@ -33,13 +35,23 @@ struct StudyTestView: View {
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
             
-            // TODO: 문제 넘어갈 때마다 문제 바뀌는 것 다른 걸로 구현
-            SpellingTestView(term: terms[0])
-            //            MeaningTestView(term: terms[0])
-            //            AbbreviationTestView(term: terms[0])
-            //            PronounciationTestView(term: terms[0])
-            
+            switch currentTestType {
+            case .spelling:
+                SpellingTestView(term: terms[0])
+            case .meaning:
+                MeaningTestView(term: terms[0])
+            case .abbreviation:
+                AbbreviationTestView(term: terms[0])
+            case .pronunciation:
+                PronounciationTestView(term: terms[0])
+            }
             AnswerView(correctAnswer: terms[0].spelling ?? "", answer: answer, buttonText: buttonText)
+//                SpellingTestView(term: terms[0])
+                //            MeaningTestView(term: terms[0])
+                //            AbbreviationTestView(term: terms[0])
+                //            PronounciationTestView(term: terms[0])
+                
+//                AnswerView(correctAnswer: terms[0].spelling ?? "", answer: answer, buttonText: buttonText)
         }
         .padding(24)
         .background(AppColor.bgColor.ignoresSafeArea())

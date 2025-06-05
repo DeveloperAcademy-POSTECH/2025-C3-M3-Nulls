@@ -12,7 +12,7 @@ struct AnswerView: View {
     @State var answer: String
     @State private var isAnswered: Bool = false
     @State private var isCorrect: Bool = false
-    let buttonText: String
+    var buttonText: String
     
     var body: some View {
         VStack {
