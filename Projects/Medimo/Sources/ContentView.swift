@@ -33,6 +33,11 @@ public struct ContentView: View {
                             switch path {
                             case let .StudyCard(glossary):
                                 StudyCardView(glossary: glossary)
+
+                            case .StudyCalendar:
+                                StudyCalendarView()
+                                    .environmentObject(navigationManager)
+
                             default:
                                 EmptyView()
                             }
@@ -45,7 +50,9 @@ public struct ContentView: View {
             }
 
 //            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            CustomTabBar(selected: $selectedTab)
+            if selectedTab != .study || navigationManager.studyPath.isEmpty {
+                CustomTabBar(selected: $selectedTab)
+            }
         }
         .ignoresSafeArea(edges: .bottom)
         .padding(.bottom, 1)

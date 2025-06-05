@@ -14,5 +14,8 @@ enum PathType: Hashable {
     case StudyCard(glossary: Glossary)
     case StudyTest(terms: [Term])
     case ReviewTest(glossary: Glossary)
+    
+    case StudyCalendar
+    
     case TestCompletion
 }

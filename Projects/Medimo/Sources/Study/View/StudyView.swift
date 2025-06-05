@@ -32,7 +32,12 @@ struct StudyView: View {
                     .padding(.horizontal, 16)
 
                     StudyCalendarCardView()
+                        .onTapGesture {
+                            print("TAP")
+                            navigationManager.studyPath.append(.StudyCalendar)
+                        }
                         .padding(16)
+                        .padding(.bottom, 84)
                 }
                 .background(
                     StudyHeaderBackgroundView()
