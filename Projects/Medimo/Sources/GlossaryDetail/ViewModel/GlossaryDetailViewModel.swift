@@ -12,6 +12,7 @@ import Observation
 @Observable
 class GlossaryDetailViewModel {
     var glossary: Glossary
+    var termFilter: GlossaryTermFilter = .notLearned
     
     init(glossary: Glossary) {
         self.glossary = glossary
