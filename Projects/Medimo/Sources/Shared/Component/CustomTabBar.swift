@@ -20,9 +20,7 @@ struct CustomTabBar: View {
                         tab: tab,
                         isSelected: selected == tab
                     ) {
-                        withAnimation(.smooth()) {
-                            selected = tab
-                        }
+                        selected = tab
                     }
                     Spacer()
                 }
@@ -31,10 +29,13 @@ struct CustomTabBar: View {
             .background(
                 TopRoundedRectangle(radius: 20)
                     .fill(Color.white)
-                    .frame(height: 60)
                     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: -12)
             )
         }
+        .background(.white)
+        .ignoresSafeArea(edges: .bottom)
+        .frame(height: 0)
+        .padding(.bottom, 24)
     }
 }
 
