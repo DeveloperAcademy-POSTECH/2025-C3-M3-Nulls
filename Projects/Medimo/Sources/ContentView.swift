@@ -8,58 +8,65 @@ public struct ContentView: View {
 
     public var body: some View {
         ZStack(alignment: .bottom) {
-            switch selectedTab {
-            case .glossary:
-                NavigationStack(path: $navigationManager.glossaryPath) {
-                    GlossaryListView(context: context)
-                        .environmentObject(navigationManager)
-                        .navigationDestination(for: PathType.self) { path in
-                            switch path {
-                            case let .GlossaryDetail(glossary):
-                                GlossaryDetailView(glossary: glossary)
-                                    .environmentObject(navigationManager)
+            VStack {
+                switch selectedTab {
+                case .glossary:
+                    NavigationStack(path: $navigationManager.glossaryPath) {
+                        VStack {
+                            GlossaryListView(context: context)
+                                .environmentObject(navigationManager)
+                                .navigationDestination(for: PathType.self) { path in
+                                    switch path {
+                                    case let .GlossaryDetail(glossary):
+                                        GlossaryDetailView(glossary: glossary)
+                                            .environmentObject(navigationManager)
 
-                            default:
-                                EmptyView()
-                            }
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
+
+                            CustomTabBar(selected: $selectedTab)
                         }
-                } // NavigationStack
+                    } // NavigationStack
 
-            case .study:
-                NavigationStack(path: $navigationManager.studyPath) {
-                    StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
-                        .environmentObject(navigationManager)
-                        .navigationDestination(for: PathType.self) { path in
-                            switch path {
-                            case let .StudyCard(glossary):
-                                StudyCardView(glossary: glossary, navigationManager: navigationManager)
+                case .study:
+                    NavigationStack(path: $navigationManager.studyPath) {
+                        VStack {
+                            StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                                .environmentObject(navigationManager)
+                                .navigationDestination(for: PathType.self) { path in
+                                    switch path {
+                                    case let .StudyCard(glossary):
+                                        StudyCardView(glossary: glossary, navigationManager: navigationManager)
 
-                            case .StudyCalendar:
-                                StudyCalendarView()
-                                    .environmentObject(navigationManager)
+                                    case .StudyCalendar:
+                                        StudyCalendarView()
+                                            .environmentObject(navigationManager)
 
-                            case let .StudyTest(terms):
-                                StudyTestView(terms: terms, index: .constant(1))
-                                    .environmentObject(navigationManager)
+                                    case let .StudyTest(terms):
+                                        StudyTestView(terms: terms, index: .constant(1))
+                                            .environmentObject(navigationManager)
 
-                            default:
-                                EmptyView()
-                            }
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
+
+                            CustomTabBar(selected: $selectedTab)
                         }
-                } // NavigationStack
+                    } // NavigationStack
 
-            case .dictionary:
-                DictionaryView(context: context)
-                    .environmentObject(navigationManager)
-            }
+                case .dictionary:
+                    VStack {
+                        DictionaryView(context: context)
+                            .environmentObject(navigationManager)
 
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if selectedTab != .study || navigationManager.studyPath.isEmpty {
-                CustomTabBar(selected: $selectedTab)
+                        CustomTabBar(selected: $selectedTab)
+                    }
+                }
             }
         }
-        .ignoresSafeArea(edges: .bottom)
-        .padding(.bottom, 1)
 
 //        TabView(selection: $selectedTab) {
 //            Tab("용어집", systemImage: "book", value: .glossary) {
