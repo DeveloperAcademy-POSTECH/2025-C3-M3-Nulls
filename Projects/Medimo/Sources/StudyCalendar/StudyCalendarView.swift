@@ -75,7 +75,6 @@ struct StudyCalendarView: View {
                 .padding(16)
 
                 // 달력
-                
 
                 Spacer()
             }
