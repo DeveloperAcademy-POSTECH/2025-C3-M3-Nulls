@@ -14,42 +14,38 @@ struct GlossaryCardView: View {
     let totalCount: Int
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 25) {
+        VStack(alignment: .leading, spacing: 24) {
             Text(title)
-                .font(.custom("S-Core Dream", size: 17))
+                .font(.body)
                 .kerning(0.1)
-                .foregroundColor(Color("MM_Navy"))
-            
-            //대충 더미용... 프로그레스 바
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(AppColor.label)
             Capsule()
-                .fill(Color("MM_Skyblue"))
+                .fill(AppColor.secondarySystemFill)
                 .frame(height: 8)
                 .overlay(
                     GeometryReader { geometry in
                         Capsule()
-                            .fill(Color("MM_Blue"))
+                            .fill(AppColor.systemFill)
                             .frame(width: geometry.size.width * 0.3, height: 8)
                     }
                     .clipShape(Capsule())
                 )
             HStack(spacing: 5) {
+                Spacer()
                 Text("\(String(format: "%02d", currentCount))")
-                    .font(.custom("Gmarket Sans", size: 17).weight(.medium))
-                    .foregroundColor(Color("MM_Navy"))
+                    .font(.bodyEng)
+                    .foregroundStyle(AppColor.label)
 
                 Text("/\(totalCount)")
-                    .font(.custom("Gmarket Sans", size: 13).weight(.medium))
-                    .foregroundColor(Color("MM_Skyblue"))
+                    .font(.caption)
+                    .foregroundColor(AppColor.secondarySystemFill)
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-
-            Spacer()
         }
         .padding(EdgeInsets(top: 20, leading: 16, bottom: 20, trailing: 16))
-        .frame(width: 170, height: 120, alignment: .topLeading)
         .background(Color.white)
-        .cornerRadius(15)
-        .shadow(color: Color("MM_Navy").opacity(0.35), radius: 2.5, x: 0, y: 2)
+        .cornerRadius(16)
+        .shadow(color: AppColor.primary.opacity(0.35), radius: 2.5, x: 0, y: 2)
     }
 }
 
