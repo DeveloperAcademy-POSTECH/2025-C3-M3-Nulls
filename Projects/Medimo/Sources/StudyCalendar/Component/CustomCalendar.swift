@@ -79,7 +79,7 @@ struct WeekdayHeaderView: View {
         HStack {
             ForEach(weekdays, id: \.self) { weekday in
                 Text(weekday)
-                    .font(.captionEng)
+                    .font(.custom("Gmarket Sans Medium", size: 12))
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(AppColor.grey3)
             }
