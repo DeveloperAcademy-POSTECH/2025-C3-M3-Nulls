@@ -24,6 +24,8 @@ class InitialDataLoader {
         try loadMorphemes()
         try linkGlossaryToTerm()
         try linkTermToMorpheme()
+        
+        makeTermLearningMetadata()
     }
     
     private func loadGlossaries() throws {
@@ -80,6 +82,20 @@ class InitialDataLoader {
             guard let term = termMap[link.termKey],
                   let morpheme = morphemeMap[link.morphemeKey] else { continue }
             term.addToMorphemes(morpheme)
+        }
+    }
+    
+    private func makeTermLearningMetadata() {
+        for glossary in glossaryMap.values {
+            for term in glossary.termsArray {
+                let termLearningMetadata = TermLearningMetadata(context: context)
+                termLearningMetadata.id = UUID()
+                termLearningMetadata.glossaryId = glossary.id
+                termLearningMetadata.termId = term.id
+                termLearningMetadata.status = LearningStatus.notStarted.rawValue
+                termLearningMetadata.easeFactor = 2.5
+                termLearningMetadata.repetitions = 0
+            }
         }
     }
     

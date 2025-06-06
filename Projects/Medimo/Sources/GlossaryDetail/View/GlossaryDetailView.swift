@@ -22,7 +22,8 @@ struct GlossaryDetailView: View {
         List {
             ForEach(viewModel.getTerms()) { term in
                 Button {
-                    navigationManager.push(to: .StudyCard(glossary: viewModel.glossary))
+                    navigationManager.glossaryPath.append(.StudyCard(glossary: viewModel.glossary))
+//                    navigationManager.push(to: .StudyCard(glossary: viewModel.glossary))
                 } label: {
                     HStack {
                         Text(term.spelling ?? "")

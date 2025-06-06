@@ -16,7 +16,11 @@ struct GlossaryListView: View {
 
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 24),
-        GridItem(.flexible(), spacing: 24)
+//<<<<<<< HEAD
+//        GridItem(.flexible(), spacing: 24)
+//=======
+        GridItem(.flexible(), spacing: 24),
+//>>>>>>> develop
     ]
 
     init(context: NSManagedObjectContext) {
@@ -24,6 +28,8 @@ struct GlossaryListView: View {
     }
     
     @State private var rowHeight: CGFloat = 0
+
+//    @State private var rowHeight: CGFloat = 0
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -44,7 +50,12 @@ struct GlossaryListView: View {
                     LazyVGrid(columns: columns, spacing: 24) {
                         ForEach(viewModel.glossaries) { glossary in
                             Button {
-                                navigationManager.push(to: .GlossaryDetail(glossary: glossary))
+//<<<<<<< HEAD
+//                                navigationManager.push(to: .GlossaryDetail(glossary: glossary))
+//=======
+                                navigationManager.glossaryPath.append(.GlossaryDetail(glossary: glossary))
+//                                navigationManager.push(to: .GlossaryDetail(glossary: glossary))
+//>>>>>>> develop
                             } label: {
                                 GlossaryCardView(
                                     title: glossary.title ?? "알 수 없음",
