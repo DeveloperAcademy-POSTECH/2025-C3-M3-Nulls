@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @StateObject var calendarViewModel = CalendarViewModel()
 
     @Bindable var viewModel: StudyViewModel
     @Bindable var studyManager = StudyManager.shared
@@ -31,7 +32,7 @@ struct StudyView: View {
                     .padding(.top, 42)
                     .padding(.horizontal, 16)
 
-                    StudyCalendarCardView()
+                    StudyCalendarCardView(calendarViewModel: calendarViewModel)
                         .onTapGesture {
                             print("TAP")
                             navigationManager.studyPath.append(.StudyCalendar)

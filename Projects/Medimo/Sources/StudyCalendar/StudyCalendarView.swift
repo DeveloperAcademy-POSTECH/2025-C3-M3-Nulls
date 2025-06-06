@@ -10,6 +10,8 @@ import SwiftUI
 struct StudyCalendarView: View {
     @EnvironmentObject var navigationManager: NavigationManager
 
+    @StateObject private var calendarViewModel = CalendarViewModel()
+
     var body: some View {
         ZStack {
             AppColor.bgColor
@@ -26,7 +28,9 @@ struct StudyCalendarView: View {
             VStack {
                 HStack {
                     Button {
-                        navigationManager.studyPath.removeLast()
+                        if !navigationManager.studyPath.isEmpty {
+                            navigationManager.studyPath.removeLast()
+                        }
                     } label: {
                         Image("chevron-left")
                             .foregroundStyle(AppColor.blue)
@@ -41,47 +45,127 @@ struct StudyCalendarView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
-
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("960개")
-                            .font(.title)
-                            .foregroundStyle(AppColor.navy)
-                            .padding(.bottom, 15)
-                        Text("외운 단어 수")
-                            .font(.headline)
-                            .foregroundStyle(AppColor.grey3)
+                ScrollView {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text("960개")
+                                .font(.title)
+                                .foregroundStyle(AppColor.navy)
+                                .padding(.bottom, 15)
+                            Text("외운 단어 수")
+                                .font(.headline)
+                                .foregroundStyle(AppColor.grey3)
+                        }
+                        Spacer(minLength: 75)
+                        VStack {
+                            Text("18일")
+                                .font(.title)
+                                .foregroundStyle(AppColor.blue)
+                                .padding(.bottom, 15)
+                            Text("최대 연속 학습")
+                                .font(.headline)
+                                .foregroundStyle(AppColor.grey3)
+                        }
+                        Spacer()
                     }
-                    Spacer(minLength: 75)
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding(.vertical, 32)
+                    .background(
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color.white)
+                    )
+                    .padding(16)
+                    
+                    // 달력
                     VStack {
-                        Text("18일")
-                            .font(.title)
-                            .foregroundStyle(AppColor.blue)
-                            .padding(.bottom, 15)
-                        Text("최대 연속 학습")
-                            .font(.headline)
-                            .foregroundStyle(AppColor.grey3)
+                        CustomCalendar(calendarViewModel: calendarViewModel)
+                        calendarSuccessCriteria()
+                            .padding(.top, 16)
                     }
+                    .padding(.vertical, 32)
+                    .background(
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color.white)
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 25)
+                    
+                    // 단어 통계
+                    VStack {
+                        HStack {
+                            Text(calendarViewModel.getTodayDateString())
+                                .font(.headline)
+                                .foregroundStyle(AppColor.navy)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        
+                        WordsStatisticsView(description: "학습한 단어", count: 30)
+                        Spacer().frame(height: 10)
+                        WordsStatisticsView(description: "복습한 단어", count: 10)
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    
                     Spacer()
                 }
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding(.vertical, 32)
-                .background(
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(Color.white)
-                )
-                .padding(16)
-
-                // 달력
-
-                Spacer()
             }
         }
         .navigationBarBackButtonHidden()
     }
 }
+
+struct calendarSuccessCriteria: View {
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(AppColor.skyBlue)
+                .frame(width: 14, height: 14)
+            Text("하나 성공!")
+                .font(.subheadline)
+                .foregroundStyle(AppColor.grey3)
+
+            Spacer().frame(width: 42)
+
+            Circle()
+                .fill(AppColor.blue)
+                .frame(width: 14, height: 14)
+            Text("학습 달성!")
+                .font(.subheadline)
+                .foregroundStyle(AppColor.grey3)
+        }
+    }
+}
+
+struct WordsStatisticsView: View {
+    let description: String
+    let count: Int
+    
+    var body: some View {
+        HStack {
+            Text(description)
+                .font(.caption)
+                .foregroundStyle(AppColor.blue)
+            
+            Spacer()
+            
+            Text("\(count)개")
+                .font(.bodyEng)
+                .foregroundStyle(AppColor.navy)
+            
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.white)
+        )
+    }
+}
+            
 
 #Preview {
     StudyCalendarView()
