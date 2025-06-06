@@ -45,7 +45,7 @@ struct StudyMainCardView: View {
 
 #Preview {
     let context = PersistenceController.preview.container.viewContext
-    var glossary = try! context.fetch(Glossary.fetchRequest())[0]
+    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
     @Bindable var viewModel = StudyViewModel(studyingGlossary: glossary)
     @Bindable var studyManager = StudyManager.shared
     ScrollView {

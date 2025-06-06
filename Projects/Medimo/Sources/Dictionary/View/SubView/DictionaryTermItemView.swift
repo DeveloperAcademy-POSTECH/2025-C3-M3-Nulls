@@ -52,6 +52,6 @@ struct DictionaryTermItemView: View {
 #Preview {
     let context = PersistenceController.preview.container.viewContext
     @Bindable var viewModel = DictionaryViewModel(context: context)
-    var term = viewModel.term[0]
+    let term = viewModel.term[0]
     DictionaryTermItemView(term: term, selectedTerm: $viewModel.selectedTerm)
 }

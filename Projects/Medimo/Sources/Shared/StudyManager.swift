@@ -116,7 +116,7 @@ public class StudyManager {
     func updateReview(of term: Term, result: QuizResult) {
         let now = Date()
         
-        var meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        let meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
         
         switch result {
         case .correct:

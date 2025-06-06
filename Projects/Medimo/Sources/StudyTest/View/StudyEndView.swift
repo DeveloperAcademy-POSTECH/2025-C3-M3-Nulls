@@ -21,7 +21,9 @@ struct StudyEndView: View {
     }
         ZStack {
             StudyEndCloudView()
-            NextButton(buttonText: "학습 종료하기")
+            NextButton(buttonText: "학습 종료하기", action: {
+                print("done")
+            })
         }
         
     }
