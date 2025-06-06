@@ -20,34 +20,48 @@ struct StudyCalendarView: View {
                 Image("cloudImage")
                     .resizable()
                     .scaledToFit()
-                    .ignoresSafeArea(edges: .bottom)
             }
+            .ignoresSafeArea()
 
             VStack {
-                HStack(alignment: .center) {
+                HStack {
                     Button {
-                        navigationManager.studyPath.removeFirst()
+                        navigationManager.studyPath.removeLast()
                     } label: {
                         Image("chevron-left")
+                            .foregroundStyle(AppColor.blue)
                     }
-
                     Spacer()
                     Text("캘린더")
+                        .foregroundStyle(AppColor.navy)
+                        .font(.headline)
                     Spacer()
                     Image("download")
+                        .foregroundStyle(AppColor.blue)
                 }
                 .padding(.horizontal, 16)
+                .padding(.top, 16)
 
                 HStack {
                     Spacer()
                     VStack {
                         Text("960개")
+                            .font(.title)
+                            .foregroundStyle(AppColor.navy)
+                            .padding(.bottom, 15)
                         Text("외운 단어 수")
+                            .font(.headline)
+                            .foregroundStyle(AppColor.grey3)
                     }
-                    Spacer()
+                    Spacer(minLength: 75)
                     VStack {
                         Text("18일")
+                            .font(.title)
+                            .foregroundStyle(AppColor.blue)
+                            .padding(.bottom, 15)
                         Text("최대 연속 학습")
+                            .font(.headline)
+                            .foregroundStyle(AppColor.grey3)
                     }
                     Spacer()
                 }
@@ -55,19 +69,16 @@ struct StudyCalendarView: View {
                 .foregroundColor(.black)
                 .padding(.vertical, 32)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 24)
                         .fill(Color.white)
-                        .shadow(radius: 2)
                 )
                 .padding(16)
-                .padding(.vertical, 9)
 
                 // 달력
                 
-                
+
                 Spacer()
             }
-            .ignoresSafeArea(edges: .bottom)
         }
         .navigationBarBackButtonHidden()
     }
@@ -75,4 +86,5 @@ struct StudyCalendarView: View {
 
 #Preview {
     StudyCalendarView()
+        .environmentObject(NavigationManager())
 }
