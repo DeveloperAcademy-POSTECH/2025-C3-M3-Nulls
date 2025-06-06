@@ -8,7 +8,7 @@ import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
-    @EnvironmentObject var navigationManager: NavigationManager
+    @ObservedObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
 
     @StateObject private var viewModel: StudyCardViewModel
@@ -23,8 +23,9 @@ struct StudyCardView: View {
         terms.count
     }
 
-    init(glossary _: Glossary) {
+    init(glossary _: Glossary, navigationManager: NavigationManager) {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
+        self.navigationManager = navigationManager
     }
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
@@ -146,7 +147,6 @@ struct StudyCardView: View {
 
     print("terms count:", StudyManager.shared.getNextStudyTerms().count)
 
-    return StudyCardView(glossary: glossary)
+    return StudyCardView(glossary: glossary, navigationManager: NavigationManager())
         .environment(\.managedObjectContext, context)
-        .environmentObject(NavigationManager())
 }

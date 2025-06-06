@@ -9,15 +9,16 @@ import SwiftUI
 
 struct NextButton: View {
     var buttonText: String
+    var action: () -> Void
     
     var body: some View {
         Button(buttonText) {
-            //action
+            action()
         }
         .font(.body)
         .padding(.vertical, 22)
         .frame(maxWidth: .infinity)
-        .background(AppColor.primary)
+        .background(AppColor.label)
         .foregroundStyle(AppColor.systemBackground)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.3), radius: 5, x: 2, y: 4)
@@ -25,5 +26,19 @@ struct NextButton: View {
 }
 
 #Preview {
-    NextButton(buttonText: "Next")
+    struct NextButtonAlertPreview: View {
+        @State private var showAlert = false
+
+        var body: some View {
+            NextButton(buttonText: "Next") {
+                showAlert = true
+            }
+            .alert("Tapped", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {}
+            }
+            .padding()
+        }
+    }
+
+    return NextButtonAlertPreview()
 }

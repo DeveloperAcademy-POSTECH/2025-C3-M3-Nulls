@@ -32,10 +32,14 @@ public struct ContentView: View {
                         .navigationDestination(for: PathType.self) { path in
                             switch path {
                             case let .StudyCard(glossary):
-                                StudyCardView(glossary: glossary)
+                                StudyCardView(glossary: glossary, navigationManager: navigationManager)
 
                             case .StudyCalendar:
                                 StudyCalendarView()
+                                    .environmentObject(navigationManager)
+
+                            case let .StudyTest(terms):
+                                StudyTestView(terms: terms, index: .constant(1))
                                     .environmentObject(navigationManager)
 
                             default:
