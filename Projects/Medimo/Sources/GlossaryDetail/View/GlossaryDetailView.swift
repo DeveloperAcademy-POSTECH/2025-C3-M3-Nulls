@@ -40,7 +40,7 @@ struct GlossaryDetailView: View {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.getTerms()) { term in
                             Button {
-                                navigationManager.glossaryPath.append(.StudyCard(glossary: viewModel.glossary))
+                                navigationManager.glossaryPath.append(.StudyCard)
                             } label: {
                                 GlossaryTermCard(
                                     spelling: term.spelling ?? "",
@@ -57,6 +57,7 @@ struct GlossaryDetailView: View {
             .frame(maxHeight: .infinity, alignment: .top)
             .padding(.top, 0)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
