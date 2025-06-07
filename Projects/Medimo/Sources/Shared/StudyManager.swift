@@ -91,6 +91,7 @@ public class StudyManager {
         var result: [Term] = []
         for termId in termIdList {
             guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
+            termLearnMetadataList!.first(where: { $0.id == term.id })?.status = LearningStatus.inProgress.rawValue
             result.append(term)
             if result.count >= studyTermSize { break }
         }
@@ -102,6 +103,7 @@ public class StudyManager {
         let now = Date()
         
         let meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        meta.status = LearningStatus.completed.rawValue
         
         switch result {
         case .correct:
