@@ -46,9 +46,11 @@ struct StudyMainCardView: View {
 #Preview {
     @Previewable @State var studyManager = StudyManager.shared
     let context = PersistenceController.preview.container.viewContext
+    
     studyManager.setContext(context)
     
-    var glossary = try! context.fetch(Glossary.fetchRequest())[0]
+    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+    
     @Bindable var viewModel = StudyViewModel(studyingGlossary: glossary)
     return ScrollView {
         StudyMainCardView(

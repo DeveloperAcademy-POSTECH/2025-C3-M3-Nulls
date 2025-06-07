@@ -31,7 +31,7 @@ struct StudyHeaderView: View {
 }
 
 #Preview {
-    var streak: Int = 5
+    let streak: Int = 5
     ScrollView {
         StudyHeaderView(streak: streak)
     }
