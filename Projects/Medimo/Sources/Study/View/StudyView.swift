@@ -12,23 +12,21 @@ struct StudyView: View {
     @Bindable var studyManager: StudyManager = .shared
     @StateObject var calendarViewModel = CalendarViewModel()
 
-    @Bindable var viewModel: StudyViewModel
+//    @Bindable var viewModel: StudyViewModel
+    
+    // TODO: streak 처리
+    var streak: Int = 0
 
     @State private var isAtTop: Bool = true
 
-    init(glossary: Glossary) {
-        viewModel = .init(studyingGlossary: glossary)
-    }
+    init() {}
 
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    StudyHeaderView(streak: viewModel.streak)
-                    StudyMainCardView(
-                        studyingGlossary: $viewModel.studyingGlossary,
-                        studyTermSize: $studyManager.studyTermSize
-                    )
+                    StudyHeaderView(streak: streak)
+                    StudyMainCardView()
                     .padding(.top, 42)
                     .padding(.horizontal, 16)
 
@@ -54,7 +52,10 @@ struct StudyView: View {
 #Preview {
     let context = PersistenceController.preview.container.viewContext
     let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+    
+    StudyManager.shared.setContext(context)
 
-    StudyView(glossary: glossary)
+    return StudyView()
         .environmentObject(NavigationManager())
+        .environment(\.managedObjectContext, context)
 }

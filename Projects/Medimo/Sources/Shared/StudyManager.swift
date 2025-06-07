@@ -16,9 +16,7 @@ public class StudyManager {
     
     private init() {}
     
-    // TODO: sutdyTermSize 설정
-    // 하루에 몇 개씩 공부할 건 지 정할 수 있는 뷰가 생기면 그 쪽에서 데이터 받아와서 설정해야 함.
-    var studyTermSize: Int = 5
+    var studyTermSize: Int = StudyTermSizeOption.small.rawValue
     
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context

@@ -39,7 +39,7 @@ public struct ContentView: View {
                 case .study:
                     NavigationStack(path: $navigationManager.studyPath) {
                         VStack {
-                            StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                            StudyView()
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
                                     switch path {
