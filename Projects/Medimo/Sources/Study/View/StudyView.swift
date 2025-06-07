@@ -9,9 +9,9 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @Bindable var studyManager: StudyManager = .shared
 
     @Bindable var viewModel: StudyViewModel
-    @Bindable var studyManager = StudyManager.shared
 
     @State private var isAtTop: Bool = true
 

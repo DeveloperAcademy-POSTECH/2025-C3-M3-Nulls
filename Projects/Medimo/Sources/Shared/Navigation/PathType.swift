@@ -11,7 +11,7 @@ enum PathType: Hashable {
     // 단어장
     case GlossaryDetail(glossary: Glossary)
     // 학습
-    case StudyCard(glossary: Glossary)
+    case StudyCard
     case StudyTest(terms: [Term])
     case ReviewTest(glossary: Glossary)
     

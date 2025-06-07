@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 class StudyViewModel {
-    var studyingGlossary: Glossary
+    var studyingGlossary: Glossary = StudyManager.shared.studyingGlossary!
     
     // TODO: 연속 학습일 처리
     var streak: Int = 0

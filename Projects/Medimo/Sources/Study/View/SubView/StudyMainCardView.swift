@@ -27,7 +27,7 @@ struct StudyMainCardView: View {
                     .padding(.bottom, 32)
                 VStack(spacing: 16) {
                     StudyStartButtonView {
-                        navigationManager.studyPath.append(.StudyCard(glossary: studyingGlossary))
+                        navigationManager.studyPath.append(.StudyCard)
 //                        navigationManager.push(to: .StudyCard(glossary: studyingGlossary))
                     }
                     .padding(.horizontal, 20)
@@ -44,11 +44,13 @@ struct StudyMainCardView: View {
 }
 
 #Preview {
+    @Previewable @State var studyManager = StudyManager.shared
     let context = PersistenceController.preview.container.viewContext
+    studyManager.setContext(context)
+    
     var glossary = try! context.fetch(Glossary.fetchRequest())[0]
     @Bindable var viewModel = StudyViewModel(studyingGlossary: glossary)
-    @Bindable var studyManager = StudyManager.shared
-    ScrollView {
+    return ScrollView {
         StudyMainCardView(
             studyingGlossary: $viewModel.studyingGlossary,
             studyTermSize: $studyManager.studyTermSize
