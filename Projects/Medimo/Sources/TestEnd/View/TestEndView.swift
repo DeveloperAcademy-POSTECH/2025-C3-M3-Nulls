@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TestEndView: View {
+    @Binding var index: Int
+    
     var body: some View {
         VStack {
             Spacer(minLength: 140)
@@ -29,7 +31,7 @@ struct TestEndView: View {
                         .foregroundStyle(AppColor.grey4)
                         .padding(.bottom, 10)
                     
-                    Text("22개")
+                    Text("\(index)개")
                         .font(.largeTitle)
                         .foregroundStyle(AppColor.navy)
                 }
@@ -66,5 +68,5 @@ struct TestEndView: View {
 }
 
 #Preview {
-    TestEndView()
+    TestEndView(index: .constant(22))
 }
