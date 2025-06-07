@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct StudyCalendarCardView: View {
+    @ObservedObject var calendarViewModel : CalendarViewModel
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 28)
@@ -27,11 +29,19 @@ struct StudyCalendarCardView: View {
                 HStack {
                     Text("나의 학습 캘린더")
                         .font(.body)
+                        .foregroundColor(AppColor.label)
                     Spacer()
                     Image("chevron-right")
                         .resizable()
                         .frame(width: 21, height: 21)
+                        .foregroundColor(AppColor.skyBlue)
                 }
+                .padding(.bottom, 30)
+                
+                WeekdayHeaderView(isPreview: true)
+                
+                PreviewDatesGridView(calendarViewModel: calendarViewModel)
+                
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 26)
@@ -39,8 +49,30 @@ struct StudyCalendarCardView: View {
     }
 }
 
+struct PreviewDatesGridView: View {
+    @ObservedObject var calendarViewModel: CalendarViewModel
+
+    private let columns = Array(repeating: GridItem(.flexible()), count: 7)
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 30) {
+            ForEach(calendarViewModel.extractCurrentWeekDateValues(currentMonth: calendarViewModel.currentMonth)
+            ) { dateValue in
+                if dateValue.day != -1 {
+                    DateButton(
+                        calendarViewModel: calendarViewModel,
+                        value: dateValue
+                    )
+                } else {
+                    Text("\(dateValue.day)").hidden()
+                }
+            }
+        }
+    }
+}
+
 #Preview {
     ScrollView {
-        StudyCalendarCardView()
+        StudyCalendarCardView(calendarViewModel: CalendarViewModel())
     }
 }
