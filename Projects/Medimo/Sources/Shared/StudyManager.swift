@@ -68,21 +68,6 @@ public class StudyManager {
         return result
     }
     
-    func updateLearningStatus(of termLearningMetadata: TermLearningMetadata, to newStatus: LearningStatus) {
-        termLearningMetadata.status = newStatus.rawValue
-        termLearningMetadata.lastReviewedAt = Date()
-        // TODO: 현재 1일 뒤 복습으로 적용되어 있으나 추후 업데이트 예정
-        termLearningMetadata.nextReviewAt = Date().addingTimeInterval(60 * 60 * 24 * 1)
-        
-        do {
-            try context!.save()
-        } catch {
-            #if DEBUG
-            print("Error updating learning status: \(error)")
-            #endif
-        }
-    }
-    
     func getNextStudyTerms() -> [Term] {
         guard studyingGlossaryId != nil else { return [] }
         guard termLearnMetadataList != nil else { return [] }
@@ -133,7 +118,6 @@ public class StudyManager {
         case .incorrect:
             meta.interval = 1
             meta.repetitions = 0
-            meta.easeFactor = 0.15
             meta.easeFactor = max(1.3, meta.easeFactor - 0.2)
         }
         
@@ -150,8 +134,9 @@ public class StudyManager {
         let today = Date()
         
         let todayReviewTermIdList = termLearnMetadataList!
-            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today}
-            .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today }
+            .sorted { $0.nextReviewAt! < $1.nextReviewAt! }
+            .prefix(studyTermSize)
             .map { $0.termId! }
         termIdList.append(contentsOf: todayReviewTermIdList)
         
