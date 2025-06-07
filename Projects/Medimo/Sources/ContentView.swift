@@ -1,28 +1,83 @@
 import SwiftUI
+import CoreData
 
 public struct ContentView: View {
     @Environment(\.managedObjectContext) var context
     @State private var selectedTab: TabType = .study
+    
+    @StateObject private var navigationManager = NavigationManager()
+    
+    init(context: NSManagedObjectContext) {
+        let studyManager = StudyManager.shared
+        studyManager.setContext(context)
+    }
 
-     public var body: some View {
-         TabView(selection: $selectedTab) {
-             Tab("용어집", systemImage: "book", value: .glossary) {
-                 GlossaryListView(context: context)
-             }
-             
-             Tab("학습", systemImage: "book", value: .study) {
-                 // TODO: StudyManager 구현하여 수정해야 함
-                 StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
-             }
-             
-             Tab("사전", systemImage: "book", value: .dictionary) {
-                 DictionaryView()
-             }
-         }
-     }
- }
+    public var body: some View {
+        ZStack(alignment: .bottom) {
+            VStack {
+                switch selectedTab {
+                case .glossary:
+                    NavigationStack(path: $navigationManager.glossaryPath) {
+                        VStack {
+                            GlossaryListView(context: context)
+                                .environmentObject(navigationManager)
+                                .navigationDestination(for: PathType.self) { path in
+                                    switch path {
+                                    case let .GlossaryDetail(glossary):
+                                        GlossaryDetailView(glossary: glossary)
+                                            .environmentObject(navigationManager)
+
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
+
+                            CustomTabBar(selected: $selectedTab)
+                        }
+                    } // NavigationStack
+
+                case .study:
+                    NavigationStack(path: $navigationManager.studyPath) {
+                        VStack {
+                            StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                                .environmentObject(navigationManager)
+                                .navigationDestination(for: PathType.self) { path in
+                                    switch path {
+                                    case /*let*/ .StudyCard:
+                                        StudyCardView()
+                                            .environmentObject(navigationManager)
+
+                                    case .StudyCalendar:
+                                        StudyCalendarView()
+                                            .environmentObject(navigationManager)
+
+                                    case let .StudyTest(terms):
+                                        StudyTestView(terms: terms, index: .constant(1))
+                                            .environmentObject(navigationManager)
+
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
+
+                            CustomTabBar(selected: $selectedTab)
+                        }
+                    } // NavigationStack
+
+                case .dictionary:
+                    VStack {
+                        DictionaryView(context: context)
+                            .environmentObject(navigationManager)
+
+                        CustomTabBar(selected: $selectedTab)
+                    }
+                }
+            }
+        }
+    }
+}
 
 #Preview {
-    ContentView()
+    ContentView(context: PersistenceController.preview.container.viewContext)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

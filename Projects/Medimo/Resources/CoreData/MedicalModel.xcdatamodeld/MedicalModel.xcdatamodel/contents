@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Glossary" representedClassName="Glossary" syncable="YES">
         <attribute name="glossaryKey" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
@@ -24,11 +24,14 @@
         <relationship name="glossarys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
         <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
     </entity>
-    <entity name="TermLearningStatus" representedClassName="TermLearningStatus" syncable="YES">
+    <entity name="TermLearningMetadata" representedClassName="TermLearningMetadata" syncable="YES">
+        <attribute name="easeFactor" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="glossaryId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="interval" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lastReviewedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="nextReviewAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="repetitions" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" optional="YES" attributeType="String"/>
         <attribute name="termId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>

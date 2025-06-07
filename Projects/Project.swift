@@ -14,6 +14,13 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "UIAppFonts": [
+                        "GmarketSansBold.otf",
+                        "GmarketSansMedium.otf",
+                        "SCDream5.otf",
+                        "SCDream6.otf",
+                        "SCDream7.otf"
+                    ]
                 ]
             ),
             sources: ["Medimo/Sources/**"],

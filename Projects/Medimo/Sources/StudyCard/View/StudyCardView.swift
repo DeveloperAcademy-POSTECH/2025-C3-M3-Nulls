@@ -4,72 +4,135 @@
 //
 //  Created by 이서현 on 6/1/25.
 //
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct StudyCardView: View {
     @Environment(\.managedObjectContext) private var context
-    
-    @Bindable private var viewModel: StudyCardViewModel
-    @State private var index: Int
-    
-    init(glossary: Glossary) {
-        _viewModel = .init(wrappedValue: StudyCardViewModel(glossary: glossary, studyTermSize: 5))
-        index = 5
+    @EnvironmentObject var navigationManager: NavigationManager
+
+    @StateObject private var viewModel: StudyCardViewModel
+    @State private var currentCardIndex: Int? = 0
+    @State private var index: Int = 1
+
+    var terms: [Term] {
+        StudyManager.shared.getNextStudyTerms()
     }
-    
+
+    init() {
+        _viewModel = .init(wrappedValue: StudyCardViewModel())
+//        self.navigationManager = navigationManager
+    }
+
+    func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
+        switch position {
+        case .center:
+            return AppColor.white
+        case .left:
+            return AppColor.blue
+        case .right:
+            return AppColor.skyBlue
+        }
+    }
+
     var body: some View {
-        NavigationStack {
-            VStack {
+        VStack {
+            if terms.count > 0 {
                 HStack {
-                    ProgressView(value: Double(index) / Double(viewModel.studyTermSize))
-                                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                                .padding(.trailing)
-                    
-                    Text("\(String(format: "%02d", index)) / \(viewModel.studyTermSize)")
+                    ProgressView(value: Double(index), total: Double(terms.count))
+                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                        .padding(.trailing)
+                    Text("\(String(format: "%02d", index)) / \(terms.count)")
+                        .font(.caption)
+                        .foregroundStyle(AppColor.primary)
                 }
                 .padding(.bottom)
-                
-                TermCardView(term: viewModel.studyTerms[index - 1])
-                    .gesture(
-                        DragGesture()
-                            .onEnded { value in
-                                let horizontalAmount = value.translation.width
-                                
-                                if horizontalAmount < -50, index < viewModel.studyTermSize {
-                                    index += 1
-                                } else if horizontalAmount > 50, index > 1 {
-                                    index -= 1
+                .padding(.horizontal, 15)
+                .padding(.top, 30)
+
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 10) {
+                        ForEach(Array(terms.enumerated()), id: \.offset) { idx, term in
+                            let position = viewModel.cardPosition(for: idx, currentIndex: currentCardIndex)
+                            let color = colorForPosition(position)
+                            TermCardView(term: term, backgroundColor: color)
+                                .modifier(CardBackgroundModifier(position: position))
+                                .id(idx)
+                                .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
+                                .frame(width: UIScreen.main.bounds.width - 64)
+                                .scrollTransition { content, phase in
+                                    content
+                                        .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
                                 }
-                            }
-                    )
-                
-                Spacer()
-                
-                Button("문제 풀기") {
-                    // TODO: 액션 정의
+                        }
+                        Color.clear
+                            .frame(width: 30) // Add trailing space to prevent clipping
+                    }
+                    .padding(.leading, 35)
+                    .scrollTargetLayout()
                 }
-                .frame(width: 220)
+                .scrollTargetBehavior(.viewAligned)
+                .scrollIndicators(.hidden)
+                .scrollPosition(id: $currentCardIndex, anchor: .center)
+
+                Spacer()
+
+                Button("용어 테스트 시작") {
+                    navigationManager.studyPath.append(.StudyTest(terms: terms))
+//                    navigationManager.push(to: .StudyTest(terms: terms))
+                }
+                .font(.body)
+                .frame(width: 262, height: 40)
                 .padding(.vertical, 14)
                 .padding(.horizontal, 20)
-                .background(Color("Navy"))
-                .foregroundColor(.white)
-                .cornerRadius(10)
+                .background(AppColor.primary)
+                .foregroundStyle(AppColor.systemBackground)
+                .cornerRadius(16)
                 .shadow(radius: 3)
-                .opacity(viewModel.studyTermSize == index ? 1 : 0)
-                
-                Spacer()
+                .opacity(index == terms.count ? 1 : 0)
+            } else {
+                Text("학습할 용어가 없습니다.")
+                    .font(.caption)
+                    .foregroundStyle(AppColor.grey1)
             }
-            .padding(.horizontal, 40)
-            .padding(.bottom, 20)
+
+            Spacer()
+        }
+        .padding(.bottom, 20)
+        .onAppear {
+            if terms.count == 0 {
+                index = 0
+            } else {
+                index = 1
+            }
+            currentCardIndex = 0
+        }
+        .onChange(of: currentCardIndex) {
+            if let newIndex = currentCardIndex {
+                index = newIndex + 1
+            }
+        }
+        .onChange(of: index) {
+            // 범위 초과 시 자동 조정
+            if index > terms.count {
+                index = terms.count
+            } else if index < 1 {
+                index = 1
+            }
         }
     }
 }
 
 #Preview {
+    @Previewable @StateObject var navigationManager = NavigationManager()
     let context = PersistenceController.preview.container.viewContext
-    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+
+    var studyManager = StudyManager.shared
+    studyManager.setContext(context)
+    print("terms count:", studyManager.getNextStudyTerms().count)
     
-    StudyCardView(glossary: glossary)
+    
+    return StudyCardView()
         .environment(\.managedObjectContext, context)
+        .environmentObject(navigationManager)
 }
