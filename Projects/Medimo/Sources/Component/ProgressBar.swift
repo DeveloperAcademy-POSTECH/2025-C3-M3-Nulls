@@ -10,6 +10,7 @@ import SwiftUI
 struct ProgressBar: View {
     let index: Int
     let total: Int
+    var format: String = "%02d"
 
     var body: some View {
         HStack {
@@ -29,7 +30,7 @@ struct ProgressBar: View {
             .clipShape(RoundedRectangle(cornerRadius: 7))
             .padding(.trailing, 12)
             
-            Text("\(String(format: "%02d", index)) / \(total)")
+            Text("\(String(format: format, index)) / \(total)")
                 .font(.caption)
                 .foregroundStyle(AppColor.navy)
         }
