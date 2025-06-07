@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GlossaryHeaderView: View {
+    @EnvironmentObject var navigationManager: NavigationManager
     let title: String
     let scrollOffset: CGFloat
 
@@ -19,7 +20,7 @@ struct GlossaryHeaderView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 10) {
                         Button(action: {
-                            // Back action here
+                            navigationManager.glossaryPath.removeLast()
                         }) {
                             Image(systemName: "chevron.backward")
                                 .font(.system(size: 20, weight: .medium))

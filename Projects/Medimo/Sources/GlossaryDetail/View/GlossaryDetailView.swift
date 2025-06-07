@@ -57,6 +57,7 @@ struct GlossaryDetailView: View {
             .frame(maxHeight: .infinity, alignment: .top)
             .padding(.top, 0)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
