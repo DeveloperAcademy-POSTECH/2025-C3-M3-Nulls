@@ -9,23 +9,21 @@ import SwiftUI
 
 struct StudyEndView: View {
     var body: some View {
-        
-        VStack{
-        StudyEndGoodView()
-            
+        VStack {
+            StudyEndGoodView()
+
                 .padding()
-        StudyEndCountView()
-            
-        StudyEndCharacterView()
-                
-    }
+            StudyEndCountView()
+
+            StudyEndCharacterView()
+        }
         ZStack {
             StudyEndCloudView()
-            NextButton(buttonText: "학습 종료하기")
+            NextButton(buttonText: "학습 종료하기", action: {})
         }
-        
     }
 }
+
 #Preview {
     StudyEndView()
 }

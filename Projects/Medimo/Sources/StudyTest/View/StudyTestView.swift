@@ -61,16 +61,13 @@ struct StudyTestView: View {
 #Preview {
     let context = PersistenceController.preview.container.viewContext
 
-    let fallbackTerm = Term(context: context)
-    fallbackTerm.id = UUID()
-    fallbackTerm.spelling = "Fallback"
-    fallbackTerm.meaning = "임시 값"
-
-    StudyManager.shared.setContext(context)
-    let terms = StudyManager.shared.getNextStudyTerms()
+    var studyManager = StudyManager.shared
+    studyManager.setContext(context)
+    
+    let terms = studyManager.getNextStudyTerms()
 
     return StudyTestView(
-        terms: terms.isEmpty ? [fallbackTerm] : terms,
+        terms: terms,
         index: .constant(1)
     )
     .environment(\.managedObjectContext, context)

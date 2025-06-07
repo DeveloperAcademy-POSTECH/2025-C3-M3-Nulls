@@ -8,24 +8,20 @@ import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
-    @ObservedObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var navigationManager: NavigationManager
 
     @StateObject private var viewModel: StudyCardViewModel
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
 
     var terms: [Term] {
-        viewModel.getStudyTerms()
+        StudyManager.shared.getNextStudyTerms()
     }
 
-    var studyTermSize: Int {
-        terms.count
-    }
-
-    init(glossary _: Glossary, navigationManager: NavigationManager) {
+    init() {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
-        self.navigationManager = navigationManager
+//        self.navigationManager = navigationManager
     }
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
@@ -41,12 +37,12 @@ struct StudyCardView: View {
 
     var body: some View {
         VStack {
-            if studyTermSize > 0 {
+            if terms.count > 0 {
                 HStack {
-                    ProgressView(value: Double(index), total: Double(studyTermSize))
+                    ProgressView(value: Double(index), total: Double(terms.count))
                         .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                         .padding(.trailing)
-                    Text("\(String(format: "%02d", index)) / \(studyTermSize)")
+                    Text("\(String(format: "%02d", index)) / \(terms.count)")
                         .font(.caption)
                         .foregroundStyle(AppColor.primary)
                 }
@@ -93,7 +89,7 @@ struct StudyCardView: View {
                 .foregroundStyle(AppColor.systemBackground)
                 .cornerRadius(16)
                 .shadow(radius: 3)
-                .opacity(index == studyTermSize ? 1 : 0)
+                .opacity(index == terms.count ? 1 : 0)
             } else {
                 Text("학습할 용어가 없습니다.")
                     .font(.caption)
@@ -104,8 +100,7 @@ struct StudyCardView: View {
         }
         .padding(.bottom, 20)
         .onAppear {
-            StudyManager.shared.setContext(context)
-            if studyTermSize == 0 {
+            if terms.count == 0 {
                 index = 0
             } else {
                 index = 1
@@ -119,8 +114,8 @@ struct StudyCardView: View {
         }
         .onChange(of: index) {
             // 범위 초과 시 자동 조정
-            if index > studyTermSize {
-                index = studyTermSize
+            if index > terms.count {
+                index = terms.count
             } else if index < 1 {
                 index = 1
             }
@@ -129,24 +124,15 @@ struct StudyCardView: View {
 }
 
 #Preview {
+    @Previewable @StateObject var navigationManager = NavigationManager()
     let context = PersistenceController.preview.container.viewContext
 
-    let glossary = Glossary(context: context)
-    glossary.id = UUID()
-    glossary.title = "프리뷰 용어집"
-
-    let term = Term(context: context)
-    term.id = UUID()
-    term.spelling = "Preview"
-    term.meaning = "미리보기"
-    glossary.addToTerms(term)
-
-    try? context.save()
-
-    StudyManager.shared.setContext(context)
-
-    print("terms count:", StudyManager.shared.getNextStudyTerms().count)
-
-    return StudyCardView(glossary: glossary, navigationManager: NavigationManager())
+    var studyManager = StudyManager.shared
+    studyManager.setContext(context)
+    print("terms count:", studyManager.getNextStudyTerms().count)
+    
+    
+    return StudyCardView()
         .environment(\.managedObjectContext, context)
+        .environmentObject(navigationManager)
 }
