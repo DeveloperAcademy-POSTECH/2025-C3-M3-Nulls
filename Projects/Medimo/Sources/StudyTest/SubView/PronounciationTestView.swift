@@ -29,6 +29,7 @@ struct PronounciationTestView: View {
                 .padding(.bottom, 25)
                 .padding(.leading, 8)
             HStack(alignment: .center) {
+                
                 Spacer()
                 
                 Button(action: {
