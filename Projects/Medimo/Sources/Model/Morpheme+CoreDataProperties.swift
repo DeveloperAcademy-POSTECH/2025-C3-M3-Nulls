@@ -2,7 +2,7 @@
 //  Morpheme+CoreDataProperties.swift
 //  Medimo
 //
-//  Created by 양시준 on 6/1/25.
+//  Created by 김현기 on 6/9/25.
 //
 //
 
@@ -16,9 +16,8 @@ extension Morpheme {
         return NSFetchRequest<Morpheme>(entityName: "Morpheme")
     }
 
-    @NSManaged public var id: UUID?
+    @NSManaged public var id: Int64
     @NSManaged public var meaning: String?
-    @NSManaged public var morphemeKey: String?
     @NSManaged public var spelling: String?
     @NSManaged public var terms: NSSet?
 

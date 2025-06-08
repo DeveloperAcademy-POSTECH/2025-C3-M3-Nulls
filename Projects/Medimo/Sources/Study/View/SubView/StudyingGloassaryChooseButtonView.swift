@@ -5,14 +5,14 @@
 //  Created by 양시준 on 6/4/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct StudyingGloassaryChooseButtonView: View {
     @Environment(\.managedObjectContext) var context
     let studyManager = StudyManager.shared
     @State var showPicker = false
-    
+
     var body: some View {
         Button {
             showPicker.toggle()
@@ -35,9 +35,9 @@ struct StudyingGloassaryChooseButtonView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     StudyManager.shared.setContext(context)
-    
+
     return StudyingGloassaryChooseButtonView()
         .environment(\.managedObjectContext, context)
 }

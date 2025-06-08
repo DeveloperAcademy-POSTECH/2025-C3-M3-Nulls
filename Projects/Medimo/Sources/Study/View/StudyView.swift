@@ -13,7 +13,7 @@ struct StudyView: View {
     @StateObject var calendarViewModel = CalendarViewModel()
 
 //    @Bindable var viewModel: StudyViewModel
-    
+
     // TODO: streak 처리
     var streak: Int = 0
 
@@ -27,8 +27,8 @@ struct StudyView: View {
                 VStack(spacing: 0) {
                     StudyHeaderView(streak: streak)
                     StudyMainCardView()
-                    .padding(.top, 42)
-                    .padding(.horizontal, 16)
+                        .padding(.top, 42)
+                        .padding(.horizontal, 16)
 
                     StudyCalendarCardView(calendarViewModel: calendarViewModel)
                         .onTapGesture {
@@ -50,9 +50,9 @@ struct StudyView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     let glossary = try! context.fetch(Glossary.fetchRequest())[0]
-    
+
     StudyManager.shared.setContext(context)
 
     return StudyView()

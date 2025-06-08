@@ -46,7 +46,7 @@ struct StudyMainCardView: View {
 
 #Preview {
     @Previewable @State var studyManager = StudyManager.shared
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     studyManager.setContext(context)
     
     return ScrollView {

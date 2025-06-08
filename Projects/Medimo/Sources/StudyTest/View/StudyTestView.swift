@@ -9,31 +9,30 @@ import SwiftUI
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-    
+
     private var viewModel: StudyTestViewModel
     @State var index: Int = 1
     @State private var currentTestType: TestType = TestType.allCases.randomElement()!
-    
+
     @Binding var isStudyInProgress: Bool
-    
+
     var terms: [Term]
     @State private var studyTermSize: Int
-    
-    
+
     var answer: String = ""
     @State var buttonText = "다음 문제로"
-    
+
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self.terms = terms
-        self._isStudyInProgress = isStudyInProgress // ✅ 언더바(_) 붙여야 함!
+        _isStudyInProgress = isStudyInProgress // ✅ 언더바(_) 붙여야 함!
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
-    
+
     var body: some View {
         VStack {
             ProgressBar(index: index, total: terms.count)
@@ -67,11 +66,11 @@ struct StudyTestView: View {
 
 #Preview {
     @Previewable @State var dummyInProgress = true
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     let studyManager = StudyManager.shared
     studyManager.setContext(context)
     let terms = studyManager.getNextStudyTerms()
-    
+
     return StudyTestView(
         terms: terms,
         isStudyInProgress: $dummyInProgress

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SpellingTestView: View {
     var term: Term
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("의미를 보고 용어를 적어주세요")
@@ -23,8 +23,8 @@ struct SpellingTestView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
+    let context = CoreDataManager.preview.container.viewContext
+
     let sampleTerm = Term(context: context)
     sampleTerm.spelling = "Electrocardiogram"
     sampleTerm.meaning = "심전도"

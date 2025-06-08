@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PronounciationTestView: View {
     var term: Term
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("음성을 듣고 철자를 적어주세요")
@@ -18,7 +18,7 @@ struct PronounciationTestView: View {
                 .padding(.leading, 8)
             HStack(alignment: .center) {
                 Spacer()
-                
+
                 Button(action: {
                     // action
                 }) {
@@ -35,7 +35,7 @@ struct PronounciationTestView: View {
                 }
                 .padding(.bottom, 37)
                 .shadow(color: AppColor.blue.opacity(0.45), radius: 5, x: 2, y: 4)
-                
+
                 Spacer()
             }
         }
@@ -44,8 +44,8 @@ struct PronounciationTestView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
+    let context = CoreDataManager.preview.container.viewContext
+
     let sampleTerm = Term(context: context)
     sampleTerm.spelling = "Electrocardiogram"
     sampleTerm.meaning = "심전도"

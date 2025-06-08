@@ -1,13 +1,17 @@
-import SwiftUI
 import CoreData
+import SwiftUI
 
 public struct ContentView: View {
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext) var moc
+    let coreDataManager = CoreDataManager.shared
+
     @State private var selectedTab: TabType = .study
     @State private var isStudyInProgress = true
-    
+
     @StateObject private var navigationManager = NavigationManager()
-    
+
+    @StateObject var syncStatus = SyncStatus()
+
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
         studyManager.setContext(context)
@@ -20,7 +24,7 @@ public struct ContentView: View {
                 case .glossary:
                     NavigationStack(path: $navigationManager.glossaryPath) {
                         VStack {
-                            GlossaryListView(context: context)
+                            GlossaryListView(context: moc)
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
                                     switch path {
@@ -34,7 +38,7 @@ public struct ContentView: View {
                                 }
 
                             CustomTabBar(selected: $selectedTab)
-                        }
+                        } // VStack
                     } // NavigationStack
 
                 case .study:
@@ -74,24 +78,55 @@ public struct ContentView: View {
                                     }
 
                                 CustomTabBar(selected: $selectedTab)
-                            }
-                        }
+                            } // VStack
+                        } // NavigationStack
                     } else {
                         VStack {
                             StudyView()
                                 .environmentObject(navigationManager)
 
                             CustomTabBar(selected: $selectedTab)
-                        }
+                        } // VStack
                     }
 
                 case .dictionary:
                     VStack {
-                        DictionaryView(context: context)
+                        DictionaryView(context: moc)
                             .environmentObject(navigationManager)
 
                         CustomTabBar(selected: $selectedTab)
+                    } // VStack
+                }
+            } // VStack
+
+            if syncStatus.isSyncing {
+                VStack {
+                    Spacer()
+
+                    HStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: AppColor.white))
+                            .frame(width: 24, height: 24)
+                        Text("데이터를 가져오고 있어요...")
+                            .foregroundStyle(AppColor.white)
                     }
+                    .padding(30)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(AppColor.navy)
+                    )
+
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black.opacity(0.45))
+                .edgesIgnoringSafeArea(.all)
+            }
+        } // ZStack
+        .onAppear {
+            Task {
+                if coreDataManager.needsInitialCloudKitFetch(context: moc) {
+                    await coreDataManager.initialize()
                 }
             }
         }
@@ -99,6 +134,6 @@ public struct ContentView: View {
 }
 
 #Preview {
-    ContentView(context: PersistenceController.preview.container.viewContext)
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView(context: CoreDataManager.preview.container.viewContext)
+        .environment(\.managedObjectContext, CoreDataManager.preview.container.viewContext)
 }
