@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 @Observable
-public class StudyManager {
+public class StudyManager: ObservableObject {
     static let shared = StudyManager()
     
     private var context: NSManagedObjectContext?
