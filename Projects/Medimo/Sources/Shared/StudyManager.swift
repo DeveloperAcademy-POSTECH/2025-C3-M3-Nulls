@@ -89,7 +89,7 @@ public class StudyManager {
         var result: [Term] = []
         for termId in termIdList {
             guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
-            termLearnMetadataList!.first(where: { $0.id == term.id })?.status = LearningStatus.inProgress.rawValue
+            termLearnMetadataList!.first(where: { $0.termId == term.id })?.status = LearningStatus.inProgress.rawValue
             result.append(term)
             if result.count >= studyTermSize { break }
         }
@@ -100,7 +100,7 @@ public class StudyManager {
     func updateReview(of term: Term, result: QuizResult) {
         let now = Date()
         
-        let meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        let meta = termLearnMetadataList!.first(where: { $0.termId == term.id })!
         meta.status = LearningStatus.completed.rawValue
         
         switch result {
