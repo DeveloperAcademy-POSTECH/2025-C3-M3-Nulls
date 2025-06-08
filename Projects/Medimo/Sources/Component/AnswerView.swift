@@ -32,7 +32,7 @@ struct AnswerView: View {
                     .disabled(isAnswered)
                 
                 Button(action: {
-                    isCorrect = answer == correctAnswer
+                    isCorrect = answer.lowercased().trimmingCharacters(in: .whitespaces) == correctAnswer
                     isAnswered = true
                 }) {
                     Image("corner-down-left")
