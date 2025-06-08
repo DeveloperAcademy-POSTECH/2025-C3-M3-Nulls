@@ -25,7 +25,11 @@ class InitialDataLoader {
         try linkGlossaryToTerm()
         try linkTermToMorpheme()
         
-        makeTermLearningMetadata()
+        let request: NSFetchRequest<TermLearningMetadata> = TermLearningMetadata.fetchRequest()
+        let count = try? context.count(for: request)
+        if count == 0 {
+            makeTermLearningMetadata()
+        }
     }
     
     private func loadGlossaries() throws {
@@ -97,6 +101,8 @@ class InitialDataLoader {
                 termLearningMetadata.repetitions = 0
             }
         }
+        
+        try? context.save()
     }
     
     private func loadJsonData<T: Decodable>(_ filename: String) throws -> [T] {

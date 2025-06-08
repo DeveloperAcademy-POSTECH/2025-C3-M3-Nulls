@@ -67,6 +67,11 @@ public struct ContentView: View {
                                                 index: index
                                             )
                                             .environmentObject(navigationManager)
+                                        
+                                    case let .TestCompletion(index):
+                                        TestEndView(index: .constant(index))
+                                            .environmentObject(navigationManager)
+
 
                                         default:
                                             EmptyView()

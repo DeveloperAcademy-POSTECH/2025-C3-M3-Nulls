@@ -16,9 +16,7 @@ public class StudyManager {
     
     private init() {}
     
-    // TODO: sutdyTermSize 설정
-    // 하루에 몇 개씩 공부할 건 지 정할 수 있는 뷰가 생기면 그 쪽에서 데이터 받아와서 설정해야 함.
-    var studyTermSize: Int = 5
+    var studyTermSize: Int = StudyTermSizeOption.small.rawValue
     
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context
@@ -68,21 +66,6 @@ public class StudyManager {
         return result
     }
     
-    func updateLearningStatus(of termLearningMetadata: TermLearningMetadata, to newStatus: LearningStatus) {
-        termLearningMetadata.status = newStatus.rawValue
-        termLearningMetadata.lastReviewedAt = Date()
-        // TODO: 현재 1일 뒤 복습으로 적용되어 있으나 추후 업데이트 예정
-        termLearningMetadata.nextReviewAt = Date().addingTimeInterval(60 * 60 * 24 * 1)
-        
-        do {
-            try context!.save()
-        } catch {
-            #if DEBUG
-            print("Error updating learning status: \(error)")
-            #endif
-        }
-    }
-    
     func getNextStudyTerms() -> [Term] {
         guard studyingGlossaryId != nil else { return [] }
         guard termLearnMetadataList != nil else { return [] }
@@ -106,6 +89,7 @@ public class StudyManager {
         var result: [Term] = []
         for termId in termIdList {
             guard let term = studyingGlossary?.termsArray.first(where: { $0.id == termId }) else { continue }
+            termLearnMetadataList!.first(where: { $0.termId == term.id })?.status = LearningStatus.inProgress.rawValue
             result.append(term)
             if result.count >= studyTermSize { break }
         }
@@ -116,7 +100,8 @@ public class StudyManager {
     func updateReview(of term: Term, result: QuizResult) {
         let now = Date()
         
-        let meta = termLearnMetadataList!.first(where: { $0.id == term.id })!
+        let meta = termLearnMetadataList!.first(where: { $0.termId == term.id })!
+        meta.status = LearningStatus.completed.rawValue
         
         switch result {
         case .correct:
@@ -133,7 +118,6 @@ public class StudyManager {
         case .incorrect:
             meta.interval = 1
             meta.repetitions = 0
-            meta.easeFactor = 0.15
             meta.easeFactor = max(1.3, meta.easeFactor - 0.2)
         }
         
@@ -150,8 +134,9 @@ public class StudyManager {
         let today = Date()
         
         let todayReviewTermIdList = termLearnMetadataList!
-            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today}
-            .sorted { $0.termId!.uuidString < $1.termId!.uuidString } // ID로 정렬
+            .filter { $0.nextReviewAt != nil && $0.nextReviewAt! <= today }
+            .sorted { $0.nextReviewAt! < $1.nextReviewAt! }
+            .prefix(studyTermSize)
             .map { $0.termId! }
         termIdList.append(contentsOf: todayReviewTermIdList)
         

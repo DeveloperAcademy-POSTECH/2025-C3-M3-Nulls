@@ -25,7 +25,7 @@ struct StudyTestView: View {
     
     init(
         terms: [Term],
-        isStudyInProgress: Binding<Bool>, // ✅ 바인딩 추가
+        isStudyInProgress: Binding<Bool>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self.terms = terms

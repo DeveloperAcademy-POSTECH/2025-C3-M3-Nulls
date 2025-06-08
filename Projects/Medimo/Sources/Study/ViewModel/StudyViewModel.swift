@@ -9,16 +9,10 @@ import Foundation
 
 @Observable
 class StudyViewModel {
-    var studyingGlossary: Glossary = StudyManager.shared.studyingGlossary!
+    var studyingGlossary: Glossary {
+        return StudyManager.shared.studyingGlossary!
+    }
     
     // TODO: 연속 학습일 처리
     var streak: Int = 0
-    
-    init(studyingGlossary: Glossary) {
-        self.studyingGlossary = studyingGlossary
-    }
-    
-    func changeStudyingGlossary(_ newGlossary: Glossary) {
-        self.studyingGlossary = newGlossary
-    }
 }

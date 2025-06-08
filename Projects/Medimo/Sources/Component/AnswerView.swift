@@ -19,7 +19,7 @@ struct AnswerView: View {
     @State private var isCorrect: Bool = false
     
     @Binding var isStudyInProgress: Bool
-    
+  
     var buttonText: String
     
     var body: some View {
