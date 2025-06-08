@@ -29,6 +29,18 @@ struct AnswerView: View {
             .replacingOccurrences(of: "[^a-z]", with: "", options: .regularExpression)
     }
     
+    func submitAction() {
+        let trimmedAnswers = correctAnswer
+            .split(separator: ",")
+            .map { clean(String($0)) }
+
+        let userAnswer = clean(answer)
+      
+        isCorrect = trimmedAnswers.contains(userAnswer)
+        isAnswered = true
+        showSoundAlert = false
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -37,17 +49,13 @@ struct AnswerView: View {
                     .foregroundStyle(AppColor.grey3)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        submitAction()
+                    }
 
                 Button(action: {
-                    let trimmedAnswers = correctAnswer
-                        .split(separator: ",")
-                        .map { clean(String($0)) }
-
-                    let userAnswer = clean(answer)
-                  
-                    isCorrect = trimmedAnswers.contains(userAnswer)
-                    isAnswered = true
-                    showSoundAlert = false
+                    submitAction()
                 }) {
                     Image("corner-down-left")
                         .renderingMode(.template)
