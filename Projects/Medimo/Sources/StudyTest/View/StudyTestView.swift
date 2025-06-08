@@ -14,6 +14,8 @@ struct StudyTestView: View {
     @State var index: Int = 1
     @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
+    @Binding var isStudyInProgress: Bool
+    
     var terms: [Term]
     @State private var studyTermSize: Int
     
@@ -21,8 +23,13 @@ struct StudyTestView: View {
     var answer: String = ""
     @State var buttonText = "다음 문제로"
     
-    init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
+    init(
+        terms: [Term],
+        isStudyInProgress: Binding<Bool>, // ✅ 바인딩 추가
+        viewModel: StudyTestViewModel = StudyTestViewModel()
+    ) {
         self.terms = terms
+        self._isStudyInProgress = isStudyInProgress // ✅ 언더바(_) 붙여야 함!
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
@@ -40,7 +47,8 @@ struct StudyTestView: View {
                     // TODO: 테스트마다 정답 다르게 하기
                     correctAnswer: terms[index - 1].spelling ?? "",
                     buttonText: buttonText, termSize: $studyTermSize,
-                    index: $index
+                    index: $index,
+                    isStudyInProgress: $isStudyInProgress
                 )
             }
         }
@@ -58,15 +66,15 @@ struct StudyTestView: View {
 }
 
 #Preview {
+    @Previewable @State var dummyInProgress = true
     let context = PersistenceController.preview.container.viewContext
-
-    var studyManager = StudyManager.shared
+    let studyManager = StudyManager.shared
     studyManager.setContext(context)
-    
     let terms = studyManager.getNextStudyTerms()
-
+    
     return StudyTestView(
-        terms: terms
+        terms: terms,
+        isStudyInProgress: $dummyInProgress
     )
     .environment(\.managedObjectContext, context)
 }

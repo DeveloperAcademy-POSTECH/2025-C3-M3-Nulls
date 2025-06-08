@@ -4,6 +4,7 @@ import CoreData
 public struct ContentView: View {
     @Environment(\.managedObjectContext) var context
     @State private var selectedTab: TabType = .study
+    @State private var isStudyInProgress = true
     
     @StateObject private var navigationManager = NavigationManager()
     
@@ -37,37 +38,52 @@ public struct ContentView: View {
                     } // NavigationStack
 
                 case .study:
-                    NavigationStack(path: $navigationManager.studyPath) {
+                    if isStudyInProgress {
+                        // 학습 진행 중이면 NavigationStack 보여주기
+                        NavigationStack(path: $navigationManager.studyPath) {
+                            VStack {
+                                StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                                    .environmentObject(navigationManager)
+                                    .navigationDestination(for: PathType.self) { path in
+                                        switch path {
+                                        case .StudyCard:
+                                            StudyCardView()
+                                                .environmentObject(navigationManager)
+
+                                        case .StudyCalendar:
+                                            StudyCalendarView()
+                                                .environmentObject(navigationManager)
+
+                                        case let .StudyTest(terms):
+                                            StudyTestView(
+                                                terms: terms,
+                                                isStudyInProgress: $isStudyInProgress
+                                            )
+                                            .environmentObject(navigationManager)
+
+                                        case let .TestCompletion(index):
+                                            TestEndView(
+                                                isStudyInProgress: $isStudyInProgress,
+                                                index: index
+                                            )
+                                            .environmentObject(navigationManager)
+
+                                        default:
+                                            EmptyView()
+                                        }
+                                    }
+
+                                CustomTabBar(selected: $selectedTab)
+                            }
+                        }
+                    } else {
                         VStack {
                             StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
                                 .environmentObject(navigationManager)
-                                .navigationDestination(for: PathType.self) { path in
-                                    switch path {
-                                    case /*let*/ .StudyCard:
-                                        StudyCardView()
-                                            .environmentObject(navigationManager)
-
-                                    case .StudyCalendar:
-                                        StudyCalendarView()
-                                            .environmentObject(navigationManager)
-
-                                    case let .StudyTest(terms):
-                                        StudyTestView(terms: terms)
-                                            .environmentObject(navigationManager)
-                                        
-                                    case let .TestCompletion(index):
-                                        TestEndView(index: .constant(index))
-                                            .environmentObject(navigationManager)
-
-
-                                    default:
-                                        EmptyView()
-                                    }
-                                }
 
                             CustomTabBar(selected: $selectedTab)
                         }
-                    } // NavigationStack
+                    }
 
                 case .dictionary:
                     VStack {
