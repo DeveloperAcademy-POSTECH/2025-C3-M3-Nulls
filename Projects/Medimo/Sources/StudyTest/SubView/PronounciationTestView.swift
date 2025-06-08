@@ -29,13 +29,13 @@ struct PronounciationTestView: View {
                 .padding(.bottom, 25)
                 .padding(.leading, 8)
             HStack(alignment: .center) {
+                
                 Spacer()
                 
                 Button(action: {
                     let session = AVAudioSession.sharedInstance()
                     do {
                         try session.setActive(true)
-                        try session.setCategory(.playback, mode: .default, options: [])
                         let volume = session.outputVolume
                         
                         if volume < 0.05 {
