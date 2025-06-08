@@ -23,7 +23,7 @@ struct StudyTestView: View {
     var answer: String = ""
     @State var buttonText = "다음 문제로"
     
-    init(terms: [Term], index: Binding<Int>, viewModel: StudyTestViewModel = StudyTestViewModel()) {
+    init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
         self.viewModel = viewModel
     }
@@ -67,8 +67,7 @@ struct StudyTestView: View {
     let terms = studyManager.getNextStudyTerms()
 
     return StudyTestView(
-        terms: terms,
-        index: .constant(1)
+        terms: terms
     )
     .environment(\.managedObjectContext, context)
 }

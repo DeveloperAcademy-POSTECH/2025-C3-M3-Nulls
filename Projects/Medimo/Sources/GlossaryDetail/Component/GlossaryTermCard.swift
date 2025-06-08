@@ -74,6 +74,5 @@ struct GlossaryTermCard: View {
         meaning: "동맥혈 가스 분석"
     )
     .padding()
-    .previewLayout(.sizeThatFits)
     .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
