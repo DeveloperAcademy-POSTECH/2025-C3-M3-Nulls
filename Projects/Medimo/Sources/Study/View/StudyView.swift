@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    @StateObject var studyManager: StudyManager = .shared
+    @State var studyManager: StudyManager = .shared
     @StateObject var calendarViewModel = CalendarViewModel()
     
     // TODO: streak 처리
