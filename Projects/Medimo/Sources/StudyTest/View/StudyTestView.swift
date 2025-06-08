@@ -20,6 +20,8 @@ struct StudyTestView: View {
 
     @State private var currentTestType: TestType = .spelling
     @State private var buttonText = "다음 문제로"
+    
+    @State private var showSoundAlert = false
 
     init(
         terms: [Term],
@@ -45,7 +47,8 @@ struct StudyTestView: View {
                     buttonText: buttonText,
                     termSize: $studyTermSize,
                     index: $index,
-                    isStudyInProgress: $isStudyInProgress
+                    isStudyInProgress: $isStudyInProgress,
+                    showSoundAlert: $showSoundAlert
                 )
             }
         }

@@ -16,6 +16,7 @@ struct StudyTestDetailView: View {
     @Binding var index: Int
     
     @Binding var isStudyInProgress: Bool
+    @Binding var showSoundAlert: Bool
     
     var correctAnswer: String {
         switch testType {
@@ -40,51 +41,72 @@ struct StudyTestDetailView: View {
             case .abbreviation:
                 AbbreviationTestView(term: term)
             case .pronunciation:
-                PronounciationTestView(term: term)
+                PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
-
-            AnswerView(
-                correctAnswer: correctAnswer,
-                index: $index,
-                termSize: $termSize,
-                isStudyInProgress: $isStudyInProgress,
-                buttonText: buttonText
-            )
+            
+            VStack {
+                AnswerView(
+                    correctAnswer: correctAnswer,
+                    index: $index,
+                    termSize: $termSize,
+                    isStudyInProgress: $isStudyInProgress,
+                    showSoundAlert: $showSoundAlert,
+                    buttonText: buttonText
+                )
+                .padding(.bottom, 20)
+                
+                if showSoundAlert {
+                    SoundAlert()
+                }
+            }
+            
+            Spacer()
         }
     }
 }
 
-#Preview {
-    @Previewable @State var index = 1
-    @Previewable @State var termSize = 3
-    @Previewable @State var isStudyInProgress = true
+struct StudyTestDetailViewPreview: View {
+    @State private var index = 1
+    @State private var termSize = 3
+    @State private var isStudyInProgress = true
+    @State private var showSoundAlert = false
 
-    // abbreviation이 있는 더미 Term 객체 생성
-    let term = Term(context: PersistenceController.preview.container.viewContext)
-    term.spelling = "Blood Pressure"
-    term.meaning = "혈압"
-    term.abbreviation = "BP"
-    term.id = UUID()
+    var body: some View {
+        let context = PersistenceController.preview.container.viewContext
 
-    // 해당 term이 abbreviation이 있으므로, 가능한 testType 리스트 구성
-    let availableTestTypes: [TestType] = TestType.allCases.filter { type in
-        switch type {
-        case .abbreviation:
-            return term.abbreviation != nil
-        default:
-            return true
+        let term: Term = {
+            let t = Term(context: context)
+            t.spelling = "Blood Pressure"
+            t.meaning = "혈압"
+            t.abbreviation = "BP"
+            t.id = UUID()
+            return t
+        }()
+
+        let availableTestTypes = TestType.allCases.filter { type in
+            switch type {
+            case .abbreviation:
+                return term.abbreviation != nil
+            default:
+                return true
+            }
         }
+
+        let randomTestType = availableTestTypes.randomElement()!
+
+        return StudyTestDetailView(
+            term: term,
+            testType: randomTestType,
+            buttonText: "다음 문제로",
+            termSize: $termSize,
+            index: $index,
+            isStudyInProgress: $isStudyInProgress,
+            showSoundAlert: $showSoundAlert
+        )
+        .environment(\.managedObjectContext, context)
     }
+}
 
-    let randomTestType = availableTestTypes.randomElement()!
-
-    return StudyTestDetailView(
-        term: term,
-        testType: randomTestType,
-        buttonText: "다음 문제로",
-        termSize: $termSize,
-        index: $index,
-        isStudyInProgress: $isStudyInProgress
-    )
-    .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+#Preview {
+    StudyTestDetailViewPreview()
 }
