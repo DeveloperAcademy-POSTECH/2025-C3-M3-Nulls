@@ -15,6 +15,8 @@ struct StudyTestDetailView: View {
     
     @Binding var termSize: Int
     @Binding var index: Int
+    
+    @Binding var isStudyInProgress: Bool
 
     var body: some View {
         VStack {
@@ -31,7 +33,9 @@ struct StudyTestDetailView: View {
 
             AnswerView(
                 correctAnswer: correctAnswer,
-                index: $index, termSize: $termSize,
+                index: $index,
+                termSize: $termSize,
+                isStudyInProgress: $isStudyInProgress,
                 buttonText: buttonText
             )
         }
