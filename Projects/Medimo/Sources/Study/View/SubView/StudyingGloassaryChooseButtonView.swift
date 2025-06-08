@@ -6,14 +6,19 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct StudyingGloassaryChooseButtonView: View {
+    @Environment(\.managedObjectContext) var context
+    let studyManager = StudyManager.shared
+    @State var showPicker = false
+    
     var body: some View {
         Button {
-        
+            showPicker.toggle()
         } label: {
             HStack(spacing: 16) {
-                Text("신경외과")
+                Text(studyManager.studyingGlossary?.title ?? "")
                     .font(.title)
                     .foregroundStyle(AppColor.label)
                 Image("chevron-down")
@@ -21,9 +26,18 @@ struct StudyingGloassaryChooseButtonView: View {
                     .frame(width: 24, height: 24)
             }
         }
+        .sheet(isPresented: $showPicker) {
+            StudyGlossarySelectSheetView(context: context, isPresented: $showPicker)
+                .presentationDetents([.height(680)])
+                .presentationDragIndicator(.visible)
+        }
     }
 }
 
 #Preview {
-    StudyingGloassaryChooseButtonView()
+    let context = PersistenceController.preview.container.viewContext
+    StudyManager.shared.setContext(context)
+    
+    return StudyingGloassaryChooseButtonView()
+        .environment(\.managedObjectContext, context)
 }

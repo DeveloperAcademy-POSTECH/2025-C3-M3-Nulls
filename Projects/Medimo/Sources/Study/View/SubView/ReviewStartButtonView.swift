@@ -15,7 +15,7 @@ struct ReviewStartButtonView: View {
             ZStack {
                 HStack {
                     Spacer()
-                    Image("cloudImage")
+                    Image("cloudBottom")
                         .resizable()
                         .scaledToFill()
                         .rotationEffect(Angle(degrees: -30))
@@ -43,6 +43,7 @@ struct ReviewStartButtonView: View {
                     .frame(height: 60)
             )
         }
+        .buttonStyle(.plain)
     }
 }
 
