@@ -43,13 +43,15 @@ struct DictionaryDetailView: View {
                         VStack(alignment: .leading) {
                             Text(viewModel.term.spelling ?? "")
                                 .font(.titleEng)
-                                .foregroundColor(AppColor.primary)
+                                .foregroundColor(AppColor.label)
                                 .padding(.bottom, 8)
                             
-                            if viewModel.term.abbreviation != nil {
-                                Text("[ \(viewModel.term.abbreviation ?? "") ]")
-                                    .font(.titleEng)
-                                    .foregroundColor(AppColor.primary)
+                            if let abbreviation = viewModel.term.abbreviation {
+                                if !abbreviation.isEmpty {
+                                    Text("[ \(abbreviation) ]")
+                                        .font(.titleEng)
+                                        .foregroundColor(AppColor.label)
+                                }
                             }
                             DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossarys)
                             
