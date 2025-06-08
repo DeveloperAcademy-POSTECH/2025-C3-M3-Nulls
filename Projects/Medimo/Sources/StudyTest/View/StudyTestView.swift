@@ -15,9 +15,7 @@ struct StudyTestView: View {
     @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
     var terms: [Term]
-    var studyTermSize: Int {
-        terms.count
-    }
+    @State private var studyTermSize: Int
     
     
     var answer: String = ""
@@ -26,6 +24,7 @@ struct StudyTestView: View {
     init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
         self.viewModel = viewModel
+        _studyTermSize = State(initialValue: terms.count)
     }
     
     var body: some View {
@@ -40,7 +39,7 @@ struct StudyTestView: View {
                     testType: currentTestType,
                     // TODO: 테스트마다 정답 다르게 하기
                     correctAnswer: terms[index - 1].spelling ?? "",
-                    buttonText: buttonText,
+                    buttonText: buttonText, termSize: $studyTermSize,
                     index: $index
                 )
             }

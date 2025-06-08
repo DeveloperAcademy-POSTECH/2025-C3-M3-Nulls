@@ -17,5 +17,5 @@ enum PathType: Hashable {
 
     case StudyCalendar
 
-    case TestCompletion
+    case TestCompletion(index: Int)
 }
