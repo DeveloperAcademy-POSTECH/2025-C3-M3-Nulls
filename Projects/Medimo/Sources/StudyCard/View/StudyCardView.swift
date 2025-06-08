@@ -21,7 +21,6 @@ struct StudyCardView: View {
 
     init() {
         _viewModel = .init(wrappedValue: StudyCardViewModel())
-//        self.navigationManager = navigationManager
     }
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
@@ -66,7 +65,7 @@ struct StudyCardView: View {
                                 }
                         }
                         Color.clear
-                            .frame(width: 30) // Add trailing space to prevent clipping
+                            .frame(width: 30)
                     }
                     .padding(.leading, 35)
                     .scrollTargetLayout()
@@ -79,7 +78,6 @@ struct StudyCardView: View {
 
                 Button("용어 테스트 시작") {
                     navigationManager.studyPath.append(.StudyTest(terms: terms))
-//                    navigationManager.push(to: .StudyTest(terms: terms))
                 }
                 .font(.body)
                 .frame(width: 262, height: 40)
@@ -113,7 +111,6 @@ struct StudyCardView: View {
             }
         }
         .onChange(of: index) {
-            // 범위 초과 시 자동 조정
             if index > terms.count {
                 index = terms.count
             } else if index < 1 {

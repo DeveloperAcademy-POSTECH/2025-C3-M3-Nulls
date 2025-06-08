@@ -125,35 +125,36 @@ extension CoreDataManager {
     func initializeTermMorphemeRelationshipData() async {
         var relationships: [TermMorphemeRelationshipDTO] = []
 
-        Task {
-            let result = await cloudKitManager.fetchAllTermMorphemeRelationships()
-            switch result {
-            case let .success(loadedRelationships):
-                relationships = loadedRelationships
+        let result = await cloudKitManager.fetchAllTermMorphemeRelationships()
+        switch result {
+        case let .success(loadedRelationships):
+            relationships = loadedRelationships
 
-            case let .failure(error):
-                print("Error fetching terms: \(error)")
+        case let .failure(error):
+            print("Error fetching relationships: \(error)")
+        }
+
+        for relationship in relationships {
+            let fetchRequest: NSFetchRequest<TermMorphemeRelationship> = TermMorphemeRelationship.fetchRequest()
+            fetchRequest.predicate = NSPredicate(
+                format: "termId == %d AND morphemeId == %d",
+                relationship.termId, relationship.morphemeId
+            )
+            fetchRequest.fetchLimit = 1
+
+            // 이미 존재하면 continue
+            if let _ = try? context.fetch(fetchRequest).first {
+                continue
             }
 
-            for relationship in relationships {
-                let fetchRequest: NSFetchRequest<TermMorphemeRelationship> = TermMorphemeRelationship.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "id == %d", relationship.termId)
-                fetchRequest.fetchLimit = 1
+            let relationshipEntity = TermMorphemeRelationship(context: context)
+            relationshipEntity.termId = Int64(relationship.termId)
+            relationshipEntity.morphemeId = Int64(relationship.morphemeId)
+            relationshipEntity.order = Int16(relationship.order)
+        }
 
-                // 이미 존재하면 continue
-                if let _ = try? context.fetch(fetchRequest).first {
-                    continue
-                }
-
-                let relationshipEntity = TermMorphemeRelationship(context: context)
-                relationshipEntity.termId = Int64(relationship.termId)
-                relationshipEntity.morphemeId = Int64(relationship.morphemeId)
-                relationshipEntity.order = Int16(relationship.order)
-            }
-
-            save()
-            print("✏️ Fetched Relationships: \(relationships.count)")
-        } // Task
+        save()
+        print("✏️ Fetched Relationships: \(relationships.count)")
     }
 
     func initializeGlossaryData() async {

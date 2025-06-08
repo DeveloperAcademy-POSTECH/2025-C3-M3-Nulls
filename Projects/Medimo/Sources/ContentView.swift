@@ -1,3 +1,10 @@
+//
+//  ContentView.swift
+//  Projects
+//
+//  Created by 김현기 on 6/9/25.
+//
+
 import CoreData
 import SwiftUI
 
@@ -38,66 +45,64 @@ public struct ContentView: View {
                                 }
 
                             CustomTabBar(selected: $selectedTab)
-                        } // VStack
-                    } // NavigationStack
+                        }
+                    }
 
                 case .study:
                     if isStudyInProgress {
-                        // 학습 진행 중이면 NavigationStack 보여주기
                         NavigationStack(path: $navigationManager.studyPath) {
                             VStack {
-                                StudyView()
+                                StudyView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
                                         case .StudyCard:
-                                            StudyCardView()
-                                                .environmentObject(navigationManager)
+                                            StudyCardView().environmentObject(navigationManager)
 
                                         case .StudyCalendar:
-                                            StudyCalendarView()
-                                                .environmentObject(navigationManager)
+                                            StudyCalendarView().environmentObject(navigationManager)
 
                                         case let .StudyTest(terms):
                                             StudyTestView(
                                                 terms: terms,
                                                 isStudyInProgress: $isStudyInProgress
-                                            )
-                                            .environmentObject(navigationManager)
+                                            ).environmentObject(navigationManager)
+
+                                        case .ReviewTest:
+                                            EmptyView()
+                                                    //                                            ReviewTestView(
+                                                    //                                                isStudyInProgress: $isStudyInProgress
+                                                    //                                            ).environmentObject(navigationManager)
 
                                         case let .TestCompletion(index):
                                             TestEndView(
                                                 isStudyInProgress: $isStudyInProgress,
                                                 index: index
-                                            )
-                                            .environmentObject(navigationManager)
+                                            ).environmentObject(navigationManager)
 
                                         default:
                                             EmptyView()
                                         }
                                     }
-
                                 CustomTabBar(selected: $selectedTab)
-                            } // VStack
-                        } // NavigationStack
+                            }
+                        }
                     } else {
                         VStack {
-                            StudyView()
+                            StudyView(isStudyInProgress: $isStudyInProgress)
                                 .environmentObject(navigationManager)
-
                             CustomTabBar(selected: $selectedTab)
-                        } // VStack
+                        }
                     }
 
                 case .dictionary:
                     VStack {
                         DictionaryView(context: moc)
                             .environmentObject(navigationManager)
-
                         CustomTabBar(selected: $selectedTab)
                     } // VStack
                 }
-            } // VStack
+            }
 
             if syncStatus.isSyncing {
                 VStack {

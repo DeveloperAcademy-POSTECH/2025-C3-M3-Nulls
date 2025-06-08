@@ -4,23 +4,27 @@
 //
 //  Created by 이서현 on 6/3/25.
 //
+
 import SwiftUI
 
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
 
+    @State private var showExitConfirm = false
+
     private var viewModel: StudyTestViewModel
-    @State var index: Int = 1
-    @State private var currentTestType: TestType = TestType.allCases.randomElement()!
+    @State private var index: Int = 1
 
     @Binding var isStudyInProgress: Bool
 
     var terms: [Term]
     @State private var studyTermSize: Int
 
-    var answer: String = ""
-    @State var buttonText = "다음 문제로"
+    @State private var currentTestType: TestType = .spelling
+    @State private var buttonText = "다음 문제로"
+
+    @State private var showSoundAlert = false
 
     init(
         terms: [Term],
@@ -28,7 +32,8 @@ struct StudyTestView: View {
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self.terms = terms
-        _isStudyInProgress = isStudyInProgress // ✅ 언더바(_) 붙여야 함!
+        _isStudyInProgress = isStudyInProgress
+
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
@@ -43,24 +48,60 @@ struct StudyTestView: View {
                 StudyTestDetailView(
                     term: terms[index - 1],
                     testType: currentTestType,
-                    // TODO: 테스트마다 정답 다르게 하기
-                    correctAnswer: terms[index - 1].spelling ?? "",
-                    buttonText: buttonText, termSize: $studyTermSize,
+                    buttonText: buttonText,
+                    termSize: $studyTermSize,
                     index: $index,
-                    isStudyInProgress: $isStudyInProgress
+                    isStudyInProgress: $isStudyInProgress,
+                    showSoundAlert: $showSoundAlert
                 )
             }
         }
         .padding(24)
         .background(AppColor.bgColor)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    showExitConfirm = true
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(AppColor.grey3)
+                }
+            }
+        }
+        .alert("학습 종료하기", isPresented: $showExitConfirm) {
+            Button("종료하기", role: .destructive) {
+                isStudyInProgress = false
+                navigationManager.studyPath = []
+            }
+            Button("취소", role: .cancel) {}
+        } message: {
+            Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
+        }
+
+        .onAppear {
+            currentTestType = randomValidTestType(for: terms[index - 1])
+        }
         .onChange(of: index) { _, newValue in
             if newValue == studyTermSize {
                 buttonText = "학습 결과 보러가기"
             } else {
                 buttonText = "다음 문제로"
             }
-            currentTestType = TestType.allCases.randomElement()!
+            currentTestType = randomValidTestType(for: terms[newValue - 1])
         }
+    }
+
+    private func randomValidTestType(for term: Term) -> TestType {
+        let availableTypes = TestType.allCases.filter { type in
+            switch type {
+            case .abbreviation:
+                return term.abbreviation != nil
+            default:
+                return true
+            }
+        }
+        return availableTypes.randomElement() ?? .meaning
     }
 }
 
