@@ -108,7 +108,7 @@ struct StudyTestView: View {
     let studyManager = StudyManager.shared
     studyManager.setContext(context)
     let terms = studyManager.getNextStudyTerms()
-
+    
     return StudyTestView(
         terms: terms,
         isStudyInProgress: $dummyInProgress

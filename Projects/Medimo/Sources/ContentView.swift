@@ -8,7 +8,6 @@ public struct ContentView: View {
     @Environment(\.managedObjectContext) var context
     @State private var selectedTab: TabType = .study
     @State private var isStudyInProgress = true
-
     @StateObject private var navigationManager = NavigationManager()
 
     init(context: NSManagedObjectContext) {
@@ -77,7 +76,7 @@ public struct ContentView: View {
                                 StudyView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                             }
-
+                          
                             CustomTabBar(selected: $selectedTab)
                         }
                     }
