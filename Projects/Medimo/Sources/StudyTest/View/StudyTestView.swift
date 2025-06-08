@@ -29,7 +29,7 @@ struct StudyTestView: View {
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self.terms = terms
-        self._isStudyInProgress = isStudyInProgress // ✅ 언더바(_) 붙여야 함!
+        self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
@@ -44,8 +44,6 @@ struct StudyTestView: View {
                 StudyTestDetailView(
                     term: terms[index - 1],
                     testType: currentTestType,
-                    // TODO: 테스트마다 정답 다르게 하기
-                    correctAnswer: terms[index - 1].spelling ?? "",
                     buttonText: buttonText, termSize: $studyTermSize,
                     index: $index,
                     isStudyInProgress: $isStudyInProgress

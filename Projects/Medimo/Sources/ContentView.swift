@@ -42,7 +42,7 @@ public struct ContentView: View {
                         // 학습 진행 중이면 NavigationStack 보여주기
                         NavigationStack(path: $navigationManager.studyPath) {
                             VStack {
-                                StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                                StudyView()
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
@@ -67,11 +67,6 @@ public struct ContentView: View {
                                                 index: index
                                             )
                                             .environmentObject(navigationManager)
-                                        
-                                    case let .TestCompletion(index):
-                                        TestEndView(index: .constant(index))
-                                            .environmentObject(navigationManager)
-
 
                                         default:
                                             EmptyView()
@@ -83,7 +78,7 @@ public struct ContentView: View {
                         }
                     } else {
                         VStack {
-                            StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
+                            StudyView()
                                 .environmentObject(navigationManager)
 
                             CustomTabBar(selected: $selectedTab)

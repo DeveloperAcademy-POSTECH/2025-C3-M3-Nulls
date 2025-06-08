@@ -10,13 +10,25 @@ import SwiftUI
 struct StudyTestDetailView: View {
     let term: Term
     let testType: TestType
-    let correctAnswer: String
     let buttonText: String
     
     @Binding var termSize: Int
     @Binding var index: Int
     
     @Binding var isStudyInProgress: Bool
+    
+    var correctAnswer: String {
+        switch testType {
+        case .spelling:
+            term.spelling ?? ""
+        case .meaning:
+            term.meaning ?? ""
+        case .abbreviation:
+            term.abbreviation ?? ""
+        case .pronunciation:
+            term.spelling ?? ""
+        }
+    }
 
     var body: some View {
         VStack {
