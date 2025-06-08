@@ -44,7 +44,7 @@ struct AnswerView: View {
                         .map { clean(String($0)) }
 
                     let userAnswer = clean(answer)
-
+                  
                     isCorrect = trimmedAnswers.contains(userAnswer)
                     isAnswered = true
                     showSoundAlert = false

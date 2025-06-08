@@ -17,7 +17,7 @@ struct StudyTestDetailView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-    
+  
     var correctAnswer: String {
         switch testType {
         case .spelling:

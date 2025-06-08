@@ -10,7 +10,7 @@ import SwiftUI
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-    
+   
     @State private var showExitConfirm = false
 
     private var viewModel: StudyTestViewModel
@@ -22,7 +22,7 @@ struct StudyTestView: View {
 
     @State private var currentTestType: TestType = .spelling
     @State private var buttonText = "다음 문제로"
-    
+
     @State private var showSoundAlert = false
 
     init(
@@ -76,6 +76,7 @@ struct StudyTestView: View {
                 } message: {
                     Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
                 }
+
         .onAppear {
             currentTestType = randomValidTestType(for: terms[index - 1])
         }

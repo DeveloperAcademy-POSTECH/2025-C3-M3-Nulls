@@ -7,7 +7,8 @@ let project = Project(
             name: "Medimo",
             destinations: .iOS,
             product: .app,
-            bundleId: "org.nulls.Medimo",
+            bundleId: "org.nulls.medimo",
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -28,6 +29,7 @@ let project = Project(
                 "Medimo/Resources/**",
                 "Medimo/Resources/**/*.xcdatamodeld"
             ],
+            entitlements: "Medimo/Medimo.entitlements",
             dependencies: []
         ),
         .target(
