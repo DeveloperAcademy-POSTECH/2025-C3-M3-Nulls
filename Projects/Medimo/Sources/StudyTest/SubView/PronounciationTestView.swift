@@ -6,9 +6,21 @@
 //
 
 import SwiftUI
+import AVFAudio
+import Combine
 
 struct PronounciationTestView: View {
     var term: Term
+    @Binding var showSoundAlert: Bool
+    
+    @State var viewModel: DictionaryDetailViewModel
+    @State private var volumeCancellable: AnyCancellable?
+    
+    init(term: Term, showSoundAlert: Binding<Bool>) {
+            self.term = term
+            self._showSoundAlert = showSoundAlert
+            _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+        }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,7 +32,23 @@ struct PronounciationTestView: View {
                 Spacer()
                 
                 Button(action: {
-                    // action
+                    let session = AVAudioSession.sharedInstance()
+                    do {
+                        try session.setActive(true)
+                        let volume = session.outputVolume
+                        
+                        if volume < 0.05 {
+                            showSoundAlert = true
+                        } else {
+                            if let spelling = viewModel.term.spelling {
+                                viewModel.speak(spelling)
+                            }
+                            showSoundAlert = false
+                        }
+                    } catch {
+                        print("AVAudioSession 실패: \(error)")
+                        showSoundAlert = true
+                    }
                 }) {
                     Image("volume-2")
                         .renderingMode(.template)
@@ -40,16 +68,41 @@ struct PronounciationTestView: View {
             }
         }
         .background(AppColor.bgColor)
+        .onAppear {
+            let session = AVAudioSession.sharedInstance()
+            try? session.setActive(true)
+
+            volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    let volume = session.outputVolume
+                    showSoundAlert = volume < 0.05
+                }
+        }
+        .onDisappear {
+            volumeCancellable?.cancel()
+        }
+    }
+}
+
+struct PronounciationTestViewPreview: View {
+    @State private var showSoundAlert = false
+    
+    var body: some View {
+        let context = PersistenceController.preview.container.viewContext
+
+        let sampleTerm: Term = {
+            let term = Term(context: context)
+            term.spelling = "Electrocardiogram"
+            term.meaning = "심전도"
+            return term
+        }()
+
+        return PronounciationTestView(term: sampleTerm, showSoundAlert: $showSoundAlert)
+            .environment(\.managedObjectContext, context)
     }
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
-    let sampleTerm = Term(context: context)
-    sampleTerm.spelling = "Electrocardiogram"
-    sampleTerm.meaning = "심전도"
-
-    return PronounciationTestView(term: sampleTerm)
-        .environment(\.managedObjectContext, context)
+    PronounciationTestViewPreview()
 }

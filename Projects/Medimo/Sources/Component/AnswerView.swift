@@ -19,6 +19,7 @@ struct AnswerView: View {
     @State private var isCorrect: Bool = false
     
     @Binding var isStudyInProgress: Bool
+    @Binding var showSoundAlert: Bool
   
     var buttonText: String
     
@@ -43,12 +44,10 @@ struct AnswerView: View {
                         .map { clean(String($0)) }
 
                     let userAnswer = clean(answer)
-
-                    print("정답 목록: \(trimmedAnswers)")
-                    print("입력값: \(userAnswer)")
-
+                  
                     isCorrect = trimmedAnswers.contains(userAnswer)
                     isAnswered = true
+                    showSoundAlert = false
                 }) {
                     Image("corner-down-left")
                         .renderingMode(.template)
@@ -83,7 +82,7 @@ struct AnswerView: View {
                     }
                 })
             } else {
-                Spacer()
+//                Spacer()
             }
         }
     }
@@ -91,11 +90,12 @@ struct AnswerView: View {
 
 #Preview {
     AnswerView(
-        correctAnswer: "abc, def", // 두 개의 정답
+        correctAnswer: "abc, def",
         index: .constant(1),
         termSize: .constant(2),
         isStudyInProgress: .constant(true),
+        showSoundAlert: Binding.constant(false),
         buttonText: "다음"
     )
-    .environmentObject(NavigationManager()) // NavigationManager 환경 객체 주입
+    .environmentObject(NavigationManager())
 }

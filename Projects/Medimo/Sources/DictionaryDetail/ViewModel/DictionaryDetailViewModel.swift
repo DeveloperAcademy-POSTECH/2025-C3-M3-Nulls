@@ -38,8 +38,16 @@ class DictionaryDetailViewModel {
         utterance.pitchMultiplier = 1.2
         utterance.volume = 1.0
 
-        DictionaryDetailViewModel.synthesizer.stopSpeaking(at: .immediate)
-        DictionaryDetailViewModel.synthesizer.speak(utterance)
+        let synthesizer = DictionaryDetailViewModel.synthesizer
+
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                synthesizer.speak(utterance)
+            }
+        } else {
+            synthesizer.speak(utterance)
+        }
     }
     
 }

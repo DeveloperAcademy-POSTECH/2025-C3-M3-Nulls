@@ -1,13 +1,15 @@
 import SwiftUI
 import CoreData
 
+import SwiftUI
+import CoreData
+
 public struct ContentView: View {
     @Environment(\.managedObjectContext) var context
     @State private var selectedTab: TabType = .study
     @State private var isStudyInProgress = true
-    
     @StateObject private var navigationManager = NavigationManager()
-    
+
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
         studyManager.setContext(context)
@@ -27,7 +29,6 @@ public struct ContentView: View {
                                     case let .GlossaryDetail(glossary):
                                         GlossaryDetailView(glossary: glossary)
                                             .environmentObject(navigationManager)
-
                                     default:
                                         EmptyView()
                                     }
@@ -35,14 +36,13 @@ public struct ContentView: View {
 
                             CustomTabBar(selected: $selectedTab)
                         }
-                    } // NavigationStack
+                    }
 
                 case .study:
-                    if isStudyInProgress {
-                        // 학습 진행 중이면 NavigationStack 보여주기
-                        NavigationStack(path: $navigationManager.studyPath) {
-                            VStack {
-                                StudyView()
+                    NavigationStack(path: $navigationManager.studyPath) {
+                        VStack {
+                            if isStudyInProgress {
+                                StudyView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
@@ -72,15 +72,11 @@ public struct ContentView: View {
                                             EmptyView()
                                         }
                                     }
-
-                                CustomTabBar(selected: $selectedTab)
+                            } else {
+                                StudyView(isStudyInProgress: $isStudyInProgress)
+                                    .environmentObject(navigationManager)
                             }
-                        }
-                    } else {
-                        VStack {
-                            StudyView()
-                                .environmentObject(navigationManager)
-
+                          
                             CustomTabBar(selected: $selectedTab)
                         }
                     }
@@ -89,7 +85,6 @@ public struct ContentView: View {
                     VStack {
                         DictionaryView(context: context)
                             .environmentObject(navigationManager)
-
                         CustomTabBar(selected: $selectedTab)
                     }
                 }
