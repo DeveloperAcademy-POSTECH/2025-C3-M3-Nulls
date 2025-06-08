@@ -22,6 +22,12 @@ struct AnswerView: View {
   
     var buttonText: String
     
+    func clean(_ text: String) -> String {
+        return text
+            .lowercased()
+            .replacingOccurrences(of: "[^a-z]", with: "", options: .regularExpression)
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -30,9 +36,18 @@ struct AnswerView: View {
                     .foregroundStyle(AppColor.grey3)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
-                
+
                 Button(action: {
-                    isCorrect = answer.lowercased().trimmingCharacters(in: .whitespaces) == correctAnswer
+                    let trimmedAnswers = correctAnswer
+                        .split(separator: ",")
+                        .map { clean(String($0)) }
+
+                    let userAnswer = clean(answer)
+
+                    print("정답 목록: \(trimmedAnswers)")
+                    print("입력값: \(userAnswer)")
+
+                    isCorrect = trimmedAnswers.contains(userAnswer)
                     isAnswered = true
                 }) {
                     Image("corner-down-left")
@@ -72,4 +87,15 @@ struct AnswerView: View {
             }
         }
     }
+}
+
+#Preview {
+    AnswerView(
+        correctAnswer: "abc, def", // 두 개의 정답
+        index: .constant(1),
+        termSize: .constant(2),
+        isStudyInProgress: .constant(true),
+        buttonText: "다음"
+    )
+    .environmentObject(NavigationManager()) // NavigationManager 환경 객체 주입
 }
