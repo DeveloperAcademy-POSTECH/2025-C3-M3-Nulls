@@ -13,6 +13,7 @@ struct StudyTestDetailView: View {
     let correctAnswer: String
     let buttonText: String
     
+    @Binding var termSize: Int
     @Binding var index: Int
 
     var body: some View {
@@ -30,7 +31,7 @@ struct StudyTestDetailView: View {
 
             AnswerView(
                 correctAnswer: correctAnswer,
-                index: $index,
+                index: $index, termSize: $termSize,
                 buttonText: buttonText
             )
         }

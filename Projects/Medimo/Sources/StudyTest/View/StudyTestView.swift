@@ -15,17 +15,16 @@ struct StudyTestView: View {
     @State private var currentTestType: TestType = TestType.allCases.randomElement()!
     
     var terms: [Term]
-    var studyTermSize: Int {
-        terms.count
-    }
+    @State private var studyTermSize: Int
     
     
     var answer: String = ""
     @State var buttonText = "다음 문제로"
     
-    init(terms: [Term], index: Binding<Int>, viewModel: StudyTestViewModel = StudyTestViewModel()) {
+    init(terms: [Term], viewModel: StudyTestViewModel = StudyTestViewModel()) {
         self.terms = terms
         self.viewModel = viewModel
+        _studyTermSize = State(initialValue: terms.count)
     }
     
     var body: some View {
@@ -40,7 +39,7 @@ struct StudyTestView: View {
                     testType: currentTestType,
                     // TODO: 테스트마다 정답 다르게 하기
                     correctAnswer: terms[index - 1].spelling ?? "",
-                    buttonText: buttonText,
+                    buttonText: buttonText, termSize: $studyTermSize,
                     index: $index
                 )
             }
@@ -67,8 +66,7 @@ struct StudyTestView: View {
     let terms = studyManager.getNextStudyTerms()
 
     return StudyTestView(
-        terms: terms,
-        index: .constant(1)
+        terms: terms
     )
     .environment(\.managedObjectContext, context)
 }
