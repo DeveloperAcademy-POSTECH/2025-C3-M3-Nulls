@@ -10,6 +10,13 @@ import SwiftUI
 struct PronounciationTestView: View {
     var term: Term
     
+    @State var viewModel: DictionaryDetailViewModel
+    
+    init(term: Term) {
+        self.term = term
+        _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("음성을 듣고 철자를 적어주세요")
@@ -20,7 +27,9 @@ struct PronounciationTestView: View {
                 Spacer()
                 
                 Button(action: {
-                    // action
+                    if let spelling = viewModel.term.spelling {
+                        viewModel.speak(spelling)
+                    }
                 }) {
                     Image("volume-2")
                         .renderingMode(.template)
@@ -43,13 +52,22 @@ struct PronounciationTestView: View {
     }
 }
 
-#Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
-    let sampleTerm = Term(context: context)
-    sampleTerm.spelling = "Electrocardiogram"
-    sampleTerm.meaning = "심전도"
+struct PronounciationTestViewPreview: View {
+    var body: some View {
+        let context = PersistenceController.preview.container.viewContext
 
-    return PronounciationTestView(term: sampleTerm)
-        .environment(\.managedObjectContext, context)
+        let sampleTerm: Term = {
+            let term = Term(context: context)
+            term.spelling = "Electrocardiogram"
+            term.meaning = "심전도"
+            return term
+        }()
+
+        return PronounciationTestView(term: sampleTerm)
+            .environment(\.managedObjectContext, context)
+    }
+}
+
+#Preview {
+    PronounciationTestViewPreview()
 }
