@@ -28,7 +28,7 @@ struct AnswerView: View {
     func clean(_ text: String) -> String {
         return text
             .lowercased()
-            .replacingOccurrences(of: "[^a-z]", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "[^a-z가-힣]", with: "", options: .regularExpression)
     }
     
     var body: some View {

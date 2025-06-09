@@ -19,7 +19,7 @@ struct PronounciationTestView: View {
     init(term: Term, showSoundAlert: Binding<Bool>) {
             self.term = term
             self._showSoundAlert = showSoundAlert
-            _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+            _viewModel = State(initialValue: DictionaryDetailViewModel(term: term))
         }
     
     var body: some View {
