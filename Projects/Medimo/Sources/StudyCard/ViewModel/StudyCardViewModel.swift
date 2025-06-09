@@ -14,6 +14,7 @@ class StudyCardViewModel: ObservableObject {
     func loadTerms(with context: NSManagedObjectContext) {
         StudyManager.shared.setContext(context)
         terms = StudyManager.shared.getNextStudyTerms()
+        print("terms: \(terms)")
     }
 
     func cardPosition(for idx: Int, currentIndex: Int?) -> CardBackgroundModifier.CardPosition {
