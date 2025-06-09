@@ -91,7 +91,7 @@ public class StudyManager {
 
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
-
+        
         var termIdList: [Int64] = []
 
         let inProgressTermIdList = dataList
@@ -99,7 +99,7 @@ public class StudyManager {
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
             .compactMap { $0.term?.id }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
-
+        
         if termIdList.count < studyTermSize {
             let notStartedTermIdList = dataList
                 .filter { $0.status == LearningStatus.notStarted.rawValue }
@@ -107,19 +107,18 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
-
+        
         var result: [Term] = []
+
         for termId in termIdList {
-            guard
-                let termsSet = studyingGlossary?.terms as? Set<Term>,
-                let term: Term = termsSet.first(where: { $0.id == termId })
-            else { continue }
-
-            dataList.first(where: { $0.term?.id == term.id })?.status = LearningStatus.inProgress.rawValue
-            result.append(term)
-            if result.count >= studyTermSize { break }
+            if let data = dataList.first(where: { $0.term?.id == termId }),
+               let term = data.term {
+                data.status = LearningStatus.inProgress.rawValue
+                result.append(term)
+                if result.count >= studyTermSize { break }
+            }
         }
-
+        
         return result
     }
 
@@ -184,29 +183,5 @@ public class StudyManager {
         }
 
         return result
-    }
-    
-    func resetTermsToNotStarted(_ terms: [Term]) {
-        guard let metaList = termLearnMetadataList else { return }
-
-        for term in terms {
-            if let meta = metaList.first(where: { $0.termId == term.id }) {
-                meta.status = LearningStatus.notStarted.rawValue
-            }
-        }
-        
-        do {
-            try context?.save()
-            print("✅ Term 상태를 notStarted로 복구 완료")
-        } catch {
-            print("❌ 상태 복구 중 오류 발생: \(error)")
-        }
-    }
-    
-    func markTermCompleted(_ term: Term) {
-        if let meta = termLearnMetadataList?.first(where: { $0.termId == term.id }) {
-            meta.status = LearningStatus.completed.rawValue
-            try? context?.save()
-        }
     }
 }

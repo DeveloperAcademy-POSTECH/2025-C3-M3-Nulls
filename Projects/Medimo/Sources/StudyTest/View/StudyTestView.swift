@@ -35,7 +35,7 @@ struct StudyTestView: View {
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
-        _studyTermSize = State(initialValue: terms.count)
+        self._studyTermSize = State(initialValue: terms.count)
     }
 
     var body: some View {
@@ -75,7 +75,6 @@ struct StudyTestView: View {
                 navigationManager.studyPath = []
             }
             Button("취소", role: .cancel) {
-                StudyManager.shared.resetTermsToNotStarted(terms)
             }
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
