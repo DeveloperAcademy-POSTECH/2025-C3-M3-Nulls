@@ -91,7 +91,7 @@ public class StudyManager {
 
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
-
+        
         var termIdList: [Int64] = []
 
         let inProgressTermIdList = dataList
@@ -99,7 +99,7 @@ public class StudyManager {
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
             .compactMap { $0.term?.id }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
-
+        
         if termIdList.count < studyTermSize {
             let notStartedTermIdList = dataList
                 .filter { $0.status == LearningStatus.notStarted.rawValue }
@@ -107,19 +107,18 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
-
+        
         var result: [Term] = []
+
         for termId in termIdList {
-            guard
-                let termsSet = studyingGlossary?.terms as? Set<Term>,
-                let term: Term = termsSet.first(where: { $0.id == termId })
-            else { continue }
-
-            dataList.first(where: { $0.term?.id == term.id })?.status = LearningStatus.inProgress.rawValue
-            result.append(term)
-            if result.count >= studyTermSize { break }
+            if let data = dataList.first(where: { $0.term?.id == termId }),
+               let term = data.term {
+                data.status = LearningStatus.inProgress.rawValue
+                result.append(term)
+                if result.count >= studyTermSize { break }
+            }
         }
-
+        
         return result
     }
 
@@ -149,7 +148,14 @@ public class StudyManager {
         }
 
         meta.lastReviewedAt = now
-        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        meta.nextReviewAt = now // Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        
+        do {
+            try context?.save()
+            print("✅ 학습 결과 저장 완료: \(result) for \(term.spelling ?? "")")
+        } catch {
+            print("❌ 학습 결과 저장 실패: \(error.localizedDescription)")
+        }
     }
 
     func getTodayReviewTerms() -> [Term] {

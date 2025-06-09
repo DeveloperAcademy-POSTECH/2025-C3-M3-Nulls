@@ -18,11 +18,11 @@ struct PronounciationTestView: View {
     @State private var volumeCancellable: AnyCancellable?
 
     init(term: Term, showSoundAlert: Binding<Bool>) {
-        self.term = term
-        _showSoundAlert = showSoundAlert
-        _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
-    }
-
+            self.term = term
+            self._showSoundAlert = showSoundAlert
+            _viewModel = State(initialValue: DictionaryDetailViewModel(term: term))
+        }
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("음성을 듣고 철자를 적어주세요")

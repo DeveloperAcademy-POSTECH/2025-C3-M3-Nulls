@@ -70,15 +70,12 @@ public struct ContentView: View {
                                             ).environmentObject(navigationManager)
 
                                         case .ReviewTest:
-                                            EmptyView()
-                                                    //                                            ReviewTestView(
-                                                    //                                                isStudyInProgress: $isStudyInProgress
-                                                    //                                            ).environmentObject(navigationManager)
-
+                                            ReviewTestView(
+                                                isStudyInProgress: $isStudyInProgress
+                                            ).environmentObject(navigationManager)
                                         case let .TestCompletion(index):
                                             TestEndView(
-                                                isStudyInProgress: $isStudyInProgress,
-                                                index: index
+                                                isStudyInProgress: $isStudyInProgress, index: index
                                             ).environmentObject(navigationManager)
 
                                         default:
@@ -95,7 +92,6 @@ public struct ContentView: View {
                             CustomTabBar(selected: $selectedTab)
                         }
                     }
-
                 case .dictionary:
                     VStack {
                         DictionaryView(context: moc)

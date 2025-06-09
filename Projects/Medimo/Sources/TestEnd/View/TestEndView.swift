@@ -56,9 +56,12 @@ struct TestEndView: View {
                 }
                 
                 NextButton(buttonText: "학습 종료하기", action: {
+                    
+                    
                     withAnimation {
                         isStudyInProgress = false
                     }
+//                    navigationManager.studyPath.removeAll()
                 })
                 .padding(70)
                 .offset(y: 100)
@@ -69,8 +72,8 @@ struct TestEndView: View {
         .ignoresSafeArea()
     }
 }
-
-#Preview {
-    @Previewable @State var isStudyInProgress = true
-    return TestEndView(isStudyInProgress: $isStudyInProgress, index: 22)
-}
+//
+//#Preview {
+//    @Previewable @State var isStudyInProgress = true
+////    TestEndView(isStudyInProgress: $isStudyInProgress, terms: terms, index: 22)
+//}

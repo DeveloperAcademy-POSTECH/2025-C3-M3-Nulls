@@ -250,7 +250,9 @@ extension CoreDataManager {
         let relationships = (try? context.fetch(relationshipFetchRequest)) ?? []
 
         // morphemeId로 Morpheme를 빠르게 찾기 위한 딕셔너리 생성
-        let morphemeDict = Dictionary(uniqueKeysWithValues: morphemes.map { ($0.id, $0) })
+        let morphemeDict = morphemes.reduce(into: [Int64: Morpheme]()) { dict, morpheme in
+            dict[morpheme.id] = morpheme
+        }
 
         func relatedMorphemeIds(for term: Term) -> [Int64] {
             relationships

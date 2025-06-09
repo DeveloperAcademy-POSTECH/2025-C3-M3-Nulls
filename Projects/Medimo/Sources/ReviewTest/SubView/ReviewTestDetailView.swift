@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct StudyTestDetailView: View {
+struct ReviewTestDetailView: View {
     @Binding var term: Term
     let testType: TestType
     let buttonText: String
-
+    
     @Binding var termSize: Int
     @Binding var index: Int
-
+    
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-
+  
     var correctAnswer: String {
         switch testType {
         case .spelling:
@@ -43,7 +43,7 @@ struct StudyTestDetailView: View {
             case .pronunciation:
                 PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
-
+            
             VStack {
                 AnswerView(
                     correctAnswer: correctAnswer,
@@ -51,16 +51,15 @@ struct StudyTestDetailView: View {
                     termSize: $termSize,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    term: $term,
-                    buttonText: buttonText
+                    term: $term, buttonText: buttonText
                 )
                 .padding(.bottom, 20)
-
+                
                 if showSoundAlert {
                     SoundAlert()
                 }
             }
-
+            
             Spacer()
         }
     }

@@ -53,32 +53,32 @@ struct DictionaryDetailView: View {
                                         .font(.titleEng)
                                         .foregroundColor(AppColor.label)
                                 }
-                                DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
-
-                                DictionaryDetailViewComponents.sectionRectangle()
                             }
+                            DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
+
+                            DictionaryDetailViewComponents.sectionRectangle()
                         }
-                        .padding(.horizontal, 32)
-
-                        // MARK: - - 의미
-
-                        DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)
-
-                        // MARK: - - 어원
-
-                        if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
-                            DictionaryDetailViewComponents.morphemeSection(morphemes)
-                        }
-
-                        // MARK: - - 설명
-
-                        DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
-
-                        Spacer()
                     }
+                    .padding(.horizontal, 32)
+
+                    // MARK: - - 의미
+
+                    DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)
+
+                    // MARK: - - 어원
+
+                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
+                        DictionaryDetailViewComponents.morphemeSection(morphemes)
+                    }
+
+                    // MARK: - - 설명
+
+                    DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
+
+                    Spacer()
                 }
-                DictionaryDetailViewComponents.characterImage()
             }
+            DictionaryDetailViewComponents.characterImage()
         }
     }
 }
