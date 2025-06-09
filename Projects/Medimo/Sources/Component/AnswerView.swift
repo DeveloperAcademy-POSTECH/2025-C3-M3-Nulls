@@ -20,13 +20,15 @@ struct AnswerView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
+    
+    @Binding var term: Term
   
     var buttonText: String
     
     func clean(_ text: String) -> String {
         return text
             .lowercased()
-            .replacingOccurrences(of: "[^a-z]", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "[^a-z가-힣]", with: "", options: .regularExpression)
     }
     
     func submitAction() {
@@ -73,8 +75,14 @@ struct AnswerView: View {
             if isAnswered {
                 if isCorrect {
                     CorrectAnswer()
+                        .onAppear {
+                            StudyManager.shared.updateReview(of: term, result: .correct)
+                        }
                 } else {
                     WrongAnswer(correctAnswer: correctAnswer)
+                        .onAppear {
+                            StudyManager.shared.updateReview(of: term, result: .incorrect)
+                        }
                 }
                 
                 Spacer()
@@ -89,21 +97,12 @@ struct AnswerView: View {
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
                 })
-            } else {
-//                Spacer()
             }
         }
+//        .onChange(of: isAnswered) { _, newValue in
+//            if newValue {
+//                StudyManager.shared.markTermCompleted(term)
+//            }
+//        }
     }
-}
-
-#Preview {
-    AnswerView(
-        correctAnswer: "abc, def",
-        index: .constant(1),
-        termSize: .constant(2),
-        isStudyInProgress: .constant(true),
-        showSoundAlert: Binding.constant(false),
-        buttonText: "다음"
-    )
-    .environmentObject(NavigationManager())
 }

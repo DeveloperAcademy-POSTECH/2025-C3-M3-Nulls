@@ -56,9 +56,12 @@ struct TestEndView: View {
                 }
                 
                 NextButton(buttonText: "학습 종료하기", action: {
+                    
+                    
                     withAnimation {
                         isStudyInProgress = false
                     }
+//                    navigationManager.studyPath.removeAll()
                 })
                 .padding(70)
                 .offset(y: 100)
@@ -72,5 +75,5 @@ struct TestEndView: View {
 
 #Preview {
     @Previewable @State var isStudyInProgress = true
-    return TestEndView(isStudyInProgress: $isStudyInProgress, index: 22)
+//    TestEndView(isStudyInProgress: $isStudyInProgress, terms: terms, index: 22)
 }

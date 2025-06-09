@@ -149,7 +149,14 @@ public class StudyManager {
         }
 
         meta.lastReviewedAt = now
-        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        meta.nextReviewAt = now // Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        
+        do {
+            try context?.save()
+            print("✅ 학습 결과 저장 완료: \(result) for \(term.spelling ?? "")")
+        } catch {
+            print("❌ 학습 결과 저장 실패: \(error.localizedDescription)")
+        }
     }
 
     func getTodayReviewTerms() -> [Term] {
@@ -177,5 +184,29 @@ public class StudyManager {
         }
 
         return result
+    }
+    
+    func resetTermsToNotStarted(_ terms: [Term]) {
+        guard let metaList = termLearnMetadataList else { return }
+
+        for term in terms {
+            if let meta = metaList.first(where: { $0.termId == term.id }) {
+                meta.status = LearningStatus.notStarted.rawValue
+            }
+        }
+        
+        do {
+            try context?.save()
+            print("✅ Term 상태를 notStarted로 복구 완료")
+        } catch {
+            print("❌ 상태 복구 중 오류 발생: \(error)")
+        }
+    }
+    
+    func markTermCompleted(_ term: Term) {
+        if let meta = termLearnMetadataList?.first(where: { $0.termId == term.id }) {
+            meta.status = LearningStatus.completed.rawValue
+            try? context?.save()
+        }
     }
 }

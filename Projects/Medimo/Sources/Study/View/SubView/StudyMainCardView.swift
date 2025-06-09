@@ -31,11 +31,17 @@ struct StudyMainCardView: View {
                         isStudyInProgress = true
                         navigationManager.studyPath.append(.StudyCard)
                     }
+<<<<<<< HEAD
+=======
 
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
                     .padding(.horizontal, 20)
 
-                    ReviewStartButtonView()
-                        .padding(.horizontal, 20)
+                    ReviewStartButtonView {
+                        isStudyInProgress = true
+                        navigationManager.studyPath.append(.ReviewTest)
+                    }
+                    .padding(.horizontal, 20)
                 }
             }
             .padding(.horizontal, 30)

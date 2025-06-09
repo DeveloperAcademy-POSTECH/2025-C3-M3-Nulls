@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct StudyTestDetailView: View {
+struct ReviewTestDetailView: View {
     @Binding var term: Term
     let testType: TestType
     let buttonText: String
-
+    
     @Binding var termSize: Int
     @Binding var index: Int
-
+    
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-
+  
     var correctAnswer: String {
         switch testType {
         case .spelling:
@@ -43,7 +43,7 @@ struct StudyTestDetailView: View {
             case .pronunciation:
                 PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
-
+            
             VStack {
                 AnswerView(
                     correctAnswer: correctAnswer,
@@ -51,55 +51,38 @@ struct StudyTestDetailView: View {
                     termSize: $termSize,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    term: $term,
-                    buttonText: buttonText
+                    term: $term, buttonText: buttonText
                 )
                 .padding(.bottom, 20)
-
+                
                 if showSoundAlert {
                     SoundAlert()
                 }
             }
-
+            
             Spacer()
         }
     }
 }
 
-struct StudyTestDetailViewPreviewWrapper: View {
-    @State private var termSize = 3
+struct ReviewTestDetailViewPreview: View {
+    @State private var term: Term
     @State private var index = 1
+    @State private var termSize = 3
     @State private var isStudyInProgress = true
     @State private var showSoundAlert = false
-    @State private var term: Term
 
     init() {
         let context = PersistenceController.preview.container.viewContext
-        let sampleTerm = Term(context: context)
-        sampleTerm.spelling = "Blood Pressure"
-        sampleTerm.meaning = "혈압"
-        sampleTerm.abbreviation = "BP"
-        sampleTerm.id = UUID()
-        _term = State(initialValue: sampleTerm)
+        let newTerm = Term(context: context)
+        newTerm.spelling = "Blood Pressure"
+        newTerm.meaning = "혈압"
+        newTerm.abbreviation = "BP"
+        newTerm.id = UUID()
+        _term = State(initialValue: newTerm)
     }
 
     var body: some View {
-<<<<<<< HEAD
-        StudyTestDetailView(
-            term: $term,
-            testType: .meaning,
-=======
-        let context = CoreDataManager.preview.container.viewContext
-
-        let term: Term = {
-            let t = Term(context: context)
-            t.spelling = "Blood Pressure"
-            t.meaning = "혈압"
-            t.abbreviation = "BP"
-            t.id = 1
-            return t
-        }()
-
         let availableTestTypes = TestType.allCases.filter { type in
             switch type {
             case .abbreviation:
@@ -108,13 +91,11 @@ struct StudyTestDetailViewPreviewWrapper: View {
                 return true
             }
         }
-
         let randomTestType = availableTestTypes.randomElement()!
 
-        return StudyTestDetailView(
-            term: term,
+        return ReviewTestDetailView(
+            term: $term,
             testType: randomTestType,
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
             buttonText: "다음 문제로",
             termSize: $termSize,
             index: $index,
@@ -126,9 +107,5 @@ struct StudyTestDetailViewPreviewWrapper: View {
 }
 
 #Preview {
-<<<<<<< HEAD
-    StudyTestDetailViewPreviewWrapper()
-=======
-    StudyTestDetailViewPreview()
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
+    ReviewTestDetailViewPreview()
 }
