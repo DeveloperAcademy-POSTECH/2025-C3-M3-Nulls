@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
-    <entity name="DateInfo" representedClassName=".DateInfo" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DateInfo" representedClassName=".DateInfo" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reviewCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="studyCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="totalStudyHist" inverseEntity="DateInfo"/>
+        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="totalStudyHist" inverseEntity="User"/>
     </entity>
-    <entity name="Glossary" representedClassName=".Glossary" syncable="YES">
+    <entity name="Glossary" representedClassName=".Glossary" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
@@ -14,36 +14,36 @@
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="glossaries" inverseEntity="Term"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TermStudyData" inverseName="glossary" inverseEntity="TermStudyData"/>
     </entity>
-    <entity name="GlossaryProgress" representedClassName=".GlossaryProgress" syncable="YES">
+    <entity name="GlossaryProgress" representedClassName=".GlossaryProgress" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lastStudiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="studiedCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="glossary" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Glossary" inverseName="progresses" inverseEntity="Glossary"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="progresses" inverseEntity="User"/>
     </entity>
-    <entity name="Morpheme" representedClassName=".Morpheme" syncable="YES">
+    <entity name="Morpheme" representedClassName=".Morpheme" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="meaning" optional="YES" attributeType="String"/>
         <attribute name="spelling" optional="YES" attributeType="String"/>
         <relationship name="terms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="morphemes" inverseEntity="Term"/>
     </entity>
-    <entity name="Term" representedClassName=".Term" syncable="YES">
+    <entity name="Term" representedClassName=".Term" syncable="YES" codeGenerationType="class">
         <attribute name="abbreviation" optional="YES" attributeType="String"/>
         <attribute name="explanation" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="meaning" optional="YES" attributeType="String"/>
         <attribute name="spelling" optional="YES" attributeType="String"/>
-        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="bookmarks" inverseEntity="Term"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="bookmarks" inverseEntity="User"/>
         <relationship name="glossaries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
         <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TermStudyData" inverseName="term" inverseEntity="TermStudyData"/>
     </entity>
-    <entity name="TermMorphemeRelationship" representedClassName=".TermMorphemeRelationship" syncable="YES">
+    <entity name="TermMorphemeRelationship" representedClassName=".TermMorphemeRelationship" syncable="YES" codeGenerationType="class">
         <attribute name="morphemeId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="termId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="TermStudyData" representedClassName=".TermStudyData" syncable="YES">
+    <entity name="TermStudyData" representedClassName=".TermStudyData" syncable="YES" codeGenerationType="class">
         <attribute name="easeFactor" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="interval" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -55,14 +55,25 @@
         <relationship name="term" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Term" inverseName="termStudyData" inverseEntity="Term"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="termStudyData" inverseEntity="User"/>
     </entity>
-    <entity name="User" representedClassName=".User" syncable="YES">
+    <entity name="User" representedClassName=".User" syncable="YES" codeGenerationType="class">
         <attribute name="currentStreak" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="longestStreak" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalLearningTerms" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Term" inverseName="bookmarks" inverseEntity="User"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Term" inverseName="bookmarks" inverseEntity="Term"/>
         <relationship name="progresses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GlossaryProgress" inverseName="user" inverseEntity="GlossaryProgress"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TermStudyData" inverseName="user" inverseEntity="TermStudyData"/>
-        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateInfo" inverseName="totalStudyHist" inverseEntity="User"/>
+        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateInfo" inverseName="totalStudyHist" inverseEntity="DateInfo"/>
     </entity>
+    <configuration name="Global"/>
+    <configuration name="Personal">
+        <memberEntity name="User"/>
+        <memberEntity name="DateInfo"/>
+        <memberEntity name="Glossary"/>
+        <memberEntity name="GlossaryProgress"/>
+        <memberEntity name="Morpheme"/>
+        <memberEntity name="Term"/>
+        <memberEntity name="TermMorphemeRelationship"/>
+        <memberEntity name="TermStudyData"/>
+    </configuration>
 </model>

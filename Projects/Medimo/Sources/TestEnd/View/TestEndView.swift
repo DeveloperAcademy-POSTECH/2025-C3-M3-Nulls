@@ -72,8 +72,8 @@ struct TestEndView: View {
         .ignoresSafeArea()
     }
 }
-
-#Preview {
-    @Previewable @State var isStudyInProgress = true
-//    TestEndView(isStudyInProgress: $isStudyInProgress, terms: terms, index: 22)
-}
+//
+//#Preview {
+//    @Previewable @State var isStudyInProgress = true
+////    TestEndView(isStudyInProgress: $isStudyInProgress, terms: terms, index: 22)
+//}

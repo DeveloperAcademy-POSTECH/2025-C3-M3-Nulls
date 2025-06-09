@@ -7,6 +7,7 @@
 
 import CloudKit
 import Combine
+import SwiftUI
 
 enum CloudKitServiceError: Error, LocalizedError {
     case message(String)
@@ -34,12 +35,18 @@ class CloudKitManager {
         CKContainer(identifier: containerID)
     }
 
+    private var privateDatabase: CKDatabase {
+        container.privateCloudDatabase
+    }
+
     private var publicDatabase: CKDatabase {
         container.publicCloudDatabase
     }
 
     // 아이클라우드 원격 데이터로부터 마지막 체인지 토큰
     var lastChangeToken: CKServerChangeToken?
+
+    @State var accountStatus: CKAccountStatus = .couldNotDetermine
 }
 
 // MARK: - CRUD Operations
@@ -236,19 +243,84 @@ extension CloudKitManager {
             fetchBatch(cursor: nil, continuation: continuation) // 초기 호출
         }
     }
+
+    func deleteAllRecordsFromPrivateDatabase() async {
+        let privateDB = container.privateCloudDatabase
+        let recordTypes = ["CD_Term", "CD_Morpheme", "CD_TermMorphemeRelationship", "CD_Glossary", "CD_User", "CDMR"] // 실제 사용 중인 타입으로 변경
+
+        for recordType in recordTypes {
+            let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
+            var recordIDsToDelete: [CKRecord.ID] = []
+
+            let operation = CKQueryOperation(query: query)
+            operation.recordMatchedBlock = { recordID, result in
+                if case .success = result {
+                    recordIDsToDelete.append(recordID)
+                }
+            }
+            operation.queryResultBlock = { result in
+                switch result {
+                case .success:
+                    // CloudKit은 한 번에 400개까지 삭제 권장
+                    let chunked = stride(from: 0, to: recordIDsToDelete.count, by: 400).map {
+                        Array(recordIDsToDelete[$0 ..< min($0 + 400, recordIDsToDelete.count)])
+                    }
+                    for chunk in chunked {
+                        let deleteOp = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: chunk)
+                        deleteOp.modifyRecordsResultBlock = { result in
+                            switch result {
+                            case .success:
+                                print("📝 \(recordType) \(chunk.count)개 삭제 완료")
+                            case let .failure(error):
+                                print("📝 \(recordType) 삭제 실패: \(error)")
+                            }
+                        }
+                        privateDB.add(deleteOp)
+                    }
+
+                case let .failure(error):
+                    print("📝 \(recordType) 쿼리 실패: \(error)")
+                }
+            }
+            privateDB.add(operation)
+        }
+
+        print("📝 모든 레코드 삭제 요청 완료")
+    }
 }
 
 // MARK: - Sub Operations
 
 extension CloudKitManager {
+    func isICloudAvailable() -> Bool {
+        if FileManager.default.ubiquityIdentityToken != nil {
+            // iCloud 사용 가능
+            return true
+        } else {
+            // iCloud 사용 불가 (로그인 안 됨, Drive 꺼짐 등)
+            return false
+        }
+    }
+
+    @MainActor
+    func fetchAccountStatus() async -> CKAccountStatus {
+        await withCheckedContinuation { continuation in
+            container.accountStatus { status, _ in
+                continuation.resume(returning: status)
+            }
+        }
+    }
+
     func checkiCloudAccountStatus(completion: @escaping (CKAccountStatus) -> Void) {
-        container.accountStatus { accountStatus, error in
+        container.accountStatus { status, error in
             if let error = error {
                 print("Error fetching iCloud account status: \(error)")
                 return
             }
 
-            switch accountStatus {
+            self.accountStatus = status
+
+            switch status {
             case .available:
                 completion(.available)
 
