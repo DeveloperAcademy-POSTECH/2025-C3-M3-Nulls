@@ -55,11 +55,12 @@ struct TermCardView: View {
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
                         .font(isFlipped ? .title : .titleEng)
-
-                    if !isFlipped, term.abbreviation != nil {
-                        Text("[\(String(term.abbreviation!))]")
-                            .font(.headlineEng)
-                            .padding(.vertical)
+                    if !isFlipped, let abbreviation = term.abbreviation {
+                        if !abbreviation.isEmpty {
+                            Text("[\(abbreviation)]")
+                                .font(.headlineEng)
+                                .padding(.vertical)
+                        }
                     }
                 }
                 .foregroundStyle(AppColor.label)
