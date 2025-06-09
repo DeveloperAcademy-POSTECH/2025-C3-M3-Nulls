@@ -11,7 +11,7 @@ final class CoreDataManager {
     static let shared = CoreDataManager()
     let cloudKitManager = CloudKitManager.shared
 
-    let container: NSPersistentCloudKitContainer
+    let container: NSPersistentContainer
     let context: NSManagedObjectContext
 
     private init(inMemory: Bool = false) {
@@ -54,150 +54,179 @@ extension CoreDataManager {
     }
 
     func initializeTermData() async {
+        let result = await cloudKitManager.fetchAllTerms()
         var terms: [TermDTO] = []
 
-        let result = await cloudKitManager.fetchAllTerms()
         switch result {
         case let .success(loadedTerms):
             terms = loadedTerms
 
+            // 백그라운드 컨텍스트에서 일괄 처리
+            await container.performBackgroundTask { [weak self] context in
+                guard self != nil else { return }
+                for term in terms {
+                    let fetchRequest: NSFetchRequest<Term> = Term.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "id == %d", term.id)
+                    fetchRequest.fetchLimit = 1
+
+                    if let _ = try? context.fetch(fetchRequest).first {
+                        continue
+                    }
+
+                    let termEntity = Term(context: context)
+                    termEntity.id = Int64(term.id)
+                    termEntity.spelling = term.spelling
+                    termEntity.meaning = term.meaning
+                    termEntity.explanation = term.explanation
+                    termEntity.abbreviation = term.abbreviation
+                }
+                do {
+                    try context.save()
+                    print("✏️ Fetched Terms: \(terms.count)")
+                } catch {
+                    print("❌ Failed to save Core Data: \(error)")
+                }
+            }
+
         case let .failure(error):
             print("Error fetching terms: \(error)")
         }
-
-        for term in terms {
-            let fetchRequest: NSFetchRequest<Term> = Term.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "id == %d", term.id)
-            fetchRequest.fetchLimit = 1
-
-            // 이미 존재하면 continue
-            if let _ = try? context.fetch(fetchRequest).first {
-                continue
-            }
-
-            let termEntity = Term(context: context)
-            termEntity.id = Int64(term.id)
-            termEntity.spelling = term.spelling
-            termEntity.meaning = term.meaning
-            termEntity.explanation = term.explanation
-            termEntity.abbreviation = term.abbreviation
-        } // Task
-
-        save()
-
-        print("✏️ Fetched Terms: \(terms.count)")
     }
 
     func initializeMorphemeData() async {
+        let result = await cloudKitManager.fetchAllMorphemes()
         var morphemes: [MorphemeDTO] = []
 
-        Task {
-            let result = await cloudKitManager.fetchAllMorphemes()
-            switch result {
-            case let .success(loadedMorphemes):
-                morphemes = loadedMorphemes
+        switch result {
+        case let .success(loadedMorphemes):
+            morphemes = loadedMorphemes
 
-            case let .failure(error):
-                print("Error fetching terms: \(error)")
-            }
+            // 백그라운드 컨텍스트에서 일괄 처리
+            await container.performBackgroundTask { [weak self] context in
+                guard self != nil else { return }
+                for morpheme in morphemes {
+                    let fetchRequest: NSFetchRequest<Morpheme> = Morpheme.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "id == %d", morpheme.id)
+                    fetchRequest.fetchLimit = 1
 
-            for morpheme in morphemes {
-                let fetchRequest: NSFetchRequest<Morpheme> = Morpheme.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "id == %d", morpheme.id)
-                fetchRequest.fetchLimit = 1
+                    if let _ = try? context.fetch(fetchRequest).first {
+                        continue
+                    }
 
-                // 이미 존재하면 continue
-                if let _ = try? context.fetch(fetchRequest).first {
-                    continue
+                    let morphemeEntity = Morpheme(context: context)
+                    morphemeEntity.id = Int64(morpheme.id)
+                    morphemeEntity.spelling = morpheme.spelling
+                    morphemeEntity.meaning = morpheme.meaning
                 }
-
-                let morphemeEntity = Morpheme(context: context)
-                morphemeEntity.id = Int64(morpheme.id)
-                morphemeEntity.spelling = morpheme.spelling
-                morphemeEntity.meaning = morpheme.meaning
+                do {
+                    try context.save()
+                    print("✏️ Fetched Morphemes: \(morphemes.count)")
+                } catch {
+                    print("❌ Failed to save Core Data: \(error)")
+                }
             }
-            save()
 
-            print("✏️ Fetched Morphemes: \(morphemes.count)")
-        } // Task
+        case let .failure(error):
+            print("Error fetching terms: \(error)")
+        }
     }
 
     func initializeTermMorphemeRelationshipData() async {
+        let result = await cloudKitManager.fetchAllTermMorphemeRelationships()
         var relationships: [TermMorphemeRelationshipDTO] = []
 
-        let result = await cloudKitManager.fetchAllTermMorphemeRelationships()
         switch result {
         case let .success(loadedRelationships):
             relationships = loadedRelationships
 
+            // 백그라운드 컨텍스트에서 일괄 처리
+            await container.performBackgroundTask { [weak self] context in
+                guard self != nil else { return }
+                for relationship in relationships {
+                    let fetchRequest: NSFetchRequest<TermMorphemeRelationship> = TermMorphemeRelationship.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(
+                        format: "termId == %d AND morphemeId == %d",
+                        relationship.termId, relationship.morphemeId
+                    )
+                    fetchRequest.fetchLimit = 1
+
+                    // 이미 존재하면 continue
+                    if let _ = try? context.fetch(fetchRequest).first {
+                        continue
+                    }
+
+                    let relationshipEntity = TermMorphemeRelationship(context: context)
+                    relationshipEntity.termId = Int64(relationship.termId)
+                    relationshipEntity.morphemeId = Int64(relationship.morphemeId)
+                    relationshipEntity.order = Int16(relationship.order)
+                }
+                do {
+                    try context.save()
+                    print("✏️ Fetched Relationships: \(relationships.count)")
+                } catch {
+                    print("❌ Failed to save Core Data: \(error)")
+                }
+            }
+
         case let .failure(error):
             print("Error fetching relationships: \(error)")
         }
-
-        for relationship in relationships {
-            let fetchRequest: NSFetchRequest<TermMorphemeRelationship> = TermMorphemeRelationship.fetchRequest()
-            fetchRequest.predicate = NSPredicate(
-                format: "termId == %d AND morphemeId == %d",
-                relationship.termId, relationship.morphemeId
-            )
-            fetchRequest.fetchLimit = 1
-
-            // 이미 존재하면 continue
-            if let _ = try? context.fetch(fetchRequest).first {
-                continue
-            }
-
-            let relationshipEntity = TermMorphemeRelationship(context: context)
-            relationshipEntity.termId = Int64(relationship.termId)
-            relationshipEntity.morphemeId = Int64(relationship.morphemeId)
-            relationshipEntity.order = Int16(relationship.order)
-        }
-
-        save()
-        print("✏️ Fetched Relationships: \(relationships.count)")
     }
 
     func initializeGlossaryData() async {
+        let result = await cloudKitManager.fetchAllGlossaries()
         var glossaries: [GlossaryDTO] = []
 
-        Task {
-            let result = await cloudKitManager.fetchAllGlossaries()
-            switch result {
-            case let .success(loadedGlossaries):
-                glossaries = loadedGlossaries
-
-            case let .failure(error):
-                print("Error fetching terms: \(error)")
-            }
+        switch result {
+        case let .success(loadedGlossaries):
+            glossaries = loadedGlossaries
 
             for glossary in glossaries {
-                let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "id == %d", glossary.id)
-                fetchRequest.fetchLimit = 1
-
-                // 이미 존재하면 continue
-                if let _ = try? context.fetch(fetchRequest).first {
-                    continue
-                }
+//                let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
+//                fetchRequest.predicate = NSPredicate(format: "id == %d", glossary.id)
+//                fetchRequest.fetchLimit = 1
+//
+//                // 이미 존재하면 continue
+//                if let _ = try? context.fetch(fetchRequest).first {
+//                    continue
+//                }
 
                 let glossaryEntity = Glossary(context: context)
                 glossaryEntity.id = Int64(glossary.id)
                 glossaryEntity.category = glossary.category
                 glossaryEntity.title = glossary.title
 
-                for termId in glossary.terms {
-                    let fetchRequest: NSFetchRequest<Term> = Term.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "id == %d", termId)
-                    fetchRequest.fetchLimit = 1
+                //            for termId in glossary.terms {
+                //                let fetchRequest: NSFetchRequest<Term> = Term.fetchRequest()
+                //                fetchRequest.predicate = NSPredicate(format: "id == %d", termId)
+                //                fetchRequest.fetchLimit = 1
+                //
+                //                if let term = try? context.fetch(fetchRequest).first {
+                //                    glossaryEntity.addToTerms(term)
+                //                }
+                //            }
 
-                    if let term = try? context.fetch(fetchRequest).first {
-                        glossaryEntity.addToTerms(term)
+                var termsToAdd: [Term] = []
+                for termId in glossary.terms {
+                    let termFetch: NSFetchRequest<Term> = Term.fetchRequest()
+                    termFetch.predicate = NSPredicate(format: "id == %d", termId)
+                    termFetch.fetchLimit = 1
+
+                    if let term = try? context.fetch(termFetch).first {
+                        termsToAdd.append(term)
                     }
+                }
+                // 반복문 종료 후 한 번에 관계 연결
+                for term in termsToAdd {
+                    glossaryEntity.addToTerms(term)
                 }
             }
             save()
             print("✏️ Fetched Glossaries: \(glossaries.count)")
-        } // Task
+
+        case let .failure(error):
+            print("Error fetching terms: \(error)")
+        }
     }
 
     func initializeUserData() async {
@@ -232,25 +261,33 @@ extension CoreDataManager {
 
         for term in terms {
             let morphemeIds = relatedMorphemeIds(for: term)
-            for morphemeId in morphemeIds {
-                // morpheme.id가 nil이 아닌 경우만 추가
-                if let morpheme = morphemeDict[morphemeId] {
-                    term.addToMorphemes(morpheme)
-                }
-            }
+            // 새롭게 연결할 Morpheme 객체 배열 생성
+            let morphemesToAdd = morphemeIds.compactMap { morphemeDict[$0] }
+            // 기존 관계를 모두 제거하고 새로 설정 (Set으로 변환)
+            term.morphemes = NSSet(array: morphemesToAdd)
         }
 
         save()
     }
 
-    func initialize() async {
-        // 초기 데이터 삽입
-        await initializeTermData()
-        await initializeMorphemeData()
-        await initializeTermMorphemeRelationshipData()
-        await initializeGlossaryData()
-        await initializeUserData()
+    func initialize() async -> Bool {
+        // 병렬로 실행 가능한 작업
+        async let termTask: () = initializeTermData()
+        async let morphemeTask: () = initializeMorphemeData()
+        async let relationshipTask: () = initializeTermMorphemeRelationshipData()
+        async let userTask: () = initializeUserData()
+
+//        // 위 5개가 모두 끝난 후 실행 (의존성 있음)
+        _ = await (termTask, morphemeTask, relationshipTask, userTask)
+//        await initializeTermData()
+//        await initializeMorphemeData()
+//        await initializeTermMorphemeRelationshipData()
+//        await initializeUserData()
+
         await linkMorphemesToTerms()
+        await initializeGlossaryData()
+
+        return true
     }
 }
 

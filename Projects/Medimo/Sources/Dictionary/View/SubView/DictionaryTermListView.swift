@@ -17,7 +17,7 @@ struct DictionaryTermListView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 ForEach(viewModel.filteredTerms) { term in
                     DictionaryTermItemView(term: term, selectedTerm: $viewModel.selectedTerm)
                 }

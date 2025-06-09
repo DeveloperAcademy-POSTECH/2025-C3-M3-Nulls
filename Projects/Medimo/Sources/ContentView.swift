@@ -131,11 +131,11 @@ public struct ContentView: View {
             //            }
         } // ZStack
         .onAppear {
-            Task {
-                if coreDataManager.needsInitialCloudKitFetch(context: moc) {
-                    await coreDataManager.initialize()
-                }
-            }
+//            Task {
+//                if coreDataManager.needsInitialCloudKitFetch(context: moc) {
+//                    await coreDataManager.initialize()
+//                }
+//            }
 
             // Check iCloud
             if cloudKitManager.isICloudAvailable() {

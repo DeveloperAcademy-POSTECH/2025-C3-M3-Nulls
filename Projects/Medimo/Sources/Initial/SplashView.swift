@@ -11,26 +11,65 @@ struct SplashView: View {
     @Environment(\.managedObjectContext) private var moc
     let coreDataManager = CoreDataManager.shared
 
+    @State private var isLoading = true
+    @State private var loadError: String?
+
     var body: some View {
         ZStack {
-            Image("SplashScreen")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-
-            if coreDataManager.needsInitialCloudKitFetch(context: moc) {
-                VStack {
-                    Spacer()
-
-                    HStack(spacing: 12) {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: AppColor.label))
-                            .frame(width: 24, height: 24)
-                        Text("초기 데이터를 가져오고 있어요...")
-                            .foregroundStyle(AppColor.label)
+            if isLoading {
+                ZStack {
+                    Image("LaunchScreen")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                    VStack {
+                        Spacer()
+                        HStack {
+                            ProgressView()
+                            Text("데이터 불러오는 중...")
+                        }
+                        if coreDataManager.needsInitialCloudKitFetch(context: coreDataManager.context) {
+                            Text("앱 초기 실행 시 시간이 걸릴 수 있습니다.")
+                                .padding(.bottom, 50)
+                        } else {
+                            Text("")
+                                .padding(.bottom, 50)
+                        }
                     }
                 }
-                .padding(.bottom, 64)
+                .transition(.opacity)
+            } else if let error = loadError {
+                Text("에러: \(error)")
+                    .transition(.opacity)
+            } else {
+                ContentView(context: coreDataManager.context)
+                    .environment(\.managedObjectContext, coreDataManager.context)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.5), value: isLoading)
+        // onAppear는 그대로 유지
+        .onAppear {
+            Task {
+                let start = Date()
+                var result = true
+
+                if coreDataManager.needsInitialCloudKitFetch(context: coreDataManager.context) {
+                    result = await coreDataManager.initialize()
+                }
+                let elapsed = Date().timeIntervalSince(start)
+                if elapsed < 2 {
+                    try? await Task.sleep(nanoseconds: UInt64((2 - elapsed) * 1_000_000_000))
+                }
+                DispatchQueue.main.async {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        if result {
+                            isLoading = false
+                        }
+                    }
+                }
             }
         }
     }

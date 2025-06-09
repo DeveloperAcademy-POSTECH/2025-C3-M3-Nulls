@@ -35,6 +35,10 @@ class CloudKitManager {
         CKContainer(identifier: containerID)
     }
 
+    private var privateDatabase: CKDatabase {
+        container.privateCloudDatabase
+    }
+
     private var publicDatabase: CKDatabase {
         container.publicCloudDatabase
     }
