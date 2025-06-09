@@ -16,6 +16,7 @@ final class CoreDataManager {
 
     private init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "MedimoModel")
+//        container = NSPersistentContainer(name: "MedimoModel")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }

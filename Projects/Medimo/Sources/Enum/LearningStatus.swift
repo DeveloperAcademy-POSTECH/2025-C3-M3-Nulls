@@ -6,7 +6,7 @@
 //
 
 enum LearningStatus: String, CaseIterable {
-    case notStarted = "Not Started"
-    case inProgress = "In Progress"
-    case completed = "Completed"
+    case notStarted = "notStarted"
+    case inProgress = "inProgress"
+    case completed = "completed"
 }

@@ -99,10 +99,5 @@ struct AnswerView: View {
                 })
             }
         }
-//        .onChange(of: isAnswered) { _, newValue in
-//            if newValue {
-//                StudyManager.shared.markTermCompleted(term)
-//            }
-//        }
     }
 }

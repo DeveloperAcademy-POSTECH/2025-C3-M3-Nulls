@@ -28,7 +28,6 @@ public class StudyManager {
         }
     }
 
-    // ContentView에서 사용되는 Glossary ID를 저장합니다.
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context
 
@@ -37,12 +36,12 @@ public class StudyManager {
 
         do {
             if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = glossary.value(forKey: "id") as? Int
+                studyingGlossaryId = Int(glossary.id)  // ← 여기!
             } else {
                 studyingGlossaryId = nil
             }
         } catch {
-            print("Glossary fetch 실패: \(error)")
+            print("❌ Glossary fetch 실패: \(error)")
             studyingGlossaryId = nil
         }
     }
@@ -91,6 +90,7 @@ public class StudyManager {
 
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
+        print("dataList: \(dataList)")
         
         var termIdList: [Int64] = []
 
@@ -108,6 +108,8 @@ public class StudyManager {
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
         
+        print("termIdList: \(termIdList)")
+        
         var result: [Term] = []
 
         for termId in termIdList {
@@ -118,7 +120,6 @@ public class StudyManager {
                 if result.count >= studyTermSize { break }
             }
         }
-        
         return result
     }
 
@@ -126,6 +127,7 @@ public class StudyManager {
         let now = Date()
 
         let meta = termStudyDataList!.first(where: { $0.term?.id == term.id })!
+
         meta.status = LearningStatus.completed.rawValue
 
         switch result {
@@ -148,7 +150,10 @@ public class StudyManager {
         }
 
         meta.lastReviewedAt = now
-        meta.nextReviewAt = now // Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+#if DEBUG
+        meta.nextReviewAt = now
+#endif
         
         do {
             try context?.save()
