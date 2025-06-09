@@ -115,7 +115,7 @@ public class StudyManager {
         let inProgressTermIdList = dataList
             .filter { $0.status == LearningStatus.inProgress.rawValue }
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
-            .compactMap { $0.term?.id }g
+            .compactMap { $0.term?.id }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
         
         if termIdList.count < studyTermSize {
