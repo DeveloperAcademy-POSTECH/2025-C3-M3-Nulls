@@ -53,9 +53,10 @@ struct DictionaryDetailView: View {
                                         .font(.titleEng)
                                         .foregroundColor(AppColor.label)
                                 }
-                            DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
+                                DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
 
-                            DictionaryDetailViewComponents.sectionRectangle()
+                                DictionaryDetailViewComponents.sectionRectangle()
+                            }
                         }
                         .padding(.horizontal, 32)
 

@@ -11,6 +11,8 @@ struct StudyCalendarView: View {
     @EnvironmentObject var navigationManager: NavigationManager
 
     @StateObject private var calendarViewModel = CalendarViewModel()
+    let coreDataManager = CoreDataManager.shared
+    let cloudKitManager = CloudKitManager.shared
 
     var body: some View {
         ZStack {
@@ -40,8 +42,14 @@ struct StudyCalendarView: View {
                         .foregroundStyle(AppColor.navy)
                         .font(.headline)
                     Spacer()
-                    Image("download")
-                        .foregroundStyle(AppColor.blue)
+                    Button {
+                        Task {
+                            await cloudKitManager.deleteAllRecordsFromPrivateDatabase()
+                        }
+                    } label: {
+                        Image("download")
+                            .foregroundStyle(AppColor.blue)
+                    }
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
@@ -77,7 +85,7 @@ struct StudyCalendarView: View {
                             .fill(Color.white)
                     )
                     .padding(16)
-                    
+
                     // 달력
                     VStack {
                         CustomCalendar(calendarViewModel: calendarViewModel)
@@ -91,25 +99,24 @@ struct StudyCalendarView: View {
                     )
                     .padding(.horizontal, 16)
                     .padding(.bottom, 25)
-                    
+
                     // 단어 통계
                     VStack {
                         HStack {
                             Text(calendarViewModel.getTodayDateString())
                                 .font(.headline)
                                 .foregroundStyle(AppColor.navy)
-                            
+
                             Spacer()
                         }
                         .padding(.horizontal, 16)
-                        
+
                         WordsStatisticsView(description: "학습한 단어", count: 30)
                         Spacer().frame(height: 10)
                         WordsStatisticsView(description: "복습한 단어", count: 10)
                     }
                     .padding(.horizontal, 16)
-                    
-                    
+
                     Spacer()
                 }
             }
@@ -143,19 +150,18 @@ struct calendarSuccessCriteria: View {
 struct WordsStatisticsView: View {
     let description: String
     let count: Int
-    
+
     var body: some View {
         HStack {
             Text(description)
                 .font(.caption)
                 .foregroundStyle(AppColor.blue)
-            
+
             Spacer()
-            
+
             Text("\(count)개")
                 .font(.bodyEng)
                 .foregroundStyle(AppColor.navy)
-            
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 16)
@@ -165,7 +171,6 @@ struct WordsStatisticsView: View {
         )
     }
 }
-            
 
 #Preview {
     StudyCalendarView()
