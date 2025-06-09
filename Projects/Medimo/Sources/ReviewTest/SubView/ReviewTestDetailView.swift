@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StudyTestDetailView: View {
+struct ReviewTestDetailView: View {
     @Binding var term: Term
     let testType: TestType
     let buttonText: String
@@ -51,8 +51,7 @@ struct StudyTestDetailView: View {
                     termSize: $termSize,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    term: $term,
-                    buttonText: buttonText
+                    term: $term, buttonText: buttonText
                 )
                 .padding(.bottom, 20)
                 
@@ -66,27 +65,37 @@ struct StudyTestDetailView: View {
     }
 }
 
-struct StudyTestDetailViewPreviewWrapper: View {
-    @State private var termSize = 3
+struct ReviewTestDetailViewPreview: View {
+    @State private var term: Term
     @State private var index = 1
+    @State private var termSize = 3
     @State private var isStudyInProgress = true
     @State private var showSoundAlert = false
-    @State private var term: Term
 
     init() {
         let context = PersistenceController.preview.container.viewContext
-        let sampleTerm = Term(context: context)
-        sampleTerm.spelling = "Blood Pressure"
-        sampleTerm.meaning = "혈압"
-        sampleTerm.abbreviation = "BP"
-        sampleTerm.id = UUID()
-        _term = State(initialValue: sampleTerm)
+        let newTerm = Term(context: context)
+        newTerm.spelling = "Blood Pressure"
+        newTerm.meaning = "혈압"
+        newTerm.abbreviation = "BP"
+        newTerm.id = UUID()
+        _term = State(initialValue: newTerm)
     }
 
     var body: some View {
-        StudyTestDetailView(
+        let availableTestTypes = TestType.allCases.filter { type in
+            switch type {
+            case .abbreviation:
+                return term.abbreviation != nil
+            default:
+                return true
+            }
+        }
+        let randomTestType = availableTestTypes.randomElement()!
+
+        return ReviewTestDetailView(
             term: $term,
-            testType: .meaning,
+            testType: randomTestType,
             buttonText: "다음 문제로",
             termSize: $termSize,
             index: $index,
@@ -98,5 +107,5 @@ struct StudyTestDetailViewPreviewWrapper: View {
 }
 
 #Preview {
-    StudyTestDetailViewPreviewWrapper()
+    ReviewTestDetailViewPreview()
 }

@@ -7,34 +7,35 @@
 
 import SwiftUI
 
-struct StudyTestView: View {
+struct ReviewTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
    
     @State private var showExitConfirm = false
 
-    private var viewModel: StudyTestViewModel
+    private var viewModel: ReviewTestViewModel
     @State private var index: Int = 1
     @Binding var isStudyInProgress: Bool
-
-    @State private var terms: [Term]
+    
+    @State var terms: [Term]
+    
     @State private var studyTermSize: Int
 
     @State private var currentTestType: TestType = .spelling
     @State private var buttonText = "다음 문제로"
 
     @State private var showSoundAlert = false
-    
 
     init(
-        terms: [Term],
         isStudyInProgress: Binding<Bool>,
-        viewModel: StudyTestViewModel = StudyTestViewModel()
+        viewModel: ReviewTestViewModel = ReviewTestViewModel()
     ) {
-        self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
-        _studyTermSize = State(initialValue: terms.count)
+        
+        let todayTerms = StudyManager.shared.getTodayReviewTerms()
+        self.terms = todayTerms
+        self._studyTermSize = State(initialValue: todayTerms.count)
     }
 
     var body: some View {
@@ -42,9 +43,9 @@ struct StudyTestView: View {
             ProgressBar(index: index, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-
+            
             if terms.indices.contains(index - 1) {
-                StudyTestDetailView(
+                ReviewTestDetailView(
                     term: $terms[index - 1],
                     testType: currentTestType,
                     buttonText: buttonText,
@@ -73,14 +74,13 @@ struct StudyTestView: View {
                 isStudyInProgress = false
                 navigationManager.studyPath = []
             }
-            Button("취소", role: .cancel) {
-                StudyManager.shared.resetTermsToNotStarted(terms)
-            }
+            Button("취소", role: .cancel) { }
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-
+        
         .onAppear {
+            guard !terms.isEmpty, terms.indices.contains(index - 1) else { return }
             currentTestType = randomValidTestType(for: terms[index - 1])
         }
         .onChange(of: index) { _, newValue in
@@ -113,8 +113,7 @@ struct StudyTestView: View {
     studyManager.setContext(context)
     let terms = studyManager.getNextStudyTerms()
     
-    return StudyTestView(
-        terms: terms,
+    return ReviewTestView(
         isStudyInProgress: $dummyInProgress
     )
     .environment(\.managedObjectContext, context)

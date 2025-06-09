@@ -13,7 +13,7 @@ enum PathType: Hashable {
     // 학습
     case StudyCard
     case StudyTest(terms: [Term])
-    case ReviewTest(glossary: Glossary)
+    case ReviewTest
 
     case StudyCalendar
 

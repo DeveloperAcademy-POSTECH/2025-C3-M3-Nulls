@@ -39,48 +39,44 @@ public struct ContentView: View {
                     }
 
                 case .study:
-                    NavigationStack(path: $navigationManager.studyPath) {
-                        VStack {
-                            if isStudyInProgress {
+                    if isStudyInProgress {
+                        NavigationStack(path: $navigationManager.studyPath) {
+                            VStack {
                                 StudyView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
                                         case .StudyCard:
-                                            StudyCardView()
-                                                .environmentObject(navigationManager)
-
+                                            StudyCardView().environmentObject(navigationManager)
                                         case .StudyCalendar:
-                                            StudyCalendarView()
-                                                .environmentObject(navigationManager)
-
+                                            StudyCalendarView().environmentObject(navigationManager)
                                         case let .StudyTest(terms):
                                             StudyTestView(
                                                 terms: terms,
                                                 isStudyInProgress: $isStudyInProgress
-                                            )
-                                            .environmentObject(navigationManager)
-
+                                            ).environmentObject(navigationManager)
+                                        case .ReviewTest:
+                                            ReviewTestView(
+                                                isStudyInProgress: $isStudyInProgress
+                                            ).environmentObject(navigationManager)
                                         case let .TestCompletion(index):
                                             TestEndView(
-                                                isStudyInProgress: $isStudyInProgress,
-                                                index: index
-                                            )
-                                            .environmentObject(navigationManager)
-
+                                                isStudyInProgress: $isStudyInProgress, index: index
+                                            ).environmentObject(navigationManager)
                                         default:
                                             EmptyView()
                                         }
                                     }
-                            } else {
-                                StudyView(isStudyInProgress: $isStudyInProgress)
-                                    .environmentObject(navigationManager)
+                                CustomTabBar(selected: $selectedTab)
                             }
-                          
+                        }
+                    } else {
+                        VStack {
+                            StudyView(isStudyInProgress: $isStudyInProgress)
+                                .environmentObject(navigationManager)
                             CustomTabBar(selected: $selectedTab)
                         }
                     }
-
                 case .dictionary:
                     VStack {
                         DictionaryView(context: context)
