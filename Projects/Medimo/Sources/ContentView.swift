@@ -73,6 +73,7 @@ public struct ContentView: View {
                                             ReviewTestView(
                                                 isStudyInProgress: $isStudyInProgress
                                             ).environmentObject(navigationManager)
+
                                         case let .TestCompletion(index):
                                             TestEndView(
                                                 isStudyInProgress: $isStudyInProgress, index: index
@@ -92,6 +93,7 @@ public struct ContentView: View {
                             CustomTabBar(selected: $selectedTab)
                         }
                     }
+
                 case .dictionary:
                     VStack {
                         DictionaryView(context: moc)
@@ -101,44 +103,19 @@ public struct ContentView: View {
                 }
             }
             .ignoresSafeArea()
-
-            //            if syncStatus.isSyncing {
-            //                VStack {
-            //                    Spacer()
-            //
-            //                    HStack(spacing: 12) {
-            //                        ProgressView()
-            //                            .progressViewStyle(CircularProgressViewStyle(tint: AppColor.white))
-            //                            .frame(width: 24, height: 24)
-            //                        Text("데이터를 가져오고 있어요...")
-            //                            .foregroundStyle(AppColor.white)
-            //                    }
-            //                    .padding(30)
-            //                    .background(
-            //                        RoundedRectangle(cornerRadius: 16)
-            //                            .fill(AppColor.navy)
-            //                    )
-            //
-            //                    Spacer()
-            //                }
-            //                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //                .background(Color.black.opacity(0.45))
-            //                .edgesIgnoringSafeArea(.all)
-            //            }
         } // ZStack
         .onAppear {
-//            Task {
-//                if coreDataManager.needsInitialCloudKitFetch(context: moc) {
-//                    await coreDataManager.initialize()
-//                }
-//            }
-
             // Check iCloud
             if cloudKitManager.isICloudAvailable() {
                 print("☁️ iCloud is available")
             } else {
                 print("☁️ iCloud is not available")
             }
+
+            // TEST
+            let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
+            userFetchRequest.fetchLimit = 1
+            let user = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
         }
 //        .overlay(
 //            cloudKitManager.accountStatus != .available

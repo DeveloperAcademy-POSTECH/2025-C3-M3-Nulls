@@ -181,48 +181,68 @@ extension CoreDataManager {
         case let .success(loadedGlossaries):
             glossaries = loadedGlossaries
 
-            for glossary in glossaries {
-//                let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
-//                fetchRequest.predicate = NSPredicate(format: "id == %d", glossary.id)
-//                fetchRequest.fetchLimit = 1
-//
-//                // 이미 존재하면 continue
-//                if let _ = try? context.fetch(fetchRequest).first {
-//                    continue
-//                }
+            // 백그라운드 컨텍스트에서 일괄 처리
+            await container.performBackgroundTask { [weak self] context in
+                guard self != nil else { return }
 
-                let glossaryEntity = Glossary(context: context)
-                glossaryEntity.id = Int64(glossary.id)
-                glossaryEntity.category = glossary.category
-                glossaryEntity.title = glossary.title
+                // User 데이터 불러오기
+                let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
+                userFetchRequest.fetchLimit = 1
+                let user = (try? context.fetch(userFetchRequest).first) ?? User(context: context)
 
-                //            for termId in glossary.terms {
-                //                let fetchRequest: NSFetchRequest<Term> = Term.fetchRequest()
-                //                fetchRequest.predicate = NSPredicate(format: "id == %d", termId)
-                //                fetchRequest.fetchLimit = 1
-                //
-                //                if let term = try? context.fetch(fetchRequest).first {
-                //                    glossaryEntity.addToTerms(term)
-                //                }
-                //            }
+                for glossary in glossaries {
+                    let fetchRequest: NSFetchRequest<Glossary> = Glossary.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "id == %d", glossary.id)
+                    fetchRequest.fetchLimit = 1
 
-                var termsToAdd: [Term] = []
-                for termId in glossary.terms {
-                    let termFetch: NSFetchRequest<Term> = Term.fetchRequest()
-                    termFetch.predicate = NSPredicate(format: "id == %d", termId)
-                    termFetch.fetchLimit = 1
+                    // 이미 존재하면 continue
+                    if let _ = try? context.fetch(fetchRequest).first {
+                        continue
+                    }
 
-                    if let term = try? context.fetch(termFetch).first {
-                        termsToAdd.append(term)
+                    let glossaryEntity = Glossary(context: context)
+                    glossaryEntity.id = Int64(glossary.id)
+                    glossaryEntity.category = glossary.category
+                    glossaryEntity.title = glossary.title
+
+                    var termsToAdd: [Term] = []
+                    for termId in glossary.terms {
+                        let termFetch: NSFetchRequest<Term> = Term.fetchRequest()
+                        termFetch.predicate = NSPredicate(format: "id == %d", termId)
+                        termFetch.fetchLimit = 1
+
+                        if let term = try? context.fetch(termFetch).first {
+                            termsToAdd.append(term)
+
+                            // TermStudyData 생성 + 관계 설정
+                            let termStudyData = TermStudyData(context: context)
+                            termStudyData.id = UUID()
+                            termStudyData.easeFactor = 2.5
+                            termStudyData.interval = 0
+                            termStudyData.lastReviewedAt = nil
+                            termStudyData.nextReviewAt = nil
+                            termStudyData.reviewCount = 0
+                            termStudyData.status = "notStarted" // 초기 상태 설정
+                            termStudyData.glossary = glossaryEntity
+                            termStudyData.term = term
+                            termStudyData.user = user
+
+                            user.addToTermStudyData(termStudyData) // User와 관계 설정
+                        }
+                    }
+                    // 반복문 종료 후 한 번에 관계 연결
+                    for term in termsToAdd {
+                        glossaryEntity.addToTerms(term)
+                    }
+
+                    do {
+                        try context.save()
+                        print("✏️ Fetched Glossaries: \(glossaries.count)")
+                    } catch {
+                        print("❌ Failed to save Core Data: \(error)")
                     }
                 }
-                // 반복문 종료 후 한 번에 관계 연결
-                for term in termsToAdd {
-                    glossaryEntity.addToTerms(term)
-                }
             }
-            save()
-            print("✏️ Fetched Glossaries: \(glossaries.count)")
 
         case let .failure(error):
             print("Error fetching terms: \(error)")
