@@ -105,16 +105,3 @@ struct ReviewTestView: View {
         return availableTypes.randomElement() ?? .meaning
     }
 }
-
-#Preview {
-    @Previewable @State var dummyInProgress = true
-    let context = PersistenceController.preview.container.viewContext
-    let studyManager = StudyManager.shared
-    studyManager.setContext(context)
-    let terms = studyManager.getNextStudyTerms()
-    
-    return ReviewTestView(
-        isStudyInProgress: $dummyInProgress
-    )
-    .environment(\.managedObjectContext, context)
-}
