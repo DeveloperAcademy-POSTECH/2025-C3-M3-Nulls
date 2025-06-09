@@ -15,7 +15,8 @@ final class CoreDataManager {
     let context: NSManagedObjectContext
 
     private init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "MedimoModel")
+//        container = NSPersistentCloudKitContainer(name: "MedimoModel")
+        container = NSPersistentContainer(name: "MedimoModel") // pr 시 삭제 및 위 코드 주석 해제
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }

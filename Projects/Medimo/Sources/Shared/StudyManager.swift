@@ -29,6 +29,23 @@ public class StudyManager {
     }
 
     // ContentView에서 사용되는 Glossary ID를 저장합니다.
+//    func setContext(_ context: NSManagedObjectContext) {
+//        self.context = context
+//
+//        let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
+//        request.fetchLimit = 1
+//
+//        do {
+//            if let glossary = try context.fetch(request).first {
+//                studyingGlossaryId = glossary.value(forKey: "id") as? Int
+//            } else {
+//                studyingGlossaryId = nil
+//            }
+//        } catch {
+//            print("Glossary fetch 실패: \(error)")
+//            studyingGlossaryId = nil
+//        }
+//    }
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context
 
@@ -37,12 +54,12 @@ public class StudyManager {
 
         do {
             if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = glossary.value(forKey: "id") as? Int
+                studyingGlossaryId = Int(glossary.id)  // ← 여기!
             } else {
                 studyingGlossaryId = nil
             }
         } catch {
-            print("Glossary fetch 실패: \(error)")
+            print("❌ Glossary fetch 실패: \(error)")
             studyingGlossaryId = nil
         }
     }
@@ -91,13 +108,14 @@ public class StudyManager {
 
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
+        print("dataList: \(dataList)")
         
         var termIdList: [Int64] = []
 
         let inProgressTermIdList = dataList
             .filter { $0.status == LearningStatus.inProgress.rawValue }
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
-            .compactMap { $0.term?.id }
+            .compactMap { $0.term?.id }g
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
         
         if termIdList.count < studyTermSize {
@@ -107,6 +125,8 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
+        
+        print("termIdList: \(termIdList)")
         
         var result: [Term] = []
 
