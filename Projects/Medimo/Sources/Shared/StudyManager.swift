@@ -21,7 +21,7 @@ public class StudyManager {
     private var _cachedStudyingGlossary: Glossary?
     private var _cachedTermStudyDataList: [TermStudyData]?
 
-    var studyiㅅngGlossaryId: Int? {
+    var studyingGlossaryId: Int? {
         didSet {
             _cachedStudyingGlossary = nil
             _cachedTermStudyDataList = nil
