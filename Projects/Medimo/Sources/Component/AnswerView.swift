@@ -92,9 +92,7 @@ struct AnswerView: View {
                         isAnswered = false
                         isCorrect = false
                         answer = ""
-                        DispatchQueue.main.async {
-                            index += 1
-                        }
+                        index += 1
                     } else {
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
