@@ -13,6 +13,7 @@ struct StudyMainCardView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var isStudyDone: Bool
+    @State private var showAlert = false
 
     var body: some View {
         ZStack {
@@ -35,12 +36,22 @@ struct StudyMainCardView: View {
                     }
                     .padding(.horizontal, 20)
 
-                    ReviewStartButtonView {
-                        isStudyInProgress = true
-                        navigationManager.studyPath.append(.ReviewTest)
-                    }
-                    .disabled(!isStudyDone)
+                    ReviewStartButtonView(
+                        action: {
+                            if isStudyDone {
+                                isStudyInProgress = true
+                                navigationManager.studyPath.append(.ReviewTest)
+                            } else {
+                                showAlert = true
+                            }
+                        }
+                    )
                     .padding(.horizontal, 20)
+                    .alert("리뷰를 시작할 수 없어요", isPresented: $showAlert) {
+                        Button("확인", role: .cancel) {}
+                    } message: {
+                        Text("학습을 먼저 완료해주세요!")
+                    }
                 }
             }
             .padding(.horizontal, 30)
