@@ -23,9 +23,11 @@ struct DictionaryTermItemView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     HStack(spacing: 10) {
                         if let abbreviation = term.abbreviation {
-                            Text("[ \(abbreviation) ]")
-                                .font(.subheadlineEng)
-                                .foregroundStyle(AppColor.label)
+                            if !abbreviation.isEmpty {
+                                Text("[ \(abbreviation) ]")
+                                    .font(.subheadlineEng)
+                                    .foregroundStyle(AppColor.label)
+                            }
                         }
                         Text(term.meaning ?? "")
                             .font(.caption)
@@ -50,7 +52,7 @@ struct DictionaryTermItemView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     @Bindable var viewModel = DictionaryViewModel(context: context)
     let term = viewModel.term[0]
     DictionaryTermItemView(term: term, selectedTerm: $viewModel.selectedTerm)

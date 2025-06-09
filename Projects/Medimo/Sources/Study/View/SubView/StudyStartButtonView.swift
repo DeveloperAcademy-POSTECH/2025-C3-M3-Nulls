@@ -43,6 +43,7 @@ struct StudyStartButtonView: View {
                     .frame(height: 60)
             )
         }
+        .buttonStyle(.plain)
     }
 }
 

@@ -8,12 +8,28 @@
 import SwiftUI
 
 struct StudyTestDetailView: View {
-    let term: Term
+    @Binding var term: Term
     let testType: TestType
-    let correctAnswer: String
     let buttonText: String
-    
+
+    @Binding var termSize: Int
     @Binding var index: Int
+
+    @Binding var isStudyInProgress: Bool
+    @Binding var showSoundAlert: Bool
+
+    var correctAnswer: String {
+        switch testType {
+        case .spelling:
+            term.spelling ?? ""
+        case .meaning:
+            term.meaning ?? ""
+        case .abbreviation:
+            term.abbreviation ?? ""
+        case .pronunciation:
+            term.spelling ?? ""
+        }
+    }
 
     var body: some View {
         VStack {
@@ -25,14 +41,27 @@ struct StudyTestDetailView: View {
             case .abbreviation:
                 AbbreviationTestView(term: term)
             case .pronunciation:
-                PronounciationTestView(term: term)
+                PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
 
-            AnswerView(
-                correctAnswer: correctAnswer,
-                index: $index,
-                buttonText: buttonText
-            )
+            VStack {
+                AnswerView(
+                    correctAnswer: correctAnswer,
+                    index: $index,
+                    termSize: $termSize,
+                    isStudyInProgress: $isStudyInProgress,
+                    showSoundAlert: $showSoundAlert,
+                    term: $term,
+                    buttonText: buttonText
+                )
+                .padding(.bottom, 20)
+
+                if showSoundAlert {
+                    SoundAlert()
+                }
+            }
+
+            Spacer()
         }
     }
 }

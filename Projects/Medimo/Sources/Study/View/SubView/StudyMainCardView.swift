@@ -9,9 +9,8 @@ import SwiftUI
 
 struct StudyMainCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-
-    @Binding var studyingGlossary: Glossary
-    @Binding var studyTermSize: Int
+    let studyManager = StudyManager.shared
+    @Binding var isStudyInProgress: Bool
 
     var body: some View {
         ZStack {
@@ -22,18 +21,23 @@ struct StudyMainCardView: View {
                     Spacer()
                     StudyTermSizeChooseButtonView()
                 }
-                StudyRingView()
+
+                // TODO: 학습 진행도 반영
+                StudyRingView(progress: 10, total: 100)
                     .padding(.top, 28)
                     .padding(.bottom, 32)
                 VStack(spacing: 16) {
                     StudyStartButtonView {
+                        isStudyInProgress = true
                         navigationManager.studyPath.append(.StudyCard)
-//                        navigationManager.push(to: .StudyCard(glossary: studyingGlossary))
                     }
                     .padding(.horizontal, 20)
 
-                    ReviewStartButtonView()
-                        .padding(.horizontal, 20)
+                    ReviewStartButtonView {
+                        isStudyInProgress = true
+                        navigationManager.studyPath.append(.ReviewTest)
+                    }
+                    .padding(.horizontal, 20)
                 }
             }
             .padding(.horizontal, 30)
@@ -44,19 +48,15 @@ struct StudyMainCardView: View {
 }
 
 #Preview {
+    @Previewable @State var isStudyInProgress = true
     @Previewable @State var studyManager = StudyManager.shared
-    let context = PersistenceController.preview.container.viewContext
-    
+    let context = CoreDataManager.preview.container.viewContext
+
     studyManager.setContext(context)
-    
-    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
-    
-    @Bindable var viewModel = StudyViewModel(studyingGlossary: glossary)
+
     return ScrollView {
-        StudyMainCardView(
-            studyingGlossary: $viewModel.studyingGlossary,
-            studyTermSize: $studyManager.studyTermSize
-        )
-        .padding(16)
+        StudyMainCardView(isStudyInProgress: $isStudyInProgress)
+            .padding(16)
     }
+    .environment(\.managedObjectContext, context)
 }

@@ -7,7 +7,10 @@
 import SwiftUI
 
 struct TestEndView: View {
-    @Binding var index: Int
+    @EnvironmentObject var navigationManager: NavigationManager
+    
+    @Binding var isStudyInProgress: Bool
+    var index: Int
     
     var body: some View {
         VStack {
@@ -52,9 +55,13 @@ struct TestEndView: View {
                     Image("pinkBottom")
                 }
                 
-                // TODO: 메인 화면으로 이동 연결
                 NextButton(buttonText: "학습 종료하기", action: {
-                    print("메인 화면으로 이동")
+                    
+                    
+                    withAnimation {
+                        isStudyInProgress = false
+                    }
+//                    navigationManager.studyPath.removeAll()
                 })
                 .padding(70)
                 .offset(y: 100)
@@ -65,7 +72,8 @@ struct TestEndView: View {
         .ignoresSafeArea()
     }
 }
-
-#Preview {
-    TestEndView(index: .constant(22))
-}
+//
+//#Preview {
+//    @Previewable @State var isStudyInProgress = true
+////    TestEndView(isStudyInProgress: $isStudyInProgress, terms: terms, index: 22)
+//}

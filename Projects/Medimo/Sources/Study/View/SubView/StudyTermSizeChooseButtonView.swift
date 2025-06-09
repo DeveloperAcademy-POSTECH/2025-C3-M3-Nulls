@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct StudyTermSizeChooseButtonView: View {
+    let studyManager = StudyManager.shared
+    @State private var showDialog = false
+
     var body: some View {
         Button {
-            
+            showDialog = true
         } label: {
             HStack(spacing: 10) {
                 Text("하루 목표: ")
                     .font(.caption)
                     .foregroundStyle(AppColor.secondaryLabel)
                 HStack(spacing: 6) {
-                    Text("30개")
+                    Text("\(studyManager.studyTermSize)개")
                         .font(.caption)
                         .foregroundStyle(AppColor.primary)
                     Image("chevron-down")
@@ -34,9 +37,26 @@ struct StudyTermSizeChooseButtonView: View {
                 alignment: .bottom
             )
         }
+        .confirmationDialog(
+            Text("오늘의 학습 / 복습 단어 수"),
+            isPresented: $showDialog,
+            titleVisibility: .visible
+        ) {
+            ForEach(StudyTermSizeOption.allCases, id: \.self) { option in
+                Button("\(option.rawValue)개") {
+                    studyManager.studyTermSize = option.rawValue
+                }
+            }
+            Button("취소", role: .cancel) {}
+        } message: {
+            Text("오늘의 목표치를 달성해 보아요!")
+        }
     }
 }
 
 #Preview {
-    StudyTermSizeChooseButtonView()
+    let context = CoreDataManager.preview.container.viewContext
+    StudyManager.shared.setContext(context)
+
+    return StudyTermSizeChooseButtonView()
 }

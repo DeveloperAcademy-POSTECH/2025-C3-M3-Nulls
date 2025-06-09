@@ -7,7 +7,8 @@ let project = Project(
             name: "Medimo",
             destinations: .iOS,
             product: .app,
-            bundleId: "org.nulls.Medimo",
+            bundleId: "org.nulls.medimo",
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -19,15 +20,18 @@ let project = Project(
                         "GmarketSansMedium.otf",
                         "SCDream5.otf",
                         "SCDream6.otf",
-                        "SCDream7.otf"
-                    ]
+                        "SCDream7.otf",
+                    ],
+                    "UIBackgroundModes": ["remote-notification"],
+//                    "UILaunchStoryboardName": "LaunchScreen.storyboard"
                 ]
             ),
             sources: ["Medimo/Sources/**"],
             resources: [
                 "Medimo/Resources/**",
-                "Medimo/Resources/**/*.xcdatamodeld"
+                "Medimo/Resources/**/*.xcdatamodeld",
             ],
+            entitlements: "Medimo/Medimo.entitlements",
             dependencies: []
         ),
         .target(

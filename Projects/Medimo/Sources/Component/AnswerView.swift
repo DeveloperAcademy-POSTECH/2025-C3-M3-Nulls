@@ -8,15 +8,41 @@
 import SwiftUI
 
 struct AnswerView: View {
+    @EnvironmentObject var navigationManager: NavigationManager
+    
     let correctAnswer: String
     @Binding var index: Int
+    @Binding var termSize: Int
     
     @State private var answer: String = ""
     @State private var isAnswered: Bool = false
     @State private var isCorrect: Bool = false
-
+    
+    @Binding var isStudyInProgress: Bool
+    @Binding var showSoundAlert: Bool
+    
+    @Binding var term: Term
+  
     var buttonText: String
+    
+    func clean(_ text: String) -> String {
+        return text
+            .lowercased()
+            .replacingOccurrences(of: "[^a-z가-힣]", with: "", options: .regularExpression)
+    }
+    
+    func submitAction() {
+        let trimmedAnswers = correctAnswer
+            .split(separator: ",")
+            .map { clean(String($0)) }
 
+        let userAnswer = clean(answer)
+      
+        isCorrect = trimmedAnswers.contains(userAnswer)
+        isAnswered = true
+        showSoundAlert = false
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -25,10 +51,13 @@ struct AnswerView: View {
                     .foregroundStyle(AppColor.grey3)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        submitAction()
+                    }
 
                 Button(action: {
-                    isCorrect = answer == correctAnswer
-                    isAnswered = true
+                    submitAction()
                 }) {
                     Image("corner-down-left")
                         .renderingMode(.template)
@@ -42,25 +71,38 @@ struct AnswerView: View {
             .padding(8)
             .background(AppColor.white)
             .cornerRadius(15)
-
+            
             if isAnswered {
                 if isCorrect {
                     CorrectAnswer()
+                        .onAppear {
+                            StudyManager.shared.updateReview(of: term, result: .correct)
+                        }
                 } else {
                     WrongAnswer(correctAnswer: correctAnswer)
+                        .onAppear {
+                            StudyManager.shared.updateReview(of: term, result: .incorrect)
+                        }
                 }
-
+                
                 Spacer()
-
+                
                 NextButton(buttonText: buttonText, action: {
-                    isAnswered = false
-                    isCorrect = false
-                    answer = ""
-                    index += 1
+                    if index < termSize {
+                        isAnswered = false
+                        isCorrect = false
+                        answer = ""
+                        index += 1
+                    } else {
+                        navigationManager.studyPath.append(.TestCompletion(index: index))
+                    }
                 })
-            } else {
-                Spacer()
             }
         }
+//        .onChange(of: isAnswered) { _, newValue in
+//            if newValue {
+//                StudyManager.shared.markTermCompleted(term)
+//            }
+//        }
     }
 }

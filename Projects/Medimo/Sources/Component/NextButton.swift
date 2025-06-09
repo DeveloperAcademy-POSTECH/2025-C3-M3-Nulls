@@ -12,16 +12,18 @@ struct NextButton: View {
     var action: () -> Void
     
     var body: some View {
-        Button(buttonText) {
+        Button {
             action()
+        } label: {
+            Text(buttonText)
+                .font(.body)
+                .padding(.vertical, 22)
+                .frame(maxWidth: .infinity)
+                .background(AppColor.label)
+                .foregroundStyle(AppColor.systemBackground)
+                .cornerRadius(16)
+                .shadow(color: Color.black.opacity(0.3), radius: 5, x: 2, y: 4)
         }
-        .font(.body)
-        .padding(.vertical, 22)
-        .frame(maxWidth: .infinity)
-        .background(AppColor.label)
-        .foregroundStyle(AppColor.systemBackground)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 2, y: 4)
     }
 }
 

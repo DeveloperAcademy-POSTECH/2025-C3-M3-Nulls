@@ -9,28 +9,28 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    @Bindable var studyManager: StudyManager = .shared
+    @State var studyManager: StudyManager = .shared
     @StateObject var calendarViewModel = CalendarViewModel()
 
-    @Bindable var viewModel: StudyViewModel
+    // TODO: streak 처리
+    var streak: Int = 0
 
     @State private var isAtTop: Bool = true
+    @Binding var isStudyInProgress: Bool
 
-    init(glossary: Glossary) {
-        viewModel = .init(studyingGlossary: glossary)
+    init(isStudyInProgress: Binding<Bool>) {
+        _isStudyInProgress = isStudyInProgress
     }
 
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    StudyHeaderView(streak: viewModel.streak)
-                    StudyMainCardView(
-                        studyingGlossary: $viewModel.studyingGlossary,
-                        studyTermSize: $studyManager.studyTermSize
-                    )
-                    .padding(.top, 42)
-                    .padding(.horizontal, 16)
+                    StudyHeaderView(streak: streak)
+
+                    StudyMainCardView(isStudyInProgress: $isStudyInProgress)
+                        .padding(.top, 42)
+                        .padding(.horizontal, 16)
 
                     StudyCalendarCardView(calendarViewModel: calendarViewModel)
                         .onTapGesture {
@@ -51,10 +51,19 @@ struct StudyView: View {
     }
 }
 
-#Preview {
-    let context = PersistenceController.preview.container.viewContext
-    let glossary = try! context.fetch(Glossary.fetchRequest())[0]
+private struct StudyViewPreviewWrapper: View {
+    @State var isStudyInProgress = false
 
-    StudyView(glossary: glossary)
-        .environmentObject(NavigationManager())
+    var body: some View {
+        let context = CoreDataManager.preview.container.viewContext
+        StudyManager.shared.setContext(context)
+
+        return StudyView(isStudyInProgress: $isStudyInProgress)
+            .environmentObject(NavigationManager())
+            .environment(\.managedObjectContext, context)
+    }
+}
+
+#Preview {
+    StudyViewPreviewWrapper()
 }

@@ -1,12 +1,25 @@
-import SwiftUI
+//
+//  ContentView.swift
+//  Projects
+//
+//  Created by 김현기 on 6/9/25.
+//
+
 import CoreData
+import SwiftUI
 
 public struct ContentView: View {
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext) var moc
+    let coreDataManager = CoreDataManager.shared
+    let cloudKitManager = CloudKitManager.shared
+
     @State private var selectedTab: TabType = .study
-    
+    @State private var isStudyInProgress = true
+
     @StateObject private var navigationManager = NavigationManager()
-    
+
+    @StateObject var syncStatus = SyncStatus()
+
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
         studyManager.setContext(context)
@@ -19,7 +32,7 @@ public struct ContentView: View {
                 case .glossary:
                     NavigationStack(path: $navigationManager.glossaryPath) {
                         VStack {
-                            GlossaryListView(context: context)
+                            GlossaryListView(context: moc)
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
                                     switch path {
@@ -34,50 +47,85 @@ public struct ContentView: View {
 
                             CustomTabBar(selected: $selectedTab)
                         }
-                    } // NavigationStack
+                    }
 
                 case .study:
-                    NavigationStack(path: $navigationManager.studyPath) {
-                        VStack {
-                            StudyView(glossary: try! context.fetch(Glossary.fetchRequest())[0])
-                                .environmentObject(navigationManager)
-                                .navigationDestination(for: PathType.self) { path in
-                                    switch path {
-                                    case /*let*/ .StudyCard:
-                                        StudyCardView()
-                                            .environmentObject(navigationManager)
+                    if isStudyInProgress {
+                        NavigationStack(path: $navigationManager.studyPath) {
+                            VStack {
+                                StudyView(isStudyInProgress: $isStudyInProgress)
+                                    .environmentObject(navigationManager)
+                                    .navigationDestination(for: PathType.self) { path in
+                                        switch path {
+                                        case .StudyCard:
+                                            StudyCardView().environmentObject(navigationManager)
 
-                                    case .StudyCalendar:
-                                        StudyCalendarView()
-                                            .environmentObject(navigationManager)
+                                        case .StudyCalendar:
+                                            StudyCalendarView().environmentObject(navigationManager)
 
-                                    case let .StudyTest(terms):
-                                        StudyTestView(terms: terms, index: .constant(1))
-                                            .environmentObject(navigationManager)
+                                        case let .StudyTest(terms):
+                                            StudyTestView(
+                                                terms: terms,
+                                                isStudyInProgress: $isStudyInProgress
+                                            ).environmentObject(navigationManager)
 
-                                    default:
-                                        EmptyView()
+                                        case .ReviewTest:
+                                            ReviewTestView(
+                                                isStudyInProgress: $isStudyInProgress
+                                            ).environmentObject(navigationManager)
+
+                                        case let .TestCompletion(index):
+                                            TestEndView(
+                                                isStudyInProgress: $isStudyInProgress, index: index
+                                            ).environmentObject(navigationManager)
+
+                                        default:
+                                            EmptyView()
+                                        }
                                     }
-                                }
-
+                                CustomTabBar(selected: $selectedTab)
+                            }
+                        }
+                    } else {
+                        VStack {
+                            StudyView(isStudyInProgress: $isStudyInProgress)
+                                .environmentObject(navigationManager)
                             CustomTabBar(selected: $selectedTab)
                         }
-                    } // NavigationStack
+                    }
 
                 case .dictionary:
                     VStack {
-                        DictionaryView(context: context)
+                        DictionaryView(context: moc)
                             .environmentObject(navigationManager)
-
                         CustomTabBar(selected: $selectedTab)
-                    }
+                    } // VStack
                 }
             }
+            .ignoresSafeArea()
+        } // ZStack
+        .onAppear {
+            // Check iCloud
+            if cloudKitManager.isICloudAvailable() {
+                print("☁️ iCloud is available")
+            } else {
+                print("☁️ iCloud is not available")
+            }
+
+            // TEST
+            let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
+            userFetchRequest.fetchLimit = 1
+            let user = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
         }
+//        .overlay(
+//            cloudKitManager.accountStatus != .available
+//            ? AnyView(iCloudStatusOverlay(accountStatus: cloudKitManager.accountStatus))
+//                : AnyView(EmptyView())
+//        )
     }
 }
 
 #Preview {
-    ContentView(context: PersistenceController.preview.container.viewContext)
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView(context: CoreDataManager.preview.container.viewContext)
+        .environment(\.managedObjectContext, CoreDataManager.preview.container.viewContext)
 }

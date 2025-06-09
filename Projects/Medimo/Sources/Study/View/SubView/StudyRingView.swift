@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct StudyRingView: View {
+    var progress: Int
+    var total: Int
+    var rate: Double
+    
+    init (progress: Int, total: Int) {
+        self.progress = progress
+        self.total = total
+        self.rate = max(Double(progress) / Double(total), 0.0001)
+    }
+    
     var body: some View {
         ZStack {
             Circle()
@@ -23,10 +33,10 @@ struct StudyRingView: View {
                 .overlay(
                     VStack {
                         HStack(alignment: .bottom, spacing: 4) {
-                            Text("240")
+                            Text("\(progress)")
                                 .font(.custom("Gmarket Sans Bold", size: 48))
                                 .foregroundStyle(AppColor.label)
-                            Text("/300")
+                            Text("/\(total)")
                                 .font(.custom("Gmarket Sans Medium", size: 16))
                                 .foregroundStyle(AppColor.label)
                                 .padding(.bottom, 8)
@@ -37,7 +47,7 @@ struct StudyRingView: View {
                     }
                 )
             Circle()
-                .trim(from: 0.0, to: 240/300)
+                .trim(from: 0.0, to: rate)
                 .stroke(
                     LinearGradient(
                         gradient: Gradient(colors: [AppColor.navy, AppColor.blue]),
@@ -50,7 +60,7 @@ struct StudyRingView: View {
                 .frame(width: 250, height: 250)
                 .background(
                     Circle()
-                        .trim(from: 0.0, to: 240/300)
+                        .trim(from: 0.0, to: rate)
                         .stroke(
                             AppColor.white,
                             style: StrokeStyle(lineWidth: 41, lineCap: .round)
@@ -64,5 +74,5 @@ struct StudyRingView: View {
 }
 
 #Preview {
-    StudyRingView()
+    StudyRingView(progress: 0, total: 300)
 }

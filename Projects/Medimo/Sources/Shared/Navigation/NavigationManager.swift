@@ -10,6 +10,7 @@ import SwiftUI
 class NavigationManager: ObservableObject {
     @Published var glossaryPath: [PathType] = []
     @Published var studyPath: [PathType] = []
+    @Published var reviewPath: [PathType] = []
     @Published var dictionaryPath: [PathType] = []
 
 //    func push(to destination: PathType) {
