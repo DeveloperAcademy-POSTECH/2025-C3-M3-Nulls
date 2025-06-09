@@ -2,13 +2,15 @@ import SwiftUI
 
 @main
 struct MedimoApp: App {
-    let persistenceController = PersistenceController.shared
-    
+    let coreDataManager = CoreDataManager.shared
+
     var body: some Scene {
         WindowGroup {
-            ContentView(context: persistenceController.container.viewContext)
+            ContentView(context: coreDataManager.context)
                 .environment(\.managedObjectContext,
-                              persistenceController.container.viewContext)
+                             coreDataManager.context)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
         }
     }
 }

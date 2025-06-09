@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-struct DictionaryDetailViewComponents {
-    
-    
-    static func soundButton(spelling: String?, speakAction: @escaping () -> Void) -> some View {
+enum DictionaryDetailViewComponents {
+    static func soundButton(spelling _: String?, speakAction: @escaping () -> Void) -> some View {
         Button(action: {
             speakAction()
         }) {
-            Image(systemName:"speaker.wave.2.fill")
+            Image(systemName: "speaker.wave.2.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24)
@@ -41,8 +39,7 @@ struct DictionaryDetailViewComponents {
         .padding(.top, 16)
         .padding(.leading, 8)
     }
-    
-    
+
     static func sectionTitle(_ title: String) -> some View {
         Text(title)
             .font(.caption)
@@ -55,7 +52,7 @@ struct DictionaryDetailViewComponents {
             .frame(height: 1)
             .foregroundColor(AppColor.grey3)
     }
-    
+
     static func sectionDivider() -> some View {
         LinearGradient(
             gradient: Gradient(colors: [AppColor.blue, AppColor.white]),
@@ -84,7 +81,7 @@ struct DictionaryDetailViewComponents {
             sectionTitle("어원")
             sectionDivider()
             VStack(alignment: .leading) {
-                ForEach(Array(morphemes), id: \.self) { morpheme in
+                ForEach(Array(morphemes)) { morpheme in
                     HStack {
                         Text(morpheme.spelling ?? "")
                             .font(.caption)
@@ -118,7 +115,7 @@ struct DictionaryDetailViewComponents {
         .padding(.horizontal, 32)
         .padding(.top, 24)
     }
-    
+
     static func characterImage() -> some View {
         Image("character5")
             .resizable()
@@ -129,8 +126,8 @@ struct DictionaryDetailViewComponents {
             .frame(maxWidth: .infinity, alignment: .center)
             .edgesIgnoringSafeArea(.all)
     }
-
 }
+
 #Preview {
     Group {
         DictionaryDetailViewComponents.soundButton(spelling: "example") {

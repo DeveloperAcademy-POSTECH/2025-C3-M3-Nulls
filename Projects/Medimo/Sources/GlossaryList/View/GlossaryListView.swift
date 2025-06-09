@@ -16,13 +16,13 @@ struct GlossaryListView: View {
 
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 24),
-        GridItem(.flexible(), spacing: 24)
+        GridItem(.flexible(), spacing: 24),
     ]
 
     init(context: NSManagedObjectContext) {
         _viewModel = State(wrappedValue: GlossaryListViewModel(context: context))
     }
-    
+
     @State private var rowHeight: CGFloat = 0
 
     var body: some View {
@@ -39,7 +39,7 @@ struct GlossaryListView: View {
                 }
                 .background(AppColor.secondarySystemFill)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 24) {
                         ForEach(viewModel.glossaries) { glossary in
@@ -63,7 +63,7 @@ struct GlossaryListView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     GlossaryListView(context: context)
         .environmentObject(NavigationManager())
         .environment(\.managedObjectContext, context)

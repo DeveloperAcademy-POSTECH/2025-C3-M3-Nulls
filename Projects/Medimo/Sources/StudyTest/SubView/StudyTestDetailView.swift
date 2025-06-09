@@ -11,13 +11,13 @@ struct StudyTestDetailView: View {
     let term: Term
     let testType: TestType
     let buttonText: String
-    
+
     @Binding var termSize: Int
     @Binding var index: Int
-    
+
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-  
+
     var correctAnswer: String {
         switch testType {
         case .spelling:
@@ -43,7 +43,7 @@ struct StudyTestDetailView: View {
             case .pronunciation:
                 PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
-            
+
             VStack {
                 AnswerView(
                     correctAnswer: correctAnswer,
@@ -54,12 +54,12 @@ struct StudyTestDetailView: View {
                     buttonText: buttonText
                 )
                 .padding(.bottom, 20)
-                
+
                 if showSoundAlert {
                     SoundAlert()
                 }
             }
-            
+
             Spacer()
         }
     }
@@ -72,14 +72,14 @@ struct StudyTestDetailViewPreview: View {
     @State private var showSoundAlert = false
 
     var body: some View {
-        let context = PersistenceController.preview.container.viewContext
+        let context = CoreDataManager.preview.container.viewContext
 
         let term: Term = {
             let t = Term(context: context)
             t.spelling = "Blood Pressure"
             t.meaning = "혈압"
             t.abbreviation = "BP"
-            t.id = UUID()
+            t.id = 1
             return t
         }()
 

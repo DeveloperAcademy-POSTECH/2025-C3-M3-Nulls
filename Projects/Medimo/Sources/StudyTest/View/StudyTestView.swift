@@ -10,11 +10,12 @@ import SwiftUI
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-   
+
     @State private var showExitConfirm = false
 
     private var viewModel: StudyTestViewModel
     @State private var index: Int = 1
+
     @Binding var isStudyInProgress: Bool
 
     var terms: [Term]
@@ -31,7 +32,8 @@ struct StudyTestView: View {
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self.terms = terms
-        self._isStudyInProgress = isStudyInProgress
+        _isStudyInProgress = isStudyInProgress
+
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
@@ -68,14 +70,14 @@ struct StudyTestView: View {
             }
         }
         .alert("학습 종료하기", isPresented: $showExitConfirm) {
-                    Button("종료하기", role: .destructive) {
-                        isStudyInProgress = false
-                        navigationManager.studyPath = []
-                    }
-                    Button("취소", role: .cancel) { }
-                } message: {
-                    Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
-                }
+            Button("종료하기", role: .destructive) {
+                isStudyInProgress = false
+                navigationManager.studyPath = []
+            }
+            Button("취소", role: .cancel) {}
+        } message: {
+            Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
+        }
 
         .onAppear {
             currentTestType = randomValidTestType(for: terms[index - 1])
@@ -105,11 +107,11 @@ struct StudyTestView: View {
 
 #Preview {
     @Previewable @State var dummyInProgress = true
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     let studyManager = StudyManager.shared
     studyManager.setContext(context)
     let terms = studyManager.getNextStudyTerms()
-    
+
     return StudyTestView(
         terms: terms,
         isStudyInProgress: $dummyInProgress

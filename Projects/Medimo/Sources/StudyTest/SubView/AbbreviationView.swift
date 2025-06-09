@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AbbreviationTestView: View {
     var term: Term
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("용어의 약어를 적어주세요")
@@ -23,8 +23,8 @@ struct AbbreviationTestView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
+    let context = CoreDataManager.preview.container.viewContext
+
     let sampleTerm = Term(context: context)
     sampleTerm.spelling = "Electrocardiogram"
     sampleTerm.meaning = "심전도"

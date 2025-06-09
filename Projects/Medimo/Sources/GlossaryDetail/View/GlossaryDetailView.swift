@@ -64,7 +64,7 @@ struct GlossaryDetailView: View {
     
     
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
 
     // ✅ 샘플 Glossary 인스턴스 생성
     let sampleGlossary = Glossary(context: context)
