@@ -97,7 +97,7 @@ struct StudyTestView: View {
         let availableTypes = TestType.allCases.filter { type in
             switch type {
             case .abbreviation:
-                return term.abbreviation != nil
+                return term.abbreviation?.isEmpty == false
             default:
                 return true
             }
