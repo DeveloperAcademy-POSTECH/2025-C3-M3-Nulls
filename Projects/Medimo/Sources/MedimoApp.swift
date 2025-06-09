@@ -6,10 +6,11 @@ struct MedimoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Color(.blue)
-//            ContentView(context: coreDataManager.context)
-//                .environment(\.managedObjectContext,
-//                             coreDataManager.context)
+            ContentView(context: coreDataManager.context)
+                .environment(\.managedObjectContext,
+                             coreDataManager.context)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
         }
     }
 }

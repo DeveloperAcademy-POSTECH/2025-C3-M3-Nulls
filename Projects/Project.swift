@@ -11,6 +11,10 @@ let project = Project(
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(
                 with: [
+                    "UILaunchScreen": [
+                        "UIColorName": "",
+                        "UIImageName": "",
+                    ],
                     "UIAppFonts": [
                         "GmarketSansBold.otf",
                         "GmarketSansMedium.otf",
