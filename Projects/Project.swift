@@ -20,14 +20,15 @@ let project = Project(
                         "GmarketSansMedium.otf",
                         "SCDream5.otf",
                         "SCDream6.otf",
-                        "SCDream7.otf"
-                    ]
+                        "SCDream7.otf",
+                    ],
+                    "UIBackgroundModes": ["remote-notification"],
                 ]
             ),
             sources: ["Medimo/Sources/**"],
             resources: [
                 "Medimo/Resources/**",
-                "Medimo/Resources/**/*.xcdatamodeld"
+                "Medimo/Resources/**/*.xcdatamodeld",
             ],
             entitlements: "Medimo/Medimo.entitlements",
             dependencies: []

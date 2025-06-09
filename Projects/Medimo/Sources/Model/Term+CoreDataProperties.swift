@@ -2,7 +2,7 @@
 //  Term+CoreDataProperties.swift
 //  Medimo
 //
-//  Created by 이서현 on 6/2/25.
+//  Created by 김현기 on 6/9/25.
 //
 //
 
@@ -18,30 +18,47 @@ extension Term {
 
     @NSManaged public var abbreviation: String?
     @NSManaged public var explanation: String?
-    @NSManaged public var id: UUID?
+    @NSManaged public var id: Int64
     @NSManaged public var meaning: String?
     @NSManaged public var spelling: String?
-    @NSManaged public var termKey: String?
-    @NSManaged public var isBookmarked: Bool
-    @NSManaged public var glossarys: NSSet?
+    @NSManaged public var bookmarks: NSSet?
+    @NSManaged public var glossaries: NSSet?
     @NSManaged public var morphemes: NSSet?
+    @NSManaged public var termStudyData: NSSet?
 
 }
 
-// MARK: Generated accessors for glossarys
+// MARK: Generated accessors for bookmarks
 extension Term {
 
-    @objc(addGlossarysObject:)
-    @NSManaged public func addToGlossarys(_ value: Glossary)
+    @objc(addBookmarksObject:)
+    @NSManaged public func addToBookmarks(_ value: User)
 
-    @objc(removeGlossarysObject:)
-    @NSManaged public func removeFromGlossarys(_ value: Glossary)
+    @objc(removeBookmarksObject:)
+    @NSManaged public func removeFromBookmarks(_ value: User)
 
-    @objc(addGlossarys:)
-    @NSManaged public func addToGlossarys(_ values: NSSet)
+    @objc(addBookmarks:)
+    @NSManaged public func addToBookmarks(_ values: NSSet)
 
-    @objc(removeGlossarys:)
-    @NSManaged public func removeFromGlossarys(_ values: NSSet)
+    @objc(removeBookmarks:)
+    @NSManaged public func removeFromBookmarks(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for glossaries
+extension Term {
+
+    @objc(addGlossariesObject:)
+    @NSManaged public func addToGlossaries(_ value: Glossary)
+
+    @objc(removeGlossariesObject:)
+    @NSManaged public func removeFromGlossaries(_ value: Glossary)
+
+    @objc(addGlossaries:)
+    @NSManaged public func addToGlossaries(_ values: NSSet)
+
+    @objc(removeGlossaries:)
+    @NSManaged public func removeFromGlossaries(_ values: NSSet)
 
 }
 
@@ -59,6 +76,23 @@ extension Term {
 
     @objc(removeMorphemes:)
     @NSManaged public func removeFromMorphemes(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for termStudyData
+extension Term {
+
+    @objc(addTermStudyDataObject:)
+    @NSManaged public func addToTermStudyData(_ value: TermStudyData)
+
+    @objc(removeTermStudyDataObject:)
+    @NSManaged public func removeFromTermStudyData(_ value: TermStudyData)
+
+    @objc(addTermStudyData:)
+    @NSManaged public func addToTermStudyData(_ values: NSSet)
+
+    @objc(removeTermStudyData:)
+    @NSManaged public func removeFromTermStudyData(_ values: NSSet)
 
 }
 

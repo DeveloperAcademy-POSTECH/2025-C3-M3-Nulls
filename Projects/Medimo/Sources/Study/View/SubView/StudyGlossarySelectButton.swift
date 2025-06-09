@@ -12,10 +12,10 @@ struct StudyGlossarySelectButton: View {
     let studiedCount = 2
     @Binding var selectedGlossary: Glossary?
     let studyManager = StudyManager.shared
-    
+
     var body: some View {
         Button {
-            StudyManager.shared.studyingGlossaryId = glossary.id
+            StudyManager.shared.studyingGlossaryId = Int(glossary.id)
             selectedGlossary = glossary
         } label: {
             HStack(spacing: 20) {
@@ -36,7 +36,7 @@ struct StudyGlossarySelectButton: View {
                     .inset(by: 1)
                     .fill(AppColor.secondarySystemGroupedBackground)
                     .stroke(
-                        studyManager.studyingGlossaryId == glossary.id ? AppColor.systemFill : Color.clear,
+                        studyManager.studyingGlossaryId ?? 0 == glossary.id ? AppColor.systemFill : Color.clear,
                         lineWidth: 2
                     )
             )
@@ -47,9 +47,9 @@ struct StudyGlossarySelectButton: View {
 
 #Preview {
     @Previewable @State var selectedGlossary: Glossary? = nil
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     StudyManager.shared.setContext(context)
     var glossary = try! context.fetch(Glossary.fetchRequest()).first!
-    
+
     return StudyGlossarySelectButton(glossary: glossary, selectedGlossary: $selectedGlossary)
 }

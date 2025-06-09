@@ -10,8 +10,7 @@ import SwiftUI
 struct StudyMainCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     let studyManager = StudyManager.shared
-//    @Binding var studyingGlossary: Glossary
-//    @Binding var studyTermSize: Int
+    @Binding var isStudyInProgress: Bool
 
     var body: some View {
         ZStack {
@@ -22,15 +21,17 @@ struct StudyMainCardView: View {
                     Spacer()
                     StudyTermSizeChooseButtonView()
                 }
-                
+
                 // TODO: 학습 진행도 반영
                 StudyRingView(progress: 10, total: 100)
                     .padding(.top, 28)
                     .padding(.bottom, 32)
                 VStack(spacing: 16) {
                     StudyStartButtonView {
+                        isStudyInProgress = true
                         navigationManager.studyPath.append(.StudyCard)
                     }
+
                     .padding(.horizontal, 20)
 
                     ReviewStartButtonView()
@@ -45,13 +46,15 @@ struct StudyMainCardView: View {
 }
 
 #Preview {
+    @Previewable @State var isStudyInProgress = true
     @Previewable @State var studyManager = StudyManager.shared
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
+
     studyManager.setContext(context)
-    
+
     return ScrollView {
-        StudyMainCardView()
-        .padding(16)
+        StudyMainCardView(isStudyInProgress: $isStudyInProgress)
+            .padding(16)
     }
     .environment(\.managedObjectContext, context)
 }

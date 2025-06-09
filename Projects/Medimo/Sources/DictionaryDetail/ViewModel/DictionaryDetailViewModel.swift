@@ -31,6 +31,14 @@ class DictionaryDetailViewModel {
     func speak(_ text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
+        
+        do {
+                let session = AVAudioSession.sharedInstance()
+                try session.setCategory(.playback, mode: .default, options: [.duckOthers])
+                try session.setActive(true)
+            } catch {
+                print("AVAudioSession 설정 실패: \(error)")
+            }
 
         let utterance = AVSpeechUtterance(string: trimmedText)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
@@ -38,8 +46,16 @@ class DictionaryDetailViewModel {
         utterance.pitchMultiplier = 1.2
         utterance.volume = 1.0
 
-        DictionaryDetailViewModel.synthesizer.stopSpeaking(at: .immediate)
-        DictionaryDetailViewModel.synthesizer.speak(utterance)
+        let synthesizer = DictionaryDetailViewModel.synthesizer
+
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                synthesizer.speak(utterance)
+            }
+        } else {
+            synthesizer.speak(utterance)
+        }
     }
     
 }

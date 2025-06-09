@@ -50,7 +50,7 @@ struct DictionaryTermItemView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     @Bindable var viewModel = DictionaryViewModel(context: context)
     let term = viewModel.term[0]
     DictionaryTermItemView(term: term, selectedTerm: $viewModel.selectedTerm)
