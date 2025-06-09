@@ -103,6 +103,7 @@ public struct ContentView: View {
                     } // VStack
                 }
             }
+            .ignoresSafeArea()
 
             if syncStatus.isSyncing {
                 VStack {
