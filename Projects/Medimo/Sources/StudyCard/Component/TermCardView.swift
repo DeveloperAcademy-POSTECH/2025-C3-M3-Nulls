@@ -4,19 +4,18 @@
 //
 //  Created by 이서현 on 6/1/25
 
-
 import SwiftUI
 
 struct TermCardView: View {
     @ObservedObject var term: Term
-    
+
     @State private var isPlaying = false
     @State private var isFlipped = false
-    
+
     @State var viewModel: DictionaryDetailViewModel
-    
+
     var backgroundColor: Color = AppColor.white
-    
+
     init(term: Term, backgroundColor: Color) {
         self.term = term
         self.backgroundColor = backgroundColor
@@ -40,11 +39,12 @@ struct TermCardView: View {
                     }
 
                     Spacer()
-                    
+
+                    // TODO: - 북마크 로직 수정
                     Button(action: {
-                        term.isBookmarked.toggle()
+                        //
                     }) {
-                        Image(systemName: term.isBookmarked ? "bookmark.fill" : "bookmark")
+                        Image(systemName: /* term.isBookmarked ? "bookmark.fill" : */ "bookmark")
                             .imageScale(.large)
                             .font(.system(size: 20))
                             .foregroundStyle(AppColor.primary)
@@ -55,7 +55,6 @@ struct TermCardView: View {
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
                         .font(isFlipped ? .title : .titleEng)
-                    
                     if !isFlipped, let abbreviation = term.abbreviation {
                         if !abbreviation.isEmpty {
                             Text("[\(abbreviation)]")
@@ -69,14 +68,14 @@ struct TermCardView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
-                
+
                 VStack(alignment: .leading) {
                     if isFlipped {
                         Text(term.explanation ?? "")
                     } else {
                         if let morphemes = term.morphemes as? Set<Morpheme> {
                             let morphemeArray = morphemes.sorted { ($0.spelling ?? "") < ($1.spelling ?? "") }
-                            
+
                             VStack(alignment: .leading, spacing: 4) {
                                 ForEach(morphemeArray, id: \.self) { morpheme in
                                     Text("\(morpheme.spelling ?? "") \(morpheme.meaning ?? "")")
@@ -101,17 +100,17 @@ struct TermCardView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     var term = Term(context: context)
-    
+
     let morpheme1 = Morpheme(context: context)
     morpheme1.spelling = "neur"
     morpheme1.meaning = "신경"
-    
+
     let morpheme2 = Morpheme(context: context)
     morpheme2.spelling = "itis"
     morpheme2.meaning = "~의 염증"
-    
+
     term = Term(context: context)
     term.spelling = "Neuritis"
     term.abbreviation = "NT"
@@ -122,7 +121,7 @@ struct TermCardView: View {
     이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.
     주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
     """
-    
+
     return TermCardView(term: term, backgroundColor: AppColor.white)
         .environment(\.managedObjectContext, context)
 }

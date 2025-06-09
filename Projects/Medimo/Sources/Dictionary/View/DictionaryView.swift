@@ -6,17 +6,17 @@
 //  Created by 양시준 on 5/30/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct DictionaryView: View {
     @Environment(\.managedObjectContext) var context
     @Bindable private var viewModel: DictionaryViewModel
-    
+
     init(context: NSManagedObjectContext) {
         _viewModel = Bindable(wrappedValue: DictionaryViewModel(context: context))
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -26,7 +26,7 @@ struct DictionaryView: View {
                 .zIndex(1)
                 DictionaryTermListView(viewModel: viewModel)
             }
-            
+
             .sheet(item: $viewModel.selectedTerm) { term in
                 DictionaryDetailView(term: term)
                     .presentationDetents([.height(640)])
@@ -36,9 +36,8 @@ struct DictionaryView: View {
     }
 }
 
-
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     NavigationStack {
         DictionaryView(context: context)
             .environment(\.managedObjectContext, context)

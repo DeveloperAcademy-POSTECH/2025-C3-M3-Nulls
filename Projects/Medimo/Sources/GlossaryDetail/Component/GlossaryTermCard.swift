@@ -5,7 +5,6 @@
 //  Created by Ell Han on 6/5/25.
 //
 
-
 //
 //  GlossaryTermCard.swift
 //  Medimo
@@ -36,9 +35,9 @@ struct GlossaryTermCard: View {
                     HStack(alignment: .top, spacing: 10) {
                         if let abbreviation = abbreviation, !abbreviation.isEmpty {
                             Text("[\(abbreviation)]")
-                                .font(.subheadlineEng)                                .foregroundColor(AppColor.navy)
+                                .font(.subheadlineEng).foregroundColor(AppColor.navy)
                         }
-                        
+
                         Text(meaning)
                             .font(.caption)
                             .foregroundColor(AppColor.grey4)
@@ -48,7 +47,7 @@ struct GlossaryTermCard: View {
             }
             .padding(0)
             .overlay(
-                GeometryReader { geometry in
+                GeometryReader { _ in
                     VStack {
                         Spacer()
                             .padding(17)
@@ -67,6 +66,7 @@ struct GlossaryTermCard: View {
 }
 
 // MARK: - Preview
+
 #Preview {
     return GlossaryTermCard(
         spelling: "Arterial Blood Gas Analysis",
@@ -74,5 +74,5 @@ struct GlossaryTermCard: View {
         meaning: "동맥혈 가스 분석"
     )
     .padding()
-    .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    .environment(\.managedObjectContext, CoreDataManager.preview.container.viewContext)
 }

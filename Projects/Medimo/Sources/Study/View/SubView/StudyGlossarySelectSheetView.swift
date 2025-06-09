@@ -5,21 +5,21 @@
 //  Created by 양시준 on 6/8/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct StudyGlossarySelectSheetView: View {
     @Binding var isPresented: Bool
     @State var selectedCategory: MedicineCategory = .all
     @State var selectedGlossary: Glossary? = nil
-    
+
     var glossaries: [Glossary] = []
-    
-    init (context: NSManagedObjectContext, isPresented: Binding<Bool>) {
+
+    init(context: NSManagedObjectContext, isPresented: Binding<Bool>) {
         glossaries = try! context.fetch(Glossary.fetchRequest())
         _isPresented = isPresented
     }
-    
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
@@ -54,9 +54,9 @@ struct StudyGlossarySelectSheetView: View {
 }
 
 #Preview {
-    @Previewable @State var isPresented: Bool = true
-    let context = PersistenceController.preview.container.viewContext
+    @Previewable @State var isPresented = true
+    let context = CoreDataManager.preview.container.viewContext
     StudyManager.shared.setContext(context)
-    
+
     return StudyGlossarySelectSheetView(context: context, isPresented: $isPresented)
 }

@@ -2,7 +2,7 @@
 //  Glossary+CoreDataProperties.swift
 //  Medimo
 //
-//  Created by 양시준 on 6/1/25.
+//  Created by 김현기 on 6/9/25.
 //
 //
 
@@ -16,10 +16,29 @@ extension Glossary {
         return NSFetchRequest<Glossary>(entityName: "Glossary")
     }
 
-    @NSManaged public var glossaryKey: String?
-    @NSManaged public var id: UUID?
+    @NSManaged public var category: String?
+    @NSManaged public var id: Int64
     @NSManaged public var title: String?
+    @NSManaged public var progresses: NSSet?
     @NSManaged public var terms: NSSet?
+    @NSManaged public var termStudyData: NSSet?
+
+}
+
+// MARK: Generated accessors for progresses
+extension Glossary {
+
+    @objc(addProgressesObject:)
+    @NSManaged public func addToProgresses(_ value: GlossaryProgress)
+
+    @objc(removeProgressesObject:)
+    @NSManaged public func removeFromProgresses(_ value: GlossaryProgress)
+
+    @objc(addProgresses:)
+    @NSManaged public func addToProgresses(_ values: NSSet)
+
+    @objc(removeProgresses:)
+    @NSManaged public func removeFromProgresses(_ values: NSSet)
 
 }
 
@@ -40,10 +59,21 @@ extension Glossary {
 
 }
 
+// MARK: Generated accessors for termStudyData
 extension Glossary {
-    public var termsArray: [Term] {
-        return Array(terms as! Set<Term>)
-    }
+
+    @objc(addTermStudyDataObject:)
+    @NSManaged public func addToTermStudyData(_ value: TermStudyData)
+
+    @objc(removeTermStudyDataObject:)
+    @NSManaged public func removeFromTermStudyData(_ value: TermStudyData)
+
+    @objc(addTermStudyData:)
+    @NSManaged public func addToTermStudyData(_ values: NSSet)
+
+    @objc(removeTermStudyData:)
+    @NSManaged public func removeFromTermStudyData(_ values: NSSet)
+
 }
 
 extension Glossary : Identifiable {

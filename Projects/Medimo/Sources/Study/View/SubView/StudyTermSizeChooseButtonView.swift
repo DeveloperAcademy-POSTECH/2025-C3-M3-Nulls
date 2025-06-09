@@ -10,7 +10,7 @@ import SwiftUI
 struct StudyTermSizeChooseButtonView: View {
     let studyManager = StudyManager.shared
     @State private var showDialog = false
-    
+
     var body: some View {
         Button {
             showDialog = true
@@ -47,7 +47,7 @@ struct StudyTermSizeChooseButtonView: View {
                     studyManager.studyTermSize = option.rawValue
                 }
             }
-            Button("취소", role: .cancel) { }
+            Button("취소", role: .cancel) {}
         } message: {
             Text("오늘의 목표치를 달성해 보아요!")
         }
@@ -55,8 +55,8 @@ struct StudyTermSizeChooseButtonView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     StudyManager.shared.setContext(context)
-    
+
     return StudyTermSizeChooseButtonView()
 }

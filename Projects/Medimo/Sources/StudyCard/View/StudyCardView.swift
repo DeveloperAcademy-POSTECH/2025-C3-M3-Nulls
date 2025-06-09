@@ -122,13 +122,12 @@ struct StudyCardView: View {
 
 #Preview {
     @Previewable @StateObject var navigationManager = NavigationManager()
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
 
     var studyManager = StudyManager.shared
     studyManager.setContext(context)
     print("terms count:", studyManager.getNextStudyTerms().count)
-    
-    
+
     return StudyCardView()
         .environment(\.managedObjectContext, context)
         .environmentObject(navigationManager)
