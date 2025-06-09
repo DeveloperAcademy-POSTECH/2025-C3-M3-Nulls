@@ -5,16 +5,16 @@
 //  Created by 양시준 on 6/5/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct DictionaryTermListView: View {
     @Bindable var viewModel: DictionaryViewModel
-    
+
     init(viewModel: DictionaryViewModel) {
         _viewModel = .init(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -31,6 +31,6 @@ struct DictionaryTermListView: View {
 }
 
 #Preview {
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     DictionaryTermListView(viewModel: .init(context: context))
 }

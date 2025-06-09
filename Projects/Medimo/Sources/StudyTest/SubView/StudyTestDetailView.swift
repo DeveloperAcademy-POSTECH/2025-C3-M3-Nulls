@@ -11,13 +11,13 @@ struct StudyTestDetailView: View {
     @Binding var term: Term
     let testType: TestType
     let buttonText: String
-    
+
     @Binding var termSize: Int
     @Binding var index: Int
-    
+
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-  
+
     var correctAnswer: String {
         switch testType {
         case .spelling:
@@ -43,7 +43,7 @@ struct StudyTestDetailView: View {
             case .pronunciation:
                 PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
             }
-            
+
             VStack {
                 AnswerView(
                     correctAnswer: correctAnswer,
@@ -55,12 +55,12 @@ struct StudyTestDetailView: View {
                     buttonText: buttonText
                 )
                 .padding(.bottom, 20)
-                
+
                 if showSoundAlert {
                     SoundAlert()
                 }
             }
-            
+
             Spacer()
         }
     }
@@ -84,9 +84,37 @@ struct StudyTestDetailViewPreviewWrapper: View {
     }
 
     var body: some View {
+<<<<<<< HEAD
         StudyTestDetailView(
             term: $term,
             testType: .meaning,
+=======
+        let context = CoreDataManager.preview.container.viewContext
+
+        let term: Term = {
+            let t = Term(context: context)
+            t.spelling = "Blood Pressure"
+            t.meaning = "혈압"
+            t.abbreviation = "BP"
+            t.id = 1
+            return t
+        }()
+
+        let availableTestTypes = TestType.allCases.filter { type in
+            switch type {
+            case .abbreviation:
+                return term.abbreviation != nil
+            default:
+                return true
+            }
+        }
+
+        let randomTestType = availableTestTypes.randomElement()!
+
+        return StudyTestDetailView(
+            term: term,
+            testType: randomTestType,
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
             buttonText: "다음 문제로",
             termSize: $termSize,
             index: $index,
@@ -98,5 +126,9 @@ struct StudyTestDetailViewPreviewWrapper: View {
 }
 
 #Preview {
+<<<<<<< HEAD
     StudyTestDetailViewPreviewWrapper()
+=======
+    StudyTestDetailViewPreview()
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
 }

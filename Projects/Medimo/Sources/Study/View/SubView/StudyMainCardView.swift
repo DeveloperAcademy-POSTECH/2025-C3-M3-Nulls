@@ -21,7 +21,7 @@ struct StudyMainCardView: View {
                     Spacer()
                     StudyTermSizeChooseButtonView()
                 }
-                
+
                 // TODO: 학습 진행도 반영
                 StudyRingView(progress: 10, total: 100)
                     .padding(.top, 28)
@@ -31,6 +31,10 @@ struct StudyMainCardView: View {
                         isStudyInProgress = true
                         navigationManager.studyPath.append(.StudyCard)
                     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
                     .padding(.horizontal, 20)
 
                     ReviewStartButtonView {
@@ -49,10 +53,11 @@ struct StudyMainCardView: View {
 
 #Preview {
     @Previewable @State var isStudyInProgress = true
-    let context = PersistenceController.preview.container.viewContext
-    let studyManager = StudyManager.shared
+    @Previewable @State var studyManager = StudyManager.shared
+    let context = CoreDataManager.preview.container.viewContext
+
     studyManager.setContext(context)
-    
+
     return ScrollView {
         StudyMainCardView(isStudyInProgress: $isStudyInProgress)
             .padding(16)

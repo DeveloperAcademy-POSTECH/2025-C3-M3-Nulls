@@ -11,23 +11,21 @@ let project = Project(
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(
                 with: [
-                    "UILaunchScreen": [
-                        "UIColorName": "",
-                        "UIImageName": "",
-                    ],
                     "UIAppFonts": [
                         "GmarketSansBold.otf",
                         "GmarketSansMedium.otf",
                         "SCDream5.otf",
                         "SCDream6.otf",
-                        "SCDream7.otf"
-                    ]
+                        "SCDream7.otf",
+                    ],
+                    "UIBackgroundModes": ["remote-notification"],
+                    "UILaunchStoryboardName": "LaunchScreen.storyboard"
                 ]
             ),
             sources: ["Medimo/Sources/**"],
             resources: [
                 "Medimo/Resources/**",
-                "Medimo/Resources/**/*.xcdatamodeld"
+                "Medimo/Resources/**/*.xcdatamodeld",
             ],
             entitlements: "Medimo/Medimo.entitlements",
             dependencies: []

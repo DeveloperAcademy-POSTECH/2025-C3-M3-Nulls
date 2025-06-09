@@ -10,11 +10,12 @@ import SwiftUI
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-   
+
     @State private var showExitConfirm = false
 
     private var viewModel: StudyTestViewModel
     @State private var index: Int = 1
+
     @Binding var isStudyInProgress: Bool
 
     @State private var terms: [Term]
@@ -31,8 +32,14 @@ struct StudyTestView: View {
         isStudyInProgress: Binding<Bool>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
+<<<<<<< HEAD
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
+=======
+        self.terms = terms
+        _isStudyInProgress = isStudyInProgress
+
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
         self.viewModel = viewModel
         _studyTermSize = State(initialValue: terms.count)
     }
@@ -73,9 +80,13 @@ struct StudyTestView: View {
                 isStudyInProgress = false
                 navigationManager.studyPath = []
             }
+<<<<<<< HEAD
             Button("취소", role: .cancel) {
                 StudyManager.shared.resetTermsToNotStarted(terms)
             }
+=======
+            Button("취소", role: .cancel) {}
+>>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
@@ -108,11 +119,11 @@ struct StudyTestView: View {
 
 #Preview {
     @Previewable @State var dummyInProgress = true
-    let context = PersistenceController.preview.container.viewContext
+    let context = CoreDataManager.preview.container.viewContext
     let studyManager = StudyManager.shared
     studyManager.setContext(context)
     let terms = studyManager.getNextStudyTerms()
-    
+
     return StudyTestView(
         terms: terms,
         isStudyInProgress: $dummyInProgress

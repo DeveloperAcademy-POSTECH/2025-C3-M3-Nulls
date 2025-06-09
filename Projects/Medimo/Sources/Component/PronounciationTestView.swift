@@ -5,17 +5,18 @@
 //  Created by 이서현 on 6/5/25.
 //
 
-import SwiftUI
 import AVFAudio
 import Combine
+import SwiftUI
 
 struct PronounciationTestView: View {
     var term: Term
+
     @Binding var showSoundAlert: Bool
-    
+
     @State var viewModel: DictionaryDetailViewModel
     @State private var volumeCancellable: AnyCancellable?
-    
+
     init(term: Term, showSoundAlert: Binding<Bool>) {
             self.term = term
             self._showSoundAlert = showSoundAlert
@@ -30,13 +31,13 @@ struct PronounciationTestView: View {
                 .padding(.leading, 8)
             HStack(alignment: .center) {
                 Spacer()
-                
+
                 Button(action: {
                     let session = AVAudioSession.sharedInstance()
                     do {
                         try session.setActive(true)
                         let volume = session.outputVolume
-                        
+
                         if volume < 0.05 {
                             showSoundAlert = true
                         } else {
@@ -63,7 +64,7 @@ struct PronounciationTestView: View {
                 }
                 .padding(.bottom, 37)
                 .shadow(color: AppColor.blue.opacity(0.45), radius: 5, x: 2, y: 4)
-                
+
                 Spacer()
             }
         }
@@ -87,9 +88,9 @@ struct PronounciationTestView: View {
 
 struct PronounciationTestViewPreview: View {
     @State private var showSoundAlert = false
-    
+
     var body: some View {
-        let context = PersistenceController.preview.container.viewContext
+        let context = CoreDataManager.preview.container.viewContext
 
         let sampleTerm: Term = {
             let term = Term(context: context)
