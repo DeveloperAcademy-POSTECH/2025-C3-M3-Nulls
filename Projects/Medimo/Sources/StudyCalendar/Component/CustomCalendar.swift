@@ -5,6 +5,7 @@
 //  Created by 김현기 on 6/6/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct CustomCalendar: View {
@@ -111,6 +112,7 @@ struct DatesGridView: View {
 }
 
 struct DateButton: View {
+    @Environment(\.managedObjectContext) private var moc
     @ObservedObject var calendarViewModel: CalendarViewModel
 
     var value: DateValue
@@ -123,36 +125,49 @@ struct DateButton: View {
         calendarViewModel.isSameDay(date1: value.date, date2: calendarViewModel.selectedDate)
     }
 
+    var dateInfos: [DateInfo] {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? moc.fetch(fetchRequest)) ?? []
+
+        if let user = users.first {
+            let array = user.dateInfos!.allObjects as? [DateInfo] ?? []
+            print(array)
+            return array
+        }
+        return []
+    }
+
+    @ViewBuilder
+    private func studiedBackground(for dateValue: DateValue) -> some View {
+        // dateInfo 중 해당 날짜와 같은 것이 있는지 찾기
+        if let dateInfo = dateInfos.first(where: { calendarViewModel.isSameDay(date1: $0.date ?? Date(), date2: dateValue.date) }) {
+            // 둘 다 0이 아니면 파란색, 하나만 0이 아니면 하늘색
+            let bothNonZero = (dateInfo.studyCount > 0) && (dateInfo.reviewCount > 0)
+            let onlyOneNonZero = (dateInfo.studyCount > 0) != (dateInfo.reviewCount > 0)
+            let color = bothNonZero ? AppColor.blue : (onlyOneNonZero ? AppColor.skyBlue : nil)
+            if let color = color {
+                Circle()
+                    .fill(color)
+                    .frame(width: 40, height: 40)
+            } else {
+                Color.clear
+            }
+        }
+    }
+
     var body: some View {
         Button {
             calendarViewModel.selectedDate = value.date
             print("📝 Selected Day: \(value.day)")
         } label: {
             ZStack(alignment: .top) {
-//                if isSelected {
-//                    Circle()
-//                        .foregroundStyle(AppColor.label)
-//                        .frame(width: 6, height: 6)
-//                        .offset(y: -10) // Adjust as needed to position above the text
-//                }
-
                 Text("\(value.day)")
                     .font(.bodyEng)
                     .foregroundStyle(isSelected ? AppColor.hotPink : AppColor.grey5)
             }
             .frame(height: 20)
             .background(
-                // 1개 성공시
-//                Circle()
-//                    .fill(AppColor.skyBlue)
-//                    .frame(width: 40, height: 40)
-//                    .opacity(isSelected ? 1 : 0)
-
-                // 2개 성공시
-                Circle()
-                    .fill(AppColor.blue)
-                    .frame(width: 40, height: 40)
-                    .opacity(isSelected ? 1 : 0)
+                studiedBackground(for: value)
             )
         }
 //        .disabled(value.date > Date() ? true : false)

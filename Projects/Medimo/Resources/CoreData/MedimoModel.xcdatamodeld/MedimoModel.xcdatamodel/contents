@@ -4,7 +4,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reviewCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="studyCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="totalStudyHist" inverseEntity="User"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="dateInfos" inverseEntity="User"/>
     </entity>
     <entity name="Glossary" representedClassName=".Glossary" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
@@ -61,9 +61,9 @@
         <attribute name="longestStreak" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalLearningTerms" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Term" inverseName="bookmarks" inverseEntity="Term"/>
+        <relationship name="dateInfos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateInfo" inverseName="user" inverseEntity="DateInfo"/>
         <relationship name="progresses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GlossaryProgress" inverseName="user" inverseEntity="GlossaryProgress"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TermStudyData" inverseName="user" inverseEntity="TermStudyData"/>
-        <relationship name="totalStudyHist" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateInfo" inverseName="totalStudyHist" inverseEntity="DateInfo"/>
     </entity>
     <configuration name="Global"/>
     <configuration name="Personal">

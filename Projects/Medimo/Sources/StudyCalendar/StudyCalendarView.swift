@@ -5,6 +5,7 @@
 //  Created by 김현기 on 6/6/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct StudyCalendarView: View {
@@ -43,8 +44,13 @@ struct StudyCalendarView: View {
                         .font(.headline)
                     Spacer()
                     Button {
-                        Task {
-                            await cloudKitManager.deleteAllRecordsFromPrivateDatabase()
+                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+                        let users = (try? coreDataManager.context.fetch(fetchRequest)) ?? []
+                        if let user = users.first {
+                            let array = user.dateInfos!.allObjects as? [DateInfo] ?? []
+                            for dateInfo in array {
+                                print("Date: \(dateInfo.date ?? Date()), Count: \(dateInfo.studyCount)")
+                            }
                         }
                     } label: {
                         Image("download")
