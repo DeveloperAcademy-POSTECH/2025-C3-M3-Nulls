@@ -11,10 +11,6 @@ let project = Project(
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(
                 with: [
-                    "UILaunchScreen": [
-                        "UIColorName": "",
-                        "UIImageName": "",
-                    ],
                     "UIAppFonts": [
                         "GmarketSansBold.otf",
                         "GmarketSansMedium.otf",
@@ -23,6 +19,7 @@ let project = Project(
                         "SCDream7.otf",
                     ],
                     "UIBackgroundModes": ["remote-notification"],
+                    "UILaunchStoryboardName": "LaunchScreen.storyboard"
                 ]
             ),
             sources: ["Medimo/Sources/**"],

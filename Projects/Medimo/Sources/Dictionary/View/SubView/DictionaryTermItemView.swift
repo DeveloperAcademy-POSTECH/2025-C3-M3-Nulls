@@ -23,9 +23,11 @@ struct DictionaryTermItemView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     HStack(spacing: 10) {
                         if let abbreviation = term.abbreviation {
-                            Text("[ \(abbreviation) ]")
-                                .font(.subheadlineEng)
-                                .foregroundStyle(AppColor.label)
+                            if !abbreviation.isEmpty {
+                                Text("[ \(abbreviation) ]")
+                                    .font(.subheadlineEng)
+                                    .foregroundStyle(AppColor.label)
+                            }
                         }
                         Text(term.meaning ?? "")
                             .font(.caption)
