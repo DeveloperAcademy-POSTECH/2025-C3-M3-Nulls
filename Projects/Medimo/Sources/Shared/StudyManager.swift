@@ -28,24 +28,6 @@ public class StudyManager {
         }
     }
 
-    // ContentView에서 사용되는 Glossary ID를 저장합니다.
-//    func setContext(_ context: NSManagedObjectContext) {
-//        self.context = context
-//
-//        let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
-//        request.fetchLimit = 1
-//
-//        do {
-//            if let glossary = try context.fetch(request).first {
-//                studyingGlossaryId = glossary.value(forKey: "id") as? Int
-//            } else {
-//                studyingGlossaryId = nil
-//            }
-//        } catch {
-//            print("Glossary fetch 실패: \(error)")
-//            studyingGlossaryId = nil
-//        }
-//    }
     func setContext(_ context: NSManagedObjectContext) {
         self.context = context
 
@@ -168,7 +150,10 @@ public class StudyManager {
         }
 
         meta.lastReviewedAt = now
-        meta.nextReviewAt = now // Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+        meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
+#if DEBUG
+        meta.nextReviewAt = now
+#endif
         
         do {
             try context?.save()
