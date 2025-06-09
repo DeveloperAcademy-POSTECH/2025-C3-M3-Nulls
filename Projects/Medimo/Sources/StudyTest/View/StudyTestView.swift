@@ -32,16 +32,10 @@ struct StudyTestView: View {
         isStudyInProgress: Binding<Bool>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
-<<<<<<< HEAD
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
-=======
-        self.terms = terms
-        _isStudyInProgress = isStudyInProgress
-
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
         self.viewModel = viewModel
-        _studyTermSize = State(initialValue: terms.count)
+        self._studyTermSize = State(initialValue: terms.count)
     }
 
     var body: some View {
@@ -80,13 +74,8 @@ struct StudyTestView: View {
                 isStudyInProgress = false
                 navigationManager.studyPath = []
             }
-<<<<<<< HEAD
             Button("취소", role: .cancel) {
-                StudyManager.shared.resetTermsToNotStarted(terms)
             }
-=======
-            Button("취소", role: .cancel) {}
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }

@@ -58,21 +58,16 @@ public struct ContentView: View {
                                         switch path {
                                         case .StudyCard:
                                             StudyCardView().environmentObject(navigationManager)
-<<<<<<< HEAD
-                                        case .StudyCalendar:
-                                            StudyCalendarView().environmentObject(navigationManager)
-=======
 
                                         case .StudyCalendar:
                                             StudyCalendarView().environmentObject(navigationManager)
 
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
                                         case let .StudyTest(terms):
                                             StudyTestView(
                                                 terms: terms,
                                                 isStudyInProgress: $isStudyInProgress
                                             ).environmentObject(navigationManager)
-<<<<<<< HEAD
+
                                         case .ReviewTest:
                                             ReviewTestView(
                                                 isStudyInProgress: $isStudyInProgress
@@ -81,21 +76,7 @@ public struct ContentView: View {
                                             TestEndView(
                                                 isStudyInProgress: $isStudyInProgress, index: index
                                             ).environmentObject(navigationManager)
-=======
 
-                                        case .ReviewTest:
-                                            EmptyView()
-                                                    //                                            ReviewTestView(
-                                                    //                                                isStudyInProgress: $isStudyInProgress
-                                                    //                                            ).environmentObject(navigationManager)
-
-                                        case let .TestCompletion(index):
-                                            TestEndView(
-                                                isStudyInProgress: $isStudyInProgress,
-                                                index: index
-                                            ).environmentObject(navigationManager)
-
->>>>>>> b70ff45aa32b82f212d88b4a376492e85e8509ae
                                         default:
                                             EmptyView()
                                         }

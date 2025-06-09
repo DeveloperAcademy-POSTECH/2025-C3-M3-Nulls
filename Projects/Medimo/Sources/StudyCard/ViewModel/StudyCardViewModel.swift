@@ -5,19 +5,25 @@
 //  Created by 이서현 on 6/1/25.
 //
 
-import CoreData
 import Foundation
-import Observation
+import CoreData
 
-@Observable
 class StudyCardViewModel: ObservableObject {
-    func cardPosition(for index: Int, currentIndex: Int?) -> CardBackgroundModifier.CardPosition {
-        if index == currentIndex {
-            return .center
-        } else if index < (currentIndex ?? 0) {
+    @Published var terms: [Term] = []
+
+    func loadTerms(with context: NSManagedObjectContext) {
+        StudyManager.shared.setContext(context)
+        terms = StudyManager.shared.getNextStudyTerms()
+    }
+
+    func cardPosition(for idx: Int, currentIndex: Int?) -> CardBackgroundModifier.CardPosition {
+        guard let currentIndex = currentIndex else { return .center }
+        if idx < currentIndex {
             return .left
-        } else {
+        } else if idx > currentIndex {
             return .right
+        } else {
+            return .center
         }
     }
 }
