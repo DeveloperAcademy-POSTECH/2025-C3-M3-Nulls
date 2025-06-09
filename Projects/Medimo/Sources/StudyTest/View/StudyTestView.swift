@@ -10,40 +10,43 @@ import SwiftUI
 struct StudyTestView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Environment(\.managedObjectContext) private var context
-
+    
     @State private var showExitConfirm = false
-
+    
     private var viewModel: StudyTestViewModel
     @State private var index: Int = 1
-
+    
     @Binding var isStudyInProgress: Bool
-
+    @Binding var isStudyDone: Bool
+    
     @State private var terms: [Term]
     @State private var studyTermSize: Int
-
+    
     @State private var currentTestType: TestType = .spelling
     @State private var buttonText = "다음 문제로"
-
+    
     @State private var showSoundAlert = false
     
-
+    
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
+        isStudyDone: Binding<Bool>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
+        self._isStudyDone = isStudyDone
     }
-
+    
     var body: some View {
         VStack {
             ProgressBar(index: index, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-
+            
             if terms.indices.contains(index - 1) {
                 StudyTestDetailView(
                     term: $terms[index - 1],
@@ -52,7 +55,7 @@ struct StudyTestView: View {
                     termSize: $studyTermSize,
                     index: $index,
                     isStudyInProgress: $isStudyInProgress,
-                    showSoundAlert: $showSoundAlert
+                    showSoundAlert: $showSoundAlert, isStudyDone: $isStudyDone
                 )
             }
         }
@@ -79,7 +82,7 @@ struct StudyTestView: View {
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-
+        
         .onAppear {
             currentTestType = randomValidTestType(for: terms[index - 1])
         }
@@ -92,7 +95,7 @@ struct StudyTestView: View {
             currentTestType = randomValidTestType(for: terms[newValue - 1])
         }
     }
-
+    
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
             switch type {
@@ -104,18 +107,4 @@ struct StudyTestView: View {
         }
         return availableTypes.randomElement() ?? .meaning
     }
-}
-
-#Preview {
-    @Previewable @State var dummyInProgress = true
-    let context = CoreDataManager.preview.container.viewContext
-    let studyManager = StudyManager.shared
-    studyManager.setContext(context)
-    let terms = studyManager.getNextStudyTerms()
-
-    return StudyTestView(
-        terms: terms,
-        isStudyInProgress: $dummyInProgress
-    )
-    .environment(\.managedObjectContext, context)
 }

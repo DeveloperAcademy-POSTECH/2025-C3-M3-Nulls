@@ -10,7 +10,9 @@ import SwiftUI
 struct StudyMainCardView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     let studyManager = StudyManager.shared
+    
     @Binding var isStudyInProgress: Bool
+    @Binding var isStudyDone: Bool
 
     var body: some View {
         ZStack {
@@ -37,6 +39,7 @@ struct StudyMainCardView: View {
                         isStudyInProgress = true
                         navigationManager.studyPath.append(.ReviewTest)
                     }
+                    .disabled(!isStudyDone)
                     .padding(.horizontal, 20)
                 }
             }
@@ -45,18 +48,4 @@ struct StudyMainCardView: View {
             .padding(.bottom, 36)
         }
     }
-}
-
-#Preview {
-    @Previewable @State var isStudyInProgress = true
-    @Previewable @State var studyManager = StudyManager.shared
-    let context = CoreDataManager.preview.container.viewContext
-
-    studyManager.setContext(context)
-
-    return ScrollView {
-        StudyMainCardView(isStudyInProgress: $isStudyInProgress)
-            .padding(16)
-    }
-    .environment(\.managedObjectContext, context)
 }

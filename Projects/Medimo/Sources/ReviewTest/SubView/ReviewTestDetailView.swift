@@ -17,6 +17,7 @@ struct ReviewTestDetailView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
+    @Binding var isStudyDone: Bool
   
     var correctAnswer: String {
         switch testType {
@@ -51,7 +52,7 @@ struct ReviewTestDetailView: View {
                     termSize: $termSize,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    term: $term, buttonText: buttonText
+                    isStudyDone: $isStudyDone, term: $term, buttonText: buttonText
                 )
                 .padding(.bottom, 20)
                 

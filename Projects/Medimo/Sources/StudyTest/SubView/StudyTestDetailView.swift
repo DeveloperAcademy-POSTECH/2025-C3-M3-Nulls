@@ -17,6 +17,7 @@ struct StudyTestDetailView: View {
 
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
+    @Binding var isStudyDone: Bool
 
     var correctAnswer: String {
         switch testType {
@@ -51,6 +52,7 @@ struct StudyTestDetailView: View {
                     termSize: $termSize,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
+                    isStudyDone: $isStudyDone,
                     term: $term,
                     buttonText: buttonText
                 )

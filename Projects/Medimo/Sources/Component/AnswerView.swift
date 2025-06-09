@@ -20,6 +20,7 @@ struct AnswerView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
+    @Binding var isStudyDone: Bool
     
     @Binding var term: Term
   
@@ -94,6 +95,7 @@ struct AnswerView: View {
                         answer = ""
                         index += 1
                     } else {
+                        isStudyDone = true
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
                 })
