@@ -34,7 +34,6 @@ struct StudyView: View {
 
                     StudyCalendarCardView(calendarViewModel: calendarViewModel)
                         .onTapGesture {
-                            print("TAP")
                             navigationManager.studyPath.append(.StudyCalendar)
                         }
                         .padding(16)

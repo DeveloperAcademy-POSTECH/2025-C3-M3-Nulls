@@ -9,11 +9,39 @@ import CoreData
 import SwiftUI
 
 struct StudyCalendarView: View {
+    @Environment(\.managedObjectContext) private var moc
     @EnvironmentObject var navigationManager: NavigationManager
 
     @StateObject private var calendarViewModel = CalendarViewModel()
     let coreDataManager = CoreDataManager.shared
     let cloudKitManager = CloudKitManager.shared
+
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? moc.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: moc)
+    }
+
+    var dateInfos: [DateInfo] {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? moc.fetch(fetchRequest)) ?? []
+
+        if let user = users.first {
+            let array = user.dateInfos!.allObjects as? [DateInfo] ?? []
+            print(array)
+            return array
+        }
+        return []
+    }
+
+    func getTotalStudyCount() -> Int {
+        dateInfos.reduce(0) { $0 + Int($1.studyCount) }
+    }
+
+    func getTotalReviewCount() -> Int {
+        dateInfos.reduce(0) { $0 + Int($1.reviewCount) }
+    }
 
     var body: some View {
         ZStack {
@@ -43,16 +71,7 @@ struct StudyCalendarView: View {
                         .foregroundStyle(AppColor.navy)
                         .font(.headline)
                     Spacer()
-                    Button {
-                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-                        let users = (try? coreDataManager.context.fetch(fetchRequest)) ?? []
-                        if let user = users.first {
-                            let array = user.dateInfos!.allObjects as? [DateInfo] ?? []
-                            for dateInfo in array {
-                                print("Date: \(dateInfo.date ?? Date()), Count: \(dateInfo.studyCount)")
-                            }
-                        }
-                    } label: {
+                    Button {} label: {
                         Image("download")
                             .foregroundStyle(AppColor.blue)
                     }
@@ -63,7 +82,7 @@ struct StudyCalendarView: View {
                     HStack {
                         Spacer()
                         VStack {
-                            Text("960개")
+                            Text("\(getTotalStudyCount())개")
                                 .font(.title)
                                 .foregroundStyle(AppColor.navy)
                                 .padding(.bottom, 15)
@@ -73,7 +92,7 @@ struct StudyCalendarView: View {
                         }
                         Spacer(minLength: 75)
                         VStack {
-                            Text("18일")
+                            Text("\(user.longestStreak)일")
                                 .font(.title)
                                 .foregroundStyle(AppColor.blue)
                                 .padding(.bottom, 15)
@@ -117,9 +136,9 @@ struct StudyCalendarView: View {
                         }
                         .padding(.horizontal, 16)
 
-                        WordsStatisticsView(description: "학습한 단어", count: 30)
+                        WordsStatisticsView(description: "학습한 단어", count: getTotalStudyCount())
                         Spacer().frame(height: 10)
-                        WordsStatisticsView(description: "복습한 단어", count: 10)
+                        WordsStatisticsView(description: "복습한 단어", count: getTotalReviewCount())
                     }
                     .padding(.horizontal, 16)
 
