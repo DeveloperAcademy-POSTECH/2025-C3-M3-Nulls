@@ -16,6 +16,15 @@ public class StudyManager {
 
     private var context: NSManagedObjectContext?
 
+    let coredataManager = CoreDataManager.shared
+
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? coredataManager.context.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: coredataManager.context)
+    }
+
     var studyTermSize: Int = StudyTermSizeOption.small.rawValue
 
     private var _cachedStudyingGlossary: Glossary?
@@ -44,13 +53,6 @@ public class StudyManager {
             print("❌ Glossary fetch 실패: \(error)")
             studyingGlossaryId = nil
         }
-    }
-    
-    var user: User {
-        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-        let users = (try? context!.fetch(fetchRequest)) ?? []
-
-        return users.first ?? User(context: context!)
     }
 
     var studyingGlossary: Glossary? {
@@ -98,7 +100,7 @@ public class StudyManager {
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
         print("dataList: \(dataList)")
-        
+
         var termIdList: [Int64] = []
 
         let inProgressTermIdList = dataList
@@ -106,7 +108,7 @@ public class StudyManager {
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
             .compactMap { $0.term?.id }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
-        
+
         if termIdList.count < studyTermSize {
             let notStartedTermIdList = dataList
                 .filter { $0.status == LearningStatus.notStarted.rawValue }
@@ -114,14 +116,15 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
-        
+
         print("termIdList: \(termIdList)")
-        
+
         var result: [Term] = []
 
         for termId in termIdList {
             if let data = dataList.first(where: { $0.term?.id == termId }),
-               let term = data.term {
+               let term = data.term
+            {
                 data.status = LearningStatus.inProgress.rawValue
                 result.append(term)
                 if result.count >= studyTermSize { break }
@@ -158,10 +161,10 @@ public class StudyManager {
 
         meta.lastReviewedAt = now
         meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
-#if DEBUG
-        meta.nextReviewAt = now
-#endif
-        
+        #if DEBUG
+            meta.nextReviewAt = now
+        #endif
+
         do {
             try context?.save()
             print("✅ 학습 결과 저장 완료: \(result) for \(term.spelling ?? "")")
@@ -195,5 +198,45 @@ public class StudyManager {
         }
 
         return result
+    }
+
+    // MARK: - CoreData Management
+
+    func isTodayDateInfoExists() -> (exists: Bool, dateInfo: DateInfo?) {
+        let fetchRequest: NSFetchRequest<DateInfo> = DateInfo.fetchRequest()
+        do {
+            let results = try coredataManager.context.fetch(fetchRequest)
+            let today = Date()
+            if let dateInfo = results.first(where: { $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: today) }) {
+                return (true, dateInfo)
+            } else {
+                return (false, nil)
+            }
+        } catch {
+            print("❌ DateInfo fetch 실패: \(error)")
+            return (false, nil)
+        }
+    }
+
+    func addDateInfoWhenFinished() {
+        let (exists, dateInfo) = isTodayDateInfoExists()
+
+        if exists {
+            print("📅 오늘 날짜 정보가 이미 존재합니다.")
+
+            dateInfo!.studyCount += Int32(studyTermSize)
+            dateInfo!.reviewCount += Int32(studyTermSize) // 임시
+            print("📅 오늘 날짜 정보 업데이트: studyCount = \(dateInfo!.studyCount), reviewCount = \(dateInfo!.reviewCount)")
+        } else {
+            print("📅 오늘 날짜 정보가 존재하지 않습니다. 추가합니다.")
+
+            let dateInfo = DateInfo(context: coredataManager.context)
+            dateInfo.date = Date()
+            dateInfo.studyCount = Int32(studyTermSize)
+            dateInfo.reviewCount = Int32(studyTermSize) // 임시
+
+            user.addToDateInfos(dateInfo)
+        }
+        coredataManager.save()
     }
 }

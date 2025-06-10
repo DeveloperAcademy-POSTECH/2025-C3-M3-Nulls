@@ -43,7 +43,7 @@ public struct ContentView: View {
                                             currentCount: currentCount,
                                             totalCount: totalCount
                                         )
-                                            .environmentObject(navigationManager)
+                                        .environmentObject(navigationManager)
 
                                     default:
                                         EmptyView()
