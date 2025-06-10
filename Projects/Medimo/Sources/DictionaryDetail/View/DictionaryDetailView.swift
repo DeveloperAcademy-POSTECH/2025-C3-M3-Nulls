@@ -11,13 +11,20 @@ import SwiftUI
 
 struct DictionaryDetailView: View {
     @Environment(\.managedObjectContext) var context
+    let coreDataManager = CoreDataManager.shared
 
     @State var viewModel: DictionaryDetailViewModel
 
     init(term: Term) {
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
-
+    
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? context.fetch(fetchRequest)) ?? []
+        return users.first ?? User(context: context)
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -34,7 +41,7 @@ struct DictionaryDetailView: View {
                                 }
                             }
                             Spacer()
-                            DictionaryDetailViewComponents.bookmarkIcon()
+                            BookmarkButtonView(manager: coreDataManager, user: user, term: viewModel.term)
                         }
                         .padding(.horizontal, 32)
                         .padding(.top, 48)
