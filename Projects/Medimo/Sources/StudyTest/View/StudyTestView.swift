@@ -34,7 +34,6 @@ struct StudyTestView: View {
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self._terms = State(initialValue: terms)
-//        self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
         self._isStudyDone = isStudyDone
@@ -53,7 +52,6 @@ struct StudyTestView: View {
                     buttonText: buttonText,
                     termSize: $studyTermSize,
                     index: $index,
-//                    isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
                     isStudyDone: $isStudyDone
                 )
@@ -74,7 +72,6 @@ struct StudyTestView: View {
         }
         .alert("학습 종료하기", isPresented: $showExitConfirm) {
             Button("종료하기", role: .destructive) {
-//                isStudyInProgress = false
                 navigationManager.studyPath = []
             }
             Button("취소", role: .cancel) {

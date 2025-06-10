@@ -96,7 +96,6 @@ struct StudyCardView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-//                    isStudyInProgress = false
                     navigationManager.studyPath = []
                 }) {
                     Image(systemName: "chevron.left")
