@@ -21,6 +21,7 @@ struct AnswerView: View {
 
     @Binding var showSoundAlert: Bool
     @Binding var isStudyDone: Bool
+    @State var learningType: LearningType
 
     @Binding var term: Term
 

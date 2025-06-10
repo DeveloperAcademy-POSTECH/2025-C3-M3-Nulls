@@ -26,10 +26,13 @@ struct ReviewTestView: View {
     @State private var buttonText = "다음 문제로"
 
     @State private var showSoundAlert = false
+    
+    @Binding var learningType: LearningType
 
     init(
         isStudyInProgress: Binding<Bool>,
         isStudyDone: Binding<Bool>,
+        learningType: Binding<LearningType>,
         viewModel: ReviewTestViewModel = ReviewTestViewModel()
     ) {
         self._isStudyInProgress = isStudyInProgress
@@ -39,6 +42,7 @@ struct ReviewTestView: View {
         self.terms = todayTerms
         self._studyTermSize = State(initialValue: todayTerms.count)
         self._isStudyDone = isStudyDone
+        self._learningType = learningType
     }
 
     var body: some View {
@@ -55,7 +59,9 @@ struct ReviewTestView: View {
                     termSize: $studyTermSize,
                     index: $index,
                     isStudyInProgress: $isStudyInProgress,
-                    showSoundAlert: $showSoundAlert, isStudyDone: $isStudyDone
+                    showSoundAlert: $showSoundAlert,
+                    isStudyDone: $isStudyDone,
+                    learningType: $learningType
                 )
             }
         }
@@ -81,7 +87,6 @@ struct ReviewTestView: View {
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-        
         .onAppear {
             guard !terms.isEmpty, terms.indices.contains(index - 1) else { return }
             currentTestType = randomValidTestType(for: terms[index - 1])

@@ -16,7 +16,7 @@ struct StudyTestView: View {
     private var viewModel: StudyTestViewModel
     @State private var index: Int = 1
     
-//    @Binding var isStudyInProgress: Bool
+    @Binding var isStudyInProgress: Bool
     @Binding var isStudyDone: Bool
     
     @State private var terms: [Term]
@@ -27,16 +27,21 @@ struct StudyTestView: View {
     
     @State private var showSoundAlert = false
     
+    @Binding var learningType: LearningType
+    
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
         isStudyDone: Binding<Bool>,
+        learningType: Binding<LearningType>,
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self._terms = State(initialValue: terms)
+        self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
         self._isStudyDone = isStudyDone
+        self._learningType = learningType
     }
     
     var body: some View {
@@ -53,7 +58,8 @@ struct StudyTestView: View {
                     termSize: $studyTermSize,
                     index: $index,
                     showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone
+                    isStudyDone: $isStudyDone,
+                    learningType: $learningType
                 )
             }
         }
