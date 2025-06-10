@@ -163,14 +163,14 @@ struct DateButton: View {
             ZStack(alignment: .top) {
                 Text("\(value.day)")
                     .font(.bodyEng)
-                    .foregroundStyle(isSelected ? AppColor.pink : AppColor.grey5)
+                    .foregroundStyle(value.date > Date() ? AppColor.grey2 : isSelected ? AppColor.pink : AppColor.grey5)
             }
             .frame(height: 20)
             .background(
                 studiedBackground(for: value)
             )
         }
-//        .disabled(value.date > Date() ? true : false)
+        .disabled(value.date > Date() ? true : false)
     }
 }
 
