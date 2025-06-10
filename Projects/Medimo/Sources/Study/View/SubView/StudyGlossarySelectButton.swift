@@ -35,9 +35,6 @@ struct StudyGlossarySelectButton: View {
 
     var body: some View {
         Button {
-            print("글로서리: \(StudyManager.shared.studyingGlossaryId)")
-            print("글로서리id: \(glossary.id)")
-            StudyManager.shared.studyingGlossaryId = glossary.id
             selectedGlossary = glossary
             studyManager.studyingGlossaryId = selectedGlossary?.id
         } label: {
