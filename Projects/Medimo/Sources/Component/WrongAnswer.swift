@@ -38,6 +38,8 @@ struct WrongAnswer: View {
                         .padding(.trailing, 10)
                     Text(correctAnswer)
                         .font(.headlineEng)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(20)
@@ -47,13 +49,13 @@ struct WrongAnswer: View {
             Image("character4")
                 .resizable()
                 .frame(width: 80, height: 80)
-                .offset(y: 16)
+                .offset(y: -20)
         }
     }
 }
 
 #Preview {
-    WrongAnswer(correctAnswer: "Electrocardiogram")
+    WrongAnswer(correctAnswer: "Electrocardiogram Moore")
         .padding()
         .background(Color.white)
 }
