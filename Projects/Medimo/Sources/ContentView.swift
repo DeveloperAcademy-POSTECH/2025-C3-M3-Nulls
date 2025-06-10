@@ -53,7 +53,7 @@ public struct ContentView: View {
                     if isStudyInProgress {
                         NavigationStack(path: $navigationManager.studyPath) {
                             VStack {
-                                StudyView(isStudyInProgress: $isStudyInProgress)
+                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
@@ -88,7 +88,7 @@ public struct ContentView: View {
                         }
                     } else {
                         VStack {
-                            StudyView(isStudyInProgress: $isStudyInProgress)
+                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress)
                                 .environmentObject(navigationManager)
                             CustomTabBar(selected: $selectedTab)
                         }

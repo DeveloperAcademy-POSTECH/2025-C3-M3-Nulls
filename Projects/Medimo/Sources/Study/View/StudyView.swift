@@ -6,19 +6,19 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct StudyView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @State var studyManager: StudyManager = .shared
     @StateObject var calendarViewModel = CalendarViewModel()
-
-    // TODO: streak 처리
-    var streak: Int = 0
-
+    @State var studyViewModel: StudyViewModel
+    
     @State private var isAtTop: Bool = true
     @Binding var isStudyInProgress: Bool
 
-    init(isStudyInProgress: Binding<Bool>) {
+    init(context: NSManagedObjectContext, isStudyInProgress: Binding<Bool>) {
+        studyViewModel = .init(moc: context)
         _isStudyInProgress = isStudyInProgress
     }
 
@@ -26,7 +26,7 @@ struct StudyView: View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    StudyHeaderView(streak: streak)
+                    StudyHeaderView(streak: studyViewModel.streak)
 
                     StudyMainCardView(isStudyInProgress: $isStudyInProgress)
                         .padding(.top, 42)
@@ -57,7 +57,7 @@ private struct StudyViewPreviewWrapper: View {
         let context = CoreDataManager.preview.container.viewContext
         StudyManager.shared.setContext(context)
 
-        return StudyView(isStudyInProgress: $isStudyInProgress)
+        return StudyView(context: context, isStudyInProgress: $isStudyInProgress)
             .environmentObject(NavigationManager())
             .environment(\.managedObjectContext, context)
     }
