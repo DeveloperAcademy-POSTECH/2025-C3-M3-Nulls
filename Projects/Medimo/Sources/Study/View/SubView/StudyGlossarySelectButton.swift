@@ -5,8 +5,8 @@
 //  Created by 양시준 on 6/8/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct StudyGlossarySelectButton: View {
     var user: User {
@@ -15,16 +15,23 @@ struct StudyGlossarySelectButton: View {
 
         return users.first ?? User(context: CoreDataManager.shared.context)
     }
+
     var glossary: Glossary!
+
     var currentCount: Int {
         Int(user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
     }
+
     var totalCount: Int {
         glossary.terms?.count ?? 0
     }
-    
+
     @Binding var selectedGlossary: Glossary?
     let studyManager = StudyManager.shared
+
+    var studiedCount: Int {
+        return Int(studyManager.user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
+    }
 
     var body: some View {
         Button {
@@ -44,9 +51,9 @@ struct StudyGlossarySelectButton: View {
                                 GeometryReader { geometry in
                                     Capsule()
                                         .fill(AppColor.systemFill)
-                                        .frame(width: geometry.size.width * CGFloat(currentCount)/CGFloat(totalCount), height: 8)
+                                        .frame(width: geometry.size.width * CGFloat(currentCount) / CGFloat(totalCount), height: 8)
                                 }
-                                    .clipShape(Capsule())
+                                .clipShape(Capsule())
                             )
                         Text("\(currentCount)/\(totalCount)")
                             .font(.caption)

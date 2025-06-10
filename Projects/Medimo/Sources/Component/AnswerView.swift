@@ -99,6 +99,7 @@ struct AnswerView: View {
                         isStudyDone = true
 
                         studyManager.addDateInfoWhenFinished()
+                        studyManager.updateGlossaryProgress()
 
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }

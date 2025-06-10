@@ -76,6 +76,12 @@ public class StudyManager {
         }
     }
 
+    var currentGlossaryProgress: GlossaryProgress? {
+        let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
+            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+        return currentProgress
+    }
+
     var termStudyDataList: [TermStudyData]? {
         if let cached = _cachedTermStudyDataList {
             return cached
@@ -237,6 +243,33 @@ public class StudyManager {
 
             user.addToDateInfos(dateInfo)
         }
+        coredataManager.save()
+    }
+
+    func checkCurrentGlossaryProgress() {
+        let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
+            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+
+        let progressList = user.progresses as? Set<GlossaryProgress> ?? []
+
+        print("✏️ 현재 유저: \(String(describing: progressList))")
+        print("✏️ 현재 Glossary: \(String(describing: studyingGlossary?.title))")
+        print("✏️ 현재 학습 진행 상황: \(String(describing: currentProgress))")
+    }
+
+    func updateGlossaryProgress() {
+        let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
+            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+
+        print("✏️ 입력전 Progress 학습 진행 상황: \(String(describing: currentProgress))")
+
+        currentProgress?.lastStudiedAt = Date()
+        currentProgress?.studiedCount += Int64(studyTermSize)
+
+//        if currentProgress != nil {
+//            user.addToProgresses(currentProgress!)
+//        }
+
         coredataManager.save()
     }
 }
