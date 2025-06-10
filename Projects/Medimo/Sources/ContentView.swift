@@ -50,7 +50,9 @@ public struct ContentView: View {
                                 Spacer()
 
                                 CustomTabBar(selected: $selectedTab)
+                                    .padding(.bottom, 24)
                             }
+                            .ignoresSafeArea(edges: .bottom)
                         }
                     }
 
@@ -94,7 +96,9 @@ public struct ContentView: View {
                                     Spacer()
 
                                     CustomTabBar(selected: $selectedTab)
+                                        .padding(.bottom, 24)
                                 }
+                                .ignoresSafeArea(edges: .bottom)
                             }
                         }
                     } else {
@@ -106,7 +110,9 @@ public struct ContentView: View {
                                 Spacer()
 
                                 CustomTabBar(selected: $selectedTab)
+                                    .padding(.bottom, 24)
                             }
+                            .ignoresSafeArea(edges: .bottom)
                         }
                     }
 
@@ -119,8 +125,9 @@ public struct ContentView: View {
                             Spacer()
 
                             CustomTabBar(selected: $selectedTab)
-                                .padding(.bottom, 34)
+                                .padding(.bottom, 24)
                         }
+                        .ignoresSafeArea(edges: .bottom)
                     } // VStack
                 }
             }
