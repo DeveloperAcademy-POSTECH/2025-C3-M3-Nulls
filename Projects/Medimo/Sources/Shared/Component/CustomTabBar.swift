@@ -11,6 +11,8 @@ struct CustomTabBar: View {
     @Binding var selected: TabType
 
     var body: some View {
+//        ZStack {
+//            Color.yellow
         VStack {
             Spacer()
             HStack(spacing: 0) {
@@ -25,18 +27,18 @@ struct CustomTabBar: View {
                     Spacer()
                 }
             }
-            .frame(height: 60)
+            .padding(.bottom, 16)
+            .frame(height: 90)
             .background(
                 TopRoundedRectangle(radius: 20)
                     .fill(Color.white)
                     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: -12)
             )
         }
-        .background(.white)
-        .ignoresSafeArea(edges: .bottom)
         .frame(height: 0)
         .padding(.bottom, 24)
     }
+//    }
 }
 
 struct TabBarButton: View {

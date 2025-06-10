@@ -60,7 +60,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="longestStreak" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalLearningTerms" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Term" inverseName="bookmarks" inverseEntity="Term"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Term" inverseName="bookmarks" inverseEntity="Term"/>
         <relationship name="dateInfos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateInfo" inverseName="user" inverseEntity="DateInfo"/>
         <relationship name="progresses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GlossaryProgress" inverseName="user" inverseEntity="GlossaryProgress"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TermStudyData" inverseName="user" inverseEntity="TermStudyData"/>

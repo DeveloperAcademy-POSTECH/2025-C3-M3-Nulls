@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DictionaryHeaderView: View {
     @Binding var searchText: String
-    
+
     var body: some View {
         VStack {
             Text("의학용어 사전")
@@ -19,17 +19,16 @@ struct DictionaryHeaderView: View {
                 .padding(.leading, 26)
                 .frame(maxWidth: .infinity, alignment: .leading)
             DictionarySearchBoxView(searchText: $searchText)
-            .padding(.horizontal, 16)
-            .padding(.bottom, 20)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 20)
         }
         .background(
             Color(AppColor.secondarySystemFill)
-                .ignoresSafeArea(edges: .top)
         )
     }
 }
 
 #Preview {
-    @Previewable @State var searchText: String = ""
+    @Previewable @State var searchText = ""
     DictionaryHeaderView(searchText: $searchText)
 }
