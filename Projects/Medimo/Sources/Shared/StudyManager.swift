@@ -99,7 +99,6 @@ public class StudyManager {
 
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
-        print("dataList: \(dataList)")
 
         var termIdList: [Int64] = []
 
@@ -116,8 +115,6 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
-
-        print("termIdList: \(termIdList)")
 
         var result: [Term] = []
 

@@ -69,6 +69,7 @@ struct StudyTestView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    isStudyInProgress = false
                     showExitConfirm = true
                 }) {
                     Image(systemName: "chevron.left")

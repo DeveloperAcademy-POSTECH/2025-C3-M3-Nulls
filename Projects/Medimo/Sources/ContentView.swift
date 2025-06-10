@@ -63,66 +63,123 @@ public struct ContentView: View {
                     }
 
                 case .study:
-                    if isStudyInProgress {
-                        NavigationStack(path: $navigationManager.studyPath) {
-                            ZStack {
-                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-                                    .environmentObject(navigationManager)
-                                    .navigationDestination(for: PathType.self) { path in
-                                        switch path {
-                                        case .StudyCard:
-                                            StudyCardView(isStudyDone: $isStudyDone)
-                                                .environmentObject(navigationManager)
-                                            
-                                        case .StudyCalendar:
-                                            StudyCalendarView().environmentObject(navigationManager)
-                                            
-                                        case let .StudyTest(terms):
-                                            StudyTestView(
-                                                terms: terms,
-                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
-                                            ).environmentObject(navigationManager)
-                                            
-                                        case .ReviewTest:
-                                            ReviewTestView(
-                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
-                                                learningType: $learningType
-                                            ).environmentObject(navigationManager)
-                                            
-                                        case let .TestCompletion(index):
-                                            TestEndView(
-                                                isStudyInProgress: $isStudyInProgress, index: index,
-                                                learningType: $learningType
-                                            ).environmentObject(navigationManager)
-                                            
-                                        default:
-                                            EmptyView()
-                                        }
-                                    }
-
-                                VStack {
-                                    Spacer()
-
-                                    CustomTabBar(selected: $selectedTab)
-                                        .padding(.bottom, 24)
-                                }
-                                .ignoresSafeArea(edges: .bottom)
-                            }
-                        }
-                    } else {
+                    NavigationStack(path: $navigationManager.studyPath)
+                    {
                         ZStack {
-                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-                                .environmentObject(navigationManager)
+                            StudyView(
+                                context: moc,
+                                isStudyInProgress: $isStudyInProgress,
+                                isStudyDone: $isStudyDone
+                            )
+                            .environmentObject(navigationManager)
+                            .navigationDestination(for: PathType.self) { path in
+                                switch path {
+                                case .StudyCard:
+                                    StudyCardView(
+                                        isStudyDone: $isStudyDone,
+                                        isStudyInProgress: $isStudyInProgress
+                                    )
+                                    .environmentObject(navigationManager)
+                                    
+                                case .StudyCalendar:
+                                    StudyCalendarView().environmentObject(navigationManager)
+                                    
+                                case let .StudyTest(terms):
+                                    StudyTestView(
+                                        terms: terms,
+                                        isStudyInProgress: $isStudyInProgress,
+                                        isStudyDone: $isStudyDone,
+                                        learningType: $learningType
+                                    ).environmentObject(navigationManager)
+                                    
+                                case .ReviewTest:
+                                    ReviewTestView(
+                                        isStudyInProgress: $isStudyInProgress,
+                                        isStudyDone: $isStudyDone,
+                                        learningType: $learningType
+                                    ).environmentObject(navigationManager)
+                                    
+                                case let .TestCompletion(index):
+                                    TestEndView(
+                                        isStudyInProgress: $isStudyInProgress,
+                                        index: index,
+                                        learningType: $learningType
+                                    ).environmentObject(navigationManager)
+                                    
+                                default:
+                                    EmptyView()
+                                }
+                            }
 
                             VStack {
                                 Spacer()
-
                                 CustomTabBar(selected: $selectedTab)
                                     .padding(.bottom, 24)
                             }
                             .ignoresSafeArea(edges: .bottom)
                         }
                     }
+                    .id(isStudyInProgress)
+//                    if isStudyInProgress {
+//                        NavigationStack(path: $navigationManager.studyPath) {
+//                            ZStack {
+//                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
+//                                    .environmentObject(navigationManager)
+//                                    .navigationDestination(for: PathType.self) { path in
+//                                        switch path {
+//                                        case .StudyCard:
+//                                            StudyCardView(isStudyDone: $isStudyDone, isStudyInProgress: $isStudyInProgress)
+//                                                .environmentObject(navigationManager)
+//                                            
+//                                        case .StudyCalendar:
+//                                            StudyCalendarView().environmentObject(navigationManager)
+//                                            
+//                                        case let .StudyTest(terms):
+//                                            StudyTestView(
+//                                                terms: terms,
+//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
+//                                            ).environmentObject(navigationManager)
+//                                            
+//                                        case .ReviewTest:
+//                                            ReviewTestView(
+//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
+//                                                learningType: $learningType
+//                                            ).environmentObject(navigationManager)
+//                                            
+//                                        case let .TestCompletion(index):
+//                                            TestEndView(
+//                                                isStudyInProgress: $isStudyInProgress, index: index,
+//                                                learningType: $learningType
+//                                            ).environmentObject(navigationManager)
+//                                            
+//                                        default:
+//                                            EmptyView()
+//                                        }
+//                                    }
+//
+//                                VStack {
+//                                    Spacer()
+//
+//                                    CustomTabBar(selected: $selectedTab)
+//                                        .padding(.bottom, 24)
+//                                }
+//                                .ignoresSafeArea(edges: .bottom)
+//                            }
+//                        }
+//                    } else {
+//                        ZStack {
+//                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
+//                                .environmentObject(navigationManager)
+//
+//                            VStack {
+//                                Spacer()
+//
+//                                CustomTabBar(selected: $selectedTab)
+//                                    .padding(.bottom, 24)
+//                            }
+//                            .ignoresSafeArea(edges: .bottom)
+//                        }
+//                    }
 
                 case .dictionary:
                     ZStack {
