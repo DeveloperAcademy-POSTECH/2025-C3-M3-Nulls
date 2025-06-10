@@ -63,7 +63,7 @@ public struct ContentView: View {
                 case .study:
                     if isStudyInProgress {
                         NavigationStack(path: $navigationManager.studyPath) {
-                            VStack {
+                            ZStack {
                                 StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
@@ -106,7 +106,7 @@ public struct ContentView: View {
                             }
                         }
                     } else {
-                        VStack {
+                        ZStack {
                             StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                 .environmentObject(navigationManager)
 
