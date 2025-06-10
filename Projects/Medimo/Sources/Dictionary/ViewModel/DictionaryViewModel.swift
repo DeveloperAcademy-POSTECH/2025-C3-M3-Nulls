@@ -36,7 +36,17 @@ class DictionaryViewModel {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Term.spelling, ascending: true)]
 
         do {
-            term = try context.fetch(request)
+            let fetchedTerms = try context.fetch(request)
+            var seenSpellings = Set<String>()
+            var uniqueTerms: [Term] = []
+
+            for t in fetchedTerms {
+                if let spelling = t.spelling, !seenSpellings.contains(spelling) {
+                    uniqueTerms.append(t)
+                    seenSpellings.insert(spelling)
+                }
+            }
+            term = uniqueTerms
         } catch {
             #if DEBUG
                 print("Failed to fetch terms: \(error)")
