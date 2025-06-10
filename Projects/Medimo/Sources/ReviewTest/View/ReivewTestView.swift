@@ -101,12 +101,30 @@ struct ReviewTestView: View {
         }
     }
 
+//    private func randomValidTestType(for term: Term) -> TestType {
+//        let availableTypes = TestType.allCases.filter { type in
+//            switch type {
+//            case .abbreviation:
+//                guard let abbr = term.abbreviation?.trimmingCharacters(in: .whitespacesAndNewlines),
+//                      !abbr.isEmpty else {
+//                    return false
+//                }
+//                return true
+//            default:
+//                return true
+//            }
+//        }
+//        return availableTypes.randomElement() ?? .meaning
+//    }
+    
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
             switch type {
             case .abbreviation:
-                guard let abbr = term.abbreviation?.trimmingCharacters(in: .whitespacesAndNewlines),
-                      !abbr.isEmpty else {
+                guard let abbr = term.abbreviation?
+                        .trimmingCharacters(in: .whitespacesAndNewlines),
+                      !abbr.isEmpty,
+                      abbr != "-" else {
                     return false
                 }
                 return true
