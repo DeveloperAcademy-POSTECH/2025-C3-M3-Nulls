@@ -15,6 +15,7 @@ public struct ContentView: View {
 
     @State private var selectedTab: TabType = .study
     @State private var isStudyInProgress = true
+    @State private var isStudyDone = false
 
     @StateObject private var navigationManager = NavigationManager()
 
@@ -57,12 +58,13 @@ public struct ContentView: View {
                     if isStudyInProgress {
                         NavigationStack(path: $navigationManager.studyPath) {
                             ZStack {
-                                StudyView(isStudyInProgress: $isStudyInProgress)
+                                StudyView(isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
                                         case .StudyCard:
-                                            StudyCardView().environmentObject(navigationManager)
+                                            StudyCardView(isStudyDone: $isStudyDone)
+                                                .environmentObject(navigationManager)
 
                                         case .StudyCalendar:
                                             StudyCalendarView().environmentObject(navigationManager)
@@ -70,12 +72,12 @@ public struct ContentView: View {
                                         case let .StudyTest(terms):
                                             StudyTestView(
                                                 terms: terms,
-                                                isStudyInProgress: $isStudyInProgress
+                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone
                                             ).environmentObject(navigationManager)
 
                                         case .ReviewTest:
                                             ReviewTestView(
-                                                isStudyInProgress: $isStudyInProgress
+                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone
                                             ).environmentObject(navigationManager)
 
                                         case let .TestCompletion(index):
@@ -97,7 +99,7 @@ public struct ContentView: View {
                         }
                     } else {
                         ZStack {
-                            StudyView(isStudyInProgress: $isStudyInProgress)
+                            StudyView(isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                 .environmentObject(navigationManager)
 
                             VStack {

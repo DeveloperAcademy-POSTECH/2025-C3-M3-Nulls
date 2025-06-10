@@ -15,6 +15,8 @@ struct StudyCardView: View {
     @StateObject private var viewModel = StudyCardViewModel()
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
+    
+    @Binding var isStudyDone: Bool
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
@@ -90,6 +92,17 @@ struct StudyCardView: View {
             Spacer()
         }
         .padding(.bottom, 20)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    navigationManager.studyPath = []
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(AppColor.grey3)
+                }
+            }
+        }
         .onAppear {
             viewModel.loadTerms(with: context)
             index = viewModel.terms.isEmpty ? 0 : 1
@@ -108,15 +121,4 @@ struct StudyCardView: View {
             }
         }
     }
-}
-
-#Preview {
-    @Previewable @StateObject var navigationManager = NavigationManager()
-    let context = CoreDataManager.preview.container.viewContext
-
-    StudyManager.shared.setContext(context)
-
-    return StudyCardView()
-        .environment(\.managedObjectContext, context)
-        .environmentObject(navigationManager)
 }
