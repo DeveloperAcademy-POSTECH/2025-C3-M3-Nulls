@@ -37,9 +37,13 @@ public struct ContentView: View {
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
                                     switch path {
-                                    case let .GlossaryDetail(glossary):
-                                        GlossaryDetailView(glossary: glossary)
-                                            .environmentObject(navigationManager)
+                                    case let .GlossaryDetail(glossary, currentCount, totalCount):
+                                        GlossaryDetailView(
+                                            glossary: glossary,
+                                            currentCount: currentCount,
+                                            totalCount: totalCount
+                                        )
+                                        .environmentObject(navigationManager)
 
                                     default:
                                         EmptyView()
@@ -60,7 +64,7 @@ public struct ContentView: View {
                     if isStudyInProgress {
                         NavigationStack(path: $navigationManager.studyPath) {
                             ZStack {
-                                StudyView(isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
+                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
                                         switch path {
@@ -103,7 +107,7 @@ public struct ContentView: View {
                         }
                     } else {
                         ZStack {
-                            StudyView(isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
+                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                                 .environmentObject(navigationManager)
 
                             VStack {

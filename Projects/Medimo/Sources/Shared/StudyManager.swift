@@ -16,12 +16,21 @@ public class StudyManager {
 
     private var context: NSManagedObjectContext?
 
+    let coredataManager = CoreDataManager.shared
+
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? coredataManager.context.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: coredataManager.context)
+    }
+
     var studyTermSize: Int = StudyTermSizeOption.small.rawValue
 
     private var _cachedStudyingGlossary: Glossary?
     private var _cachedTermStudyDataList: [TermStudyData]?
 
-    var studyingGlossaryId: Int? {
+    var studyingGlossaryId: Int64? {
         didSet {
             _cachedStudyingGlossary = nil
             _cachedTermStudyDataList = nil
@@ -36,7 +45,7 @@ public class StudyManager {
 
         do {
             if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = Int(glossary.id) // ← 여기!
+                studyingGlossaryId = glossary.id
             } else {
                 studyingGlossaryId = nil
             }
@@ -72,7 +81,7 @@ public class StudyManager {
             return cached
         }
 
-        guard let id = studyingGlossaryId as Int? else { return nil }
+        guard let id = studyingGlossaryId as Int64? else { return nil }
 
         let request: NSFetchRequest<TermStudyData> = TermStudyData.fetchRequest()
         request.predicate = NSPredicate(format: "glossary.id == %d", id)
@@ -189,5 +198,45 @@ public class StudyManager {
         }
 
         return result
+    }
+
+    // MARK: - CoreData Management
+
+    func isTodayDateInfoExists() -> (exists: Bool, dateInfo: DateInfo?) {
+        let fetchRequest: NSFetchRequest<DateInfo> = DateInfo.fetchRequest()
+        do {
+            let results = try coredataManager.context.fetch(fetchRequest)
+            let today = Date()
+            if let dateInfo = results.first(where: { $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: today) }) {
+                return (true, dateInfo)
+            } else {
+                return (false, nil)
+            }
+        } catch {
+            print("❌ DateInfo fetch 실패: \(error)")
+            return (false, nil)
+        }
+    }
+
+    func addDateInfoWhenFinished() {
+        let (exists, dateInfo) = isTodayDateInfoExists()
+
+        if exists {
+            print("📅 오늘 날짜 정보가 이미 존재합니다.")
+
+            dateInfo!.studyCount += Int32(studyTermSize)
+            dateInfo!.reviewCount += Int32(studyTermSize) // 임시
+            print("📅 오늘 날짜 정보 업데이트: studyCount = \(dateInfo!.studyCount), reviewCount = \(dateInfo!.reviewCount)")
+        } else {
+            print("📅 오늘 날짜 정보가 존재하지 않습니다. 추가합니다.")
+
+            let dateInfo = DateInfo(context: coredataManager.context)
+            dateInfo.date = Date()
+            dateInfo.studyCount = Int32(studyTermSize)
+            dateInfo.reviewCount = Int32(studyTermSize) // 임시
+
+            user.addToDateInfos(dateInfo)
+        }
+        coredataManager.save()
     }
 }

@@ -9,40 +9,41 @@ import SwiftUI
 
 struct AnswerView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    
+    let studyManager: StudyManager = .shared
+
     let correctAnswer: String
     @Binding var index: Int
     @Binding var termSize: Int
-    
+
     @State private var answer: String = ""
     @State private var isAnswered: Bool = false
     @State private var isCorrect: Bool = false
-    
+
     @Binding var showSoundAlert: Bool
     @Binding var isStudyDone: Bool
-    
+
     @Binding var term: Term
-  
+
     var buttonText: String
-    
+
     func clean(_ text: String) -> String {
         return text
             .lowercased()
             .replacingOccurrences(of: "[^a-z가-힣]", with: "", options: .regularExpression)
     }
-    
+
     func submitAction() {
         let trimmedAnswers = correctAnswer
             .split(separator: ",")
             .map { clean(String($0)) }
 
         let userAnswer = clean(answer)
-      
+
         isCorrect = trimmedAnswers.contains(userAnswer)
         isAnswered = true
         showSoundAlert = false
     }
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -71,7 +72,7 @@ struct AnswerView: View {
             .padding(8)
             .background(AppColor.white)
             .cornerRadius(15)
-            
+
             if isAnswered {
                 if isCorrect {
                     CorrectAnswer()
@@ -84,9 +85,9 @@ struct AnswerView: View {
                             StudyManager.shared.updateReview(of: term, result: .incorrect)
                         }
                 }
-                
+
                 Spacer()
-                
+
                 NextButton(buttonText: buttonText, action: {
                     if index < termSize {
                         isAnswered = false
@@ -95,6 +96,9 @@ struct AnswerView: View {
                         index += 1
                     } else {
                         isStudyDone = true
+
+                        studyManager.addDateInfoWhenFinished()
+
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
                 })
