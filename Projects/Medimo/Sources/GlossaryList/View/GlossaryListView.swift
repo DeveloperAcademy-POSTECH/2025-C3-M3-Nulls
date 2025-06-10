@@ -48,8 +48,8 @@ struct GlossaryListView: View {
                             } label: {
                                 GlossaryCardView(
                                     title: glossary.title ?? "알 수 없음",
-                                    currentCount: 1,
-                                    totalCount: 200
+                                    currentCount: Int(viewModel.user.progressForGlossary(glossary.id)?.studiedCount ?? 0),
+                                    totalCount: glossary.terms?.count ?? 0
                                 )
                             }
                         }

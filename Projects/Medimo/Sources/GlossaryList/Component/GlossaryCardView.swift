@@ -31,9 +31,9 @@ struct GlossaryCardView: View {
                     }
                     .clipShape(Capsule())
                 )
-            HStack(spacing: 5) {
+            HStack(alignment: .bottom, spacing: 4) {
                 Spacer()
-                Text("\(String(format: "%02d", currentCount))")
+                Text("\(String(format: "%d", currentCount))")
                     .font(.bodyEng)
                     .foregroundStyle(AppColor.label)
 

@@ -7,11 +7,23 @@
 
 import SwiftUI
 
+extension User {
+    func progressForGlossary(_ glossaryId: Int64?) -> GlossaryProgress? {
+        let progressList = progresses as? Set<GlossaryProgress>
+        print("glossaryId: \(String(describing: glossaryId))")
+        for progress in progressList ?? [] {
+            print("progress: \(String(describing: progress.glossary?.id))")
+        }
+        return progressList?.first(where: { $0.glossary?.id == glossaryId })
+    }
+}
+
 struct StudyMainCardView: View {
+    @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var navigationManager: NavigationManager
     let studyManager = StudyManager.shared
     @Binding var isStudyInProgress: Bool
-
+    
     var body: some View {
         ZStack {
             StudyMainCardBackgroundView()
@@ -23,7 +35,12 @@ struct StudyMainCardView: View {
                 }
 
                 // TODO: 학습 진행도 반영
-                StudyRingView(progress: 10, total: 100)
+                StudyRingView(
+                    progress: Int(studyManager.user.progressForGlossary(
+                        studyManager.studyingGlossaryId!
+                    )?.studiedCount ?? 0),
+                    total: studyManager.studyingGlossary?.terms?.count ?? 0
+                )
                     .padding(.top, 28)
                     .padding(.bottom, 32)
                 VStack(spacing: 16) {

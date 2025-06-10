@@ -21,7 +21,7 @@ public class StudyManager {
     private var _cachedStudyingGlossary: Glossary?
     private var _cachedTermStudyDataList: [TermStudyData]?
 
-    var studyingGlossaryId: Int? {
+    var studyingGlossaryId: Int64? {
         didSet {
             _cachedStudyingGlossary = nil
             _cachedTermStudyDataList = nil
@@ -36,7 +36,7 @@ public class StudyManager {
 
         do {
             if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = Int(glossary.id)  // ← 여기!
+                studyingGlossaryId = glossary.id
             } else {
                 studyingGlossaryId = nil
             }
@@ -44,6 +44,13 @@ public class StudyManager {
             print("❌ Glossary fetch 실패: \(error)")
             studyingGlossaryId = nil
         }
+    }
+    
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? context!.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: context!)
     }
 
     var studyingGlossary: Glossary? {
@@ -72,7 +79,7 @@ public class StudyManager {
             return cached
         }
 
-        guard let id = studyingGlossaryId as Int? else { return nil }
+        guard let id = studyingGlossaryId as Int64? else { return nil }
 
         let request: NSFetchRequest<TermStudyData> = TermStudyData.fetchRequest()
         request.predicate = NSPredicate(format: "glossary.id == %d", id)
