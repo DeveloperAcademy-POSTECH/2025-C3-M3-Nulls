@@ -4,8 +4,8 @@
 //
 //  Created by 이서현 on 6/1/25
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct TermCardView: View {
     @ObservedObject var term: Term
@@ -22,7 +22,7 @@ struct TermCardView: View {
         self.backgroundColor = backgroundColor
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
-    
+
     var user: User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let users = (try? context.fetch(fetchRequest)) ?? []
@@ -115,7 +115,7 @@ struct TermCardView: View {
     term.spelling = "Neuritis"
     term.abbreviation = "NT"
     term.meaning = "신경의 염증"
-    term.morphemes = NSSet(array: [morpheme1, morpheme2])
+    term.morphemes = NSOrderedSet(array: [morpheme1, morpheme2])
     term.explanation = """
     Neuritis는 신경에 염증이 생긴 상태를 의미합니다.
     이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.

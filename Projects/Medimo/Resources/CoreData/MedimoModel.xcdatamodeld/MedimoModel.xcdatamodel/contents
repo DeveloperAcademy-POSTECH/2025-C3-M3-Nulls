@@ -35,7 +35,7 @@
         <attribute name="spelling" optional="YES" attributeType="String"/>
         <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="bookmarks" inverseEntity="User"/>
         <relationship name="glossaries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Glossary" inverseName="terms" inverseEntity="Glossary"/>
-        <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
+        <relationship name="morphemes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Morpheme" inverseName="terms" inverseEntity="Morpheme"/>
         <relationship name="termStudyData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TermStudyData" inverseName="term" inverseEntity="TermStudyData"/>
     </entity>
     <entity name="TermMorphemeRelationship" representedClassName=".TermMorphemeRelationship" syncable="YES" codeGenerationType="class">
