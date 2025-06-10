@@ -25,15 +25,14 @@ struct CustomTabBar: View {
                     Spacer()
                 }
             }
-            .frame(height: 60)
+            .padding(.bottom, 8)
+            .frame(height: 80)
             .background(
                 TopRoundedRectangle(radius: 20)
                     .fill(Color.white)
                     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: -12)
             )
         }
-        .background(.white)
-        .ignoresSafeArea(edges: .bottom)
         .frame(height: 0)
         .padding(.bottom, 24)
     }

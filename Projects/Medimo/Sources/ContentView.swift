@@ -31,7 +31,7 @@ public struct ContentView: View {
                 switch selectedTab {
                 case .glossary:
                     NavigationStack(path: $navigationManager.glossaryPath) {
-                        VStack {
+                        ZStack {
                             GlossaryListView(context: moc)
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
@@ -45,14 +45,18 @@ public struct ContentView: View {
                                     }
                                 }
 
-                            CustomTabBar(selected: $selectedTab)
+                            VStack {
+                                Spacer()
+
+                                CustomTabBar(selected: $selectedTab)
+                            }
                         }
                     }
 
                 case .study:
                     if isStudyInProgress {
                         NavigationStack(path: $navigationManager.studyPath) {
-                            VStack {
+                            ZStack {
                                 StudyView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
                                     .navigationDestination(for: PathType.self) { path in
@@ -83,45 +87,48 @@ public struct ContentView: View {
                                             EmptyView()
                                         }
                                     }
-                                CustomTabBar(selected: $selectedTab)
+
+                                VStack {
+                                    Spacer()
+
+                                    CustomTabBar(selected: $selectedTab)
+                                }
                             }
                         }
                     } else {
-                        VStack {
+                        ZStack {
                             StudyView(isStudyInProgress: $isStudyInProgress)
                                 .environmentObject(navigationManager)
-                            CustomTabBar(selected: $selectedTab)
+
+                            VStack {
+                                Spacer()
+
+                                CustomTabBar(selected: $selectedTab)
+                            }
                         }
                     }
 
                 case .dictionary:
-                    VStack {
-                        DictionaryView(context: moc)
+                    ZStack {
+                        DictionaryView()
                             .environmentObject(navigationManager)
-                        CustomTabBar(selected: $selectedTab)
+
+                        VStack {
+                            Spacer()
+
+                            CustomTabBar(selected: $selectedTab)
+                                .padding(.bottom, 34)
+                        }
                     } // VStack
                 }
             }
-            .ignoresSafeArea()
         } // ZStack
         .onAppear {
-            // Check iCloud
-            if cloudKitManager.isICloudAvailable() {
-                print("☁️ iCloud is available")
-            } else {
-                print("☁️ iCloud is not available")
-            }
-
             // TEST
             let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
             userFetchRequest.fetchLimit = 1
-            let user = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
+            _ = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
         }
-//        .overlay(
-//            cloudKitManager.accountStatus != .available
-//            ? AnyView(iCloudStatusOverlay(accountStatus: cloudKitManager.accountStatus))
-//                : AnyView(EmptyView())
-//        )
     }
 }
 

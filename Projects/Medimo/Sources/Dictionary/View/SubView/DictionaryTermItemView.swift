@@ -10,7 +10,7 @@ import SwiftUI
 struct DictionaryTermItemView: View {
     var term: Term
     @Binding var selectedTerm: Term?
-    
+
     var body: some View {
         Button(action: {
             selectedTerm = term
@@ -50,10 +50,10 @@ struct DictionaryTermItemView: View {
         .listRowBackground(Color.clear)
     }
 }
-
-#Preview {
-    let context = CoreDataManager.preview.container.viewContext
-    @Bindable var viewModel = DictionaryViewModel(context: context)
-    let term = viewModel.term[0]
-    DictionaryTermItemView(term: term, selectedTerm: $viewModel.selectedTerm)
-}
+//
+//#Preview {
+//    let context = CoreDataManager.preview.container.viewContext
+//    @Previewable var viewModel = DictionaryViewModel()
+//    let term = viewModel.term[0]
+//    DictionaryTermItemView(term: term, selectedTerm: viewModel.selectedTerm)
+//}
