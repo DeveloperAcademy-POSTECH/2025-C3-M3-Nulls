@@ -79,7 +79,11 @@ extension CoreDataManager {
                     termEntity.spelling = term.spelling
                     termEntity.meaning = term.meaning
                     termEntity.explanation = term.explanation
-                    termEntity.abbreviation = term.abbreviation
+                    if term.abbreviation == "-" {
+                        termEntity.abbreviation = ""
+                    } else {
+                        termEntity.abbreviation = term.abbreviation
+                    }
                 }
                 do {
                     try context.save()

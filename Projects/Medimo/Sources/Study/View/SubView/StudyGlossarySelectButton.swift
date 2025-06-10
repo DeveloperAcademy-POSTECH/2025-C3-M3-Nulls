@@ -35,8 +35,8 @@ struct StudyGlossarySelectButton: View {
 
     var body: some View {
         Button {
-            StudyManager.shared.studyingGlossaryId = glossary.id
             selectedGlossary = glossary
+            studyManager.studyingGlossaryId = selectedGlossary?.id
         } label: {
             HStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {

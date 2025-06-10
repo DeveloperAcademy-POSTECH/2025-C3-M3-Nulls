@@ -10,7 +10,7 @@ import SwiftUI
 struct CategorySelectButton: View {
     let category: MedicineCategory
     @Binding var selectedCategory: MedicineCategory
-    
+
     var body: some View {
         Button(action: {
             selectedCategory = category
