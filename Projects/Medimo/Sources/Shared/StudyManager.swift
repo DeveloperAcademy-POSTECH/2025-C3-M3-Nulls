@@ -36,7 +36,7 @@ public class StudyManager {
 
         do {
             if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = Int(glossary.id)  // ← 여기!
+                studyingGlossaryId = Int(glossary.id) // ← 여기!
             } else {
                 studyingGlossaryId = nil
             }
@@ -91,7 +91,7 @@ public class StudyManager {
     func getNextStudyTerms() -> [Term] {
         guard let dataList = termStudyDataList else { return [] }
         print("dataList: \(dataList)")
-        
+
         var termIdList: [Int64] = []
 
         let inProgressTermIdList = dataList
@@ -99,7 +99,7 @@ public class StudyManager {
             .sorted { ($0.term?.id ?? 0) < ($1.term?.id ?? 0) }
             .compactMap { $0.term?.id }
         termIdList.append(contentsOf: inProgressTermIdList.prefix(studyTermSize))
-        
+
         if termIdList.count < studyTermSize {
             let notStartedTermIdList = dataList
                 .filter { $0.status == LearningStatus.notStarted.rawValue }
@@ -107,14 +107,15 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
-        
+
         print("termIdList: \(termIdList)")
-        
+
         var result: [Term] = []
 
         for termId in termIdList {
             if let data = dataList.first(where: { $0.term?.id == termId }),
-               let term = data.term {
+               let term = data.term
+            {
                 data.status = LearningStatus.inProgress.rawValue
                 result.append(term)
                 if result.count >= studyTermSize { break }
@@ -151,10 +152,10 @@ public class StudyManager {
 
         meta.lastReviewedAt = now
         meta.nextReviewAt = Calendar.current.date(byAdding: .day, value: Int(meta.interval), to: now)!
-#if DEBUG
-        meta.nextReviewAt = now
-#endif
-        
+        #if DEBUG
+            meta.nextReviewAt = now
+        #endif
+
         do {
             try context?.save()
             print("✅ 학습 결과 저장 완료: \(result) for \(term.spelling ?? "")")
