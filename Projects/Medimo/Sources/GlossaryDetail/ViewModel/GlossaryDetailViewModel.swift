@@ -12,10 +12,15 @@ import Observation
 @Observable
 class GlossaryDetailViewModel {
     var glossary: Glossary
+    var currentCount: Int
+    var totalCount: Int
+    
     var termFilter: GlossaryTermFilter = .notLearned
     
-    init(glossary: Glossary) {
+    init(glossary: Glossary, currentCount: Int, totalCount: Int) {
         self.glossary = glossary
+        self.currentCount = currentCount
+        self.totalCount = totalCount
     }
     
     func getTerms() -> [Term] {

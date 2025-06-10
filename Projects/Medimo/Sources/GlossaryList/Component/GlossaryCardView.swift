@@ -27,13 +27,13 @@ struct GlossaryCardView: View {
                     GeometryReader { geometry in
                         Capsule()
                             .fill(AppColor.systemFill)
-                            .frame(width: geometry.size.width * 0.3, height: 8)
+                            .frame(width: geometry.size.width * CGFloat(currentCount)/CGFloat(totalCount), height: 8)
                     }
                     .clipShape(Capsule())
                 )
-            HStack(spacing: 5) {
+            HStack(alignment: .bottom, spacing: 4) {
                 Spacer()
-                Text("\(String(format: "%02d", currentCount))")
+                Text("\(String(format: "%d", currentCount))")
                     .font(.bodyEng)
                     .foregroundStyle(AppColor.label)
 
@@ -50,5 +50,5 @@ struct GlossaryCardView: View {
 }
 
 #Preview {
-    GlossaryCardView(title: "북마크", currentCount: 1, totalCount: 200)
+    GlossaryCardView(title: "북마크", currentCount: 30, totalCount: 200)
 }

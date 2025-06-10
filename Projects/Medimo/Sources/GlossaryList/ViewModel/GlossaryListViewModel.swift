@@ -13,8 +13,11 @@ import Observation
 class GlossaryListViewModel {
     var glossaries: [Glossary]
     
+    var moc: NSManagedObjectContext
+    
     init(context: NSManagedObjectContext, glossaries: [Glossary] = []) {
         self.glossaries = glossaries
+        self.moc = context
         fetchGlossaries(context: context)
     }
     
@@ -29,5 +32,12 @@ class GlossaryListViewModel {
             print("Failed to fetch glossaries: \(error)")
             #endif
         }
+    }
+    
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? moc.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: moc)
     }
 }

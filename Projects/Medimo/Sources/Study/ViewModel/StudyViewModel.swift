@@ -6,13 +6,28 @@
 //
 
 import Foundation
+import CoreData
 
 @Observable
 class StudyViewModel {
+    var moc: NSManagedObjectContext
+    
+    init(moc: NSManagedObjectContext) {
+        self.moc = moc
+    }
+    
     var studyingGlossary: Glossary {
         return StudyManager.shared.studyingGlossary!
     }
     
-    // TODO: 연속 학습일 처리
-    var streak: Int = 0
+    var streak: Int {
+        Int(user.currentStreak)
+    }
+    
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? moc.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: moc)
+    }
 }

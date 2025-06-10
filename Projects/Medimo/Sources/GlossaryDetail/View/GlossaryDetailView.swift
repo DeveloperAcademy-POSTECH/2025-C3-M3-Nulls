@@ -16,8 +16,12 @@ struct GlossaryDetailView: View {
     
     @State var viewModel: GlossaryDetailViewModel
     
-    init(glossary: Glossary) {
-        _viewModel = State(wrappedValue: GlossaryDetailViewModel(glossary: glossary))
+    init(glossary: Glossary, currentCount: Int, totalCount: Int) {
+        _viewModel = State(wrappedValue: GlossaryDetailViewModel(
+            glossary: glossary,
+            currentCount: currentCount,
+            totalCount: totalCount
+        ))
     }
     
     var body: some View {
@@ -29,7 +33,12 @@ struct GlossaryDetailView: View {
             VStack(spacing: 0) {
                 VStack(spacing: 15) {
                     ZStack{
-                        GlossaryHeaderView(title: viewModel.glossary.title ?? "제목 없음", scrollOffset: 0)
+                        GlossaryHeaderView(
+                            title: viewModel.glossary.title ?? "제목 없음",
+                            currentCount: viewModel.currentCount,
+                            totalCount: viewModel.totalCount,
+                            scrollOffset: 0
+                        )
                     }
                     GlossaryFilterToggle(selectedFilter: $glossaryFilter)
                         .padding(.horizontal, 17)
@@ -78,7 +87,7 @@ struct GlossaryDetailView: View {
 
     sampleGlossary.addToTerms(sampleTerm)
 
-    return GlossaryDetailView(glossary: sampleGlossary)
+    return GlossaryDetailView(glossary: sampleGlossary, currentCount: 1, totalCount: 5)
         .environmentObject(NavigationManager())
         .environment(\.managedObjectContext, context)
 }

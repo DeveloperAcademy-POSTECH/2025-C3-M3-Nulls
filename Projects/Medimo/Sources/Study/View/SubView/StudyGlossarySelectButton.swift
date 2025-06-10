@@ -15,7 +15,7 @@ struct StudyGlossarySelectButton: View {
 
     var body: some View {
         Button {
-            StudyManager.shared.studyingGlossaryId = Int(glossary.id)
+            StudyManager.shared.studyingGlossaryId = glossary.id
             selectedGlossary = glossary
         } label: {
             HStack(spacing: 20) {

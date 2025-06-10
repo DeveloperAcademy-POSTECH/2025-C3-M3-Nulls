@@ -205,6 +205,12 @@ extension CoreDataManager {
                     glossaryEntity.id = Int64(glossary.id)
                     glossaryEntity.category = glossary.category
                     glossaryEntity.title = glossary.title
+                    
+                    let glossaryProgressEntity = GlossaryProgress(context: context)
+                    glossaryProgressEntity.glossary = glossaryEntity
+                    glossaryProgressEntity.studiedCount = 0
+                    glossaryProgressEntity.user = user
+                    user.addToProgresses(glossaryProgressEntity)
 
                     var termsToAdd: [Term] = []
                     for termId in glossary.terms {

@@ -13,42 +13,48 @@ struct GlossaryFilterToggle: View {
     @Namespace private var animation
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 9)
-                .fill(Color.white)
-                .frame(width: 361, height: 40)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 9)
-                        .stroke(AppColor.systemFill, lineWidth: 1)
-                )
-
-            HStack(spacing: 0) {
-                ForEach(GlossaryTermFilter.allCases, id: \.self) { type in
-                    Button(action: {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            selectedFilter = type
-                        }
-                    }) {
-                        ZStack {
-                            if selectedFilter == type {
+        HStack(spacing: 0) {
+            ForEach(GlossaryTermFilter.allCases, id: \.self) { type in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        selectedFilter = type
+                    }
+                } label: {
+                    if selectedFilter == type {
+                        Text(type.rawValue)
+                            .font(.caption)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(AppColor.white)
+                            .frame(maxWidth: .infinity, minHeight: 40)
+                            .background(
                                 RoundedRectangle(cornerRadius: 7)
-                                    .fill(AppColor.secondarySystemFill)
-                                    .frame(width: 179, height: 40)
+                                    .fill(AppColor.systemFill)
                                     .matchedGeometryEffect(id: "toggleBackground", in: animation)
                                     .shadow(color: .black.opacity(0.04), radius: 0.5, x: 0, y: 3)
                                     .shadow(color: .black.opacity(0.12), radius: 4, x: 0, y: 3)
-                            }
-
-                            Text(type.rawValue)
-                                .font(.caption)
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(selectedFilter == type ? .white : Color(AppColor.label))
-                                .frame(width: 179, height: 40)
-                        }
+                            )
+                    } else {
+                        Text(type.rawValue)
+                            .font(.caption)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(AppColor.label)
+                            .frame(maxWidth: .infinity, minHeight: 40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 7)
+                                    .fill(Color.clear)
+                            )
                     }
                 }
             }
         }
+        .background(
+            RoundedRectangle(cornerRadius: 9)
+                .fill(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 9)
+                        .stroke(AppColor.systemFill, lineWidth: 1)
+                )
+        )
       
     }
 }
