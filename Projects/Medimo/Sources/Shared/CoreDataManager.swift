@@ -15,8 +15,8 @@ final class CoreDataManager {
     let context: NSManagedObjectContext
 
     private init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "MedimoModel")
-//        container = NSPersistentContainer(name: "MedimoModel")
+        container = NSPersistentContainer(name: "MedimoModel")
+
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
@@ -256,6 +256,23 @@ extension CoreDataManager {
         user.currentStreak = 0
         user.longestStreak = 0
         user.totalLearningTerms = 0
+
+        // TODO: - 나중에 삭제하기
+        // 테스트용 DateInfo 5개 생성
+        for i in 0 ..< 5 {
+            let dateInfo = DateInfo(context: context)
+            if i % 2 == 0 {
+                dateInfo.date = Calendar.current.date(byAdding: .day, value: -i, to: Date())
+                dateInfo.studyCount = Int32(10 + i)
+                dateInfo.reviewCount = Int32(10 + i)
+            } else {
+                dateInfo.date = Calendar.current.date(byAdding: .day, value: -i, to: Date())
+                dateInfo.studyCount = Int32(10 + i)
+                dateInfo.reviewCount = 0
+            }
+
+            user.addToDateInfos(dateInfo)
+        }
 
         save()
     }
