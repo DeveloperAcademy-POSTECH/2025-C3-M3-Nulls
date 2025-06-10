@@ -39,6 +39,7 @@ struct StudyGlossarySelectButton: View {
             print("글로서리id: \(glossary.id)")
             StudyManager.shared.studyingGlossaryId = glossary.id
             selectedGlossary = glossary
+            studyManager.studyingGlossaryId = selectedGlossary?.id
         } label: {
             HStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
