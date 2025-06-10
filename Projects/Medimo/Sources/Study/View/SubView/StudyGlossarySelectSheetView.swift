@@ -36,7 +36,6 @@ struct StudyGlossarySelectSheetView: View {
                     .scaledToFit()
             }
             VStack(spacing: 0) {
-                // TODO: Category 선택 결과에 따라 필터 적용
                 CategorySelectButtonGroup(selectedCategory: $selectedCategory)
                     .padding(.horizontal, 32)
                     .padding(.top, 42)
