@@ -9,9 +9,13 @@ import SwiftUI
 
 struct StudyGlossarySelectButton: View {
     var glossary: Glossary!
-    let studiedCount = 2
+
     @Binding var selectedGlossary: Glossary?
     let studyManager = StudyManager.shared
+
+    var studiedCount: Int {
+        return Int(studyManager.user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
+    }
 
     var body: some View {
         Button {

@@ -24,6 +24,8 @@ public struct ContentView: View {
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
         studyManager.setContext(context)
+
+        studyManager.checkCurrentGlossaryProgress()
     }
 
     public var body: some View {
@@ -138,9 +140,9 @@ public struct ContentView: View {
         } // ZStack
         .onAppear {
             // TEST
-            let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
-            userFetchRequest.fetchLimit = 1
-            _ = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
+//            let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
+//            userFetchRequest.fetchLimit = 1
+//            let user : User = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
         }
     }
 }

@@ -22,7 +22,7 @@ struct StudyMainCardView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var navigationManager: NavigationManager
     let studyManager = StudyManager.shared
-    
+
     @Binding var isStudyInProgress: Bool
     @Binding var isStudyDone: Bool
     @State private var showAlert = false
@@ -37,15 +37,12 @@ struct StudyMainCardView: View {
                     StudyTermSizeChooseButtonView()
                 }
 
-                // TODO: 학습 진행도 반영
                 StudyRingView(
-                    progress: Int(studyManager.user.progressForGlossary(
-                        studyManager.studyingGlossaryId!
-                    )?.studiedCount ?? 0),
+                    progress: Int(studyManager.currentGlossaryProgress?.studiedCount ?? 0),
                     total: studyManager.studyingGlossary?.terms?.count ?? 0
                 )
-                    .padding(.top, 28)
-                    .padding(.bottom, 32)
+                .padding(.top, 28)
+                .padding(.bottom, 32)
                 VStack(spacing: 16) {
                     StudyStartButtonView {
                         isStudyInProgress = true
