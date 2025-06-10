@@ -92,6 +92,18 @@ struct StudyCardView: View {
             Spacer()
         }
         .padding(.bottom, 20)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+//                    isStudyInProgress = false
+                    navigationManager.studyPath = []
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(AppColor.grey3)
+                }
+            }
+        }
         .onAppear {
             viewModel.loadTerms(with: context)
             index = viewModel.terms.isEmpty ? 0 : 1

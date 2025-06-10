@@ -50,7 +50,7 @@ struct ReviewTestDetailView: View {
                     correctAnswer: correctAnswer,
                     index: $index,
                     termSize: $termSize,
-                    isStudyInProgress: $isStudyInProgress,
+//                    isStudyInProgress: $gisStudyInProgress,
                     showSoundAlert: $showSoundAlert,
                     isStudyDone: $isStudyDone, term: $term, buttonText: buttonText
                 )

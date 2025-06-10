@@ -16,7 +16,7 @@ struct StudyTestView: View {
     private var viewModel: StudyTestViewModel
     @State private var index: Int = 1
     
-    @Binding var isStudyInProgress: Bool
+//    @Binding var isStudyInProgress: Bool
     @Binding var isStudyDone: Bool
     
     @State private var terms: [Term]
@@ -27,7 +27,6 @@ struct StudyTestView: View {
     
     @State private var showSoundAlert = false
     
-    
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
@@ -35,7 +34,7 @@ struct StudyTestView: View {
         viewModel: StudyTestViewModel = StudyTestViewModel()
     ) {
         self._terms = State(initialValue: terms)
-        self._isStudyInProgress = isStudyInProgress
+//        self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
         self._isStudyDone = isStudyDone
@@ -54,8 +53,9 @@ struct StudyTestView: View {
                     buttonText: buttonText,
                     termSize: $studyTermSize,
                     index: $index,
-                    isStudyInProgress: $isStudyInProgress,
-                    showSoundAlert: $showSoundAlert, isStudyDone: $isStudyDone
+//                    isStudyInProgress: $isStudyInProgress,
+                    showSoundAlert: $showSoundAlert,
+                    isStudyDone: $isStudyDone
                 )
             }
         }
@@ -74,7 +74,7 @@ struct StudyTestView: View {
         }
         .alert("학습 종료하기", isPresented: $showExitConfirm) {
             Button("종료하기", role: .destructive) {
-                isStudyInProgress = false
+//                isStudyInProgress = false
                 navigationManager.studyPath = []
             }
             Button("취소", role: .cancel) {
