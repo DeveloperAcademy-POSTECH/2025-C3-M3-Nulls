@@ -308,6 +308,14 @@ extension CoreDataManager {
             // 순서대로 morpheme 객체 배열 생성
             let morphemesToAdd = morphemeIds.compactMap { morphemeDict[$0] }
 
+            // TODO: - 삭제할 것. DEBUG
+            if term.id > 5, term.id < 13 {
+                print("Morphemes for term \(term.id):\n")
+                for morpheme in morphemesToAdd {
+                    print("  - \(morpheme.id) -> \(morpheme.spelling ?? "Unknown"): \(morpheme.meaning ?? "No meaning")")
+                }
+            }
+
             // Core Data 모델에서 morphemes가 NSOrderedSet이면 아래처럼 설정
             term.morphemes = NSOrderedSet(array: morphemesToAdd)
         }
