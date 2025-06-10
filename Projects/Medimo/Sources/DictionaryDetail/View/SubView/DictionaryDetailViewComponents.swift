@@ -6,6 +6,34 @@
 //
 
 import SwiftUI
+import CoreData
+
+struct BookmarkButtonView: View {
+    let user: User
+    let term: Term
+    
+    @State private var isBookmarked: Bool = false
+
+    var body: some View {
+        Button(action: {
+            isBookmarked.toggle()
+            if isBookmarked {
+                user.addToBookmarks(term)
+            } else {
+                user.removeFromBookmarks(term)
+            }
+            try? CoreDataManager.shared.context.save()
+        }) {
+            Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                .resizable()
+                .frame(width: 15, height: 20)
+                .foregroundStyle(AppColor.primary)
+        }
+        .onAppear {
+            isBookmarked = user.bookmarks?.contains(term) ?? false
+        }
+    }
+}
 
 enum DictionaryDetailViewComponents {
     static func soundButton(spelling _: String?, speakAction: @escaping () -> Void) -> some View {
@@ -20,14 +48,31 @@ enum DictionaryDetailViewComponents {
         }
     }
 
-    static func bookmarkIcon() -> some View {
-        Image("bookmark")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 25)
-            .foregroundStyle(AppColor.primary)
-    }
+//    static func bookmarkIcon(manager: CoreDataManager, user: User, term: Term, isBookmarked: Binding<Bool>) -> some View {
+//        let isCurrentlyBookmarked = user.bookmarks?.contains(term) ?? false
+//
+//        return Button(action: {
+//            isBookmarked.wrappedValue.toggle()
+//            
+//            if (isBookmarked.wrappedValue) {
+//                // Term값을 User 모델의 bookmarks에 넣어준다
+//                user.addToBookmarks(term)
+//                
+//            } else {
+//                // User 모델의 bookmarks에 들어있는 동일한 Term 객체를 찾아서 없애준다.
+//                user.removeFromBookmarks(term)
+//            }
+//            manager.save()
+//        }) {
+//            Image(systemName: isCurrentlyBookmarked ? "bookmark.fill" : "bookmark")
+//                .resizable()
+//                .frame(width: 15)
+//                .foregroundStyle(AppColor.primary)
+//        }
+//    }
 
+    
+    
     static func sectionGlossary(_ glossarys: NSSet?) -> some View {
         Text(
             (glossarys as? Set<Glossary>)?
@@ -133,7 +178,7 @@ enum DictionaryDetailViewComponents {
         DictionaryDetailViewComponents.soundButton(spelling: "example") {
             print("Speaking")
         }
-        DictionaryDetailViewComponents.bookmarkIcon()
+        
         DictionaryDetailViewComponents.meaningSection("예시 의미입니다.")
         DictionaryDetailViewComponents.explanationSection("설명 텍스트")
         DictionaryDetailViewComponents.sectionRectangle()

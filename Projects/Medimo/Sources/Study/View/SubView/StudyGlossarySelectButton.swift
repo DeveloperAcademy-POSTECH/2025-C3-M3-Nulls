@@ -48,7 +48,7 @@ struct StudyGlossarySelectButton: View {
 #Preview {
     @Previewable @State var selectedGlossary: Glossary? = nil
     let context = CoreDataManager.preview.container.viewContext
-    StudyManager.shared.setContext(context)
+//    StudyManager.shared.setContext(context)
     var glossary = try! context.fetch(Glossary.fetchRequest()).first!
 
     return StudyGlossarySelectButton(glossary: glossary, selectedGlossary: $selectedGlossary)

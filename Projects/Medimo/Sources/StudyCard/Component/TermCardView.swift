@@ -5,13 +5,14 @@
 //  Created by 이서현 on 6/1/25
 
 import SwiftUI
+import CoreData
 
 struct TermCardView: View {
     @ObservedObject var term: Term
+    @Environment(\.managedObjectContext) var context
 
     @State private var isPlaying = false
     @State private var isFlipped = false
-
     @State var viewModel: DictionaryDetailViewModel
 
     var backgroundColor: Color = AppColor.white
@@ -20,6 +21,12 @@ struct TermCardView: View {
         self.term = term
         self.backgroundColor = backgroundColor
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
+    }
+    
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? context.fetch(fetchRequest)) ?? []
+        return users.first ?? User(context: context)
     }
 
     var body: some View {
@@ -41,14 +48,7 @@ struct TermCardView: View {
                     Spacer()
 
                     // TODO: - 북마크 로직 수정
-                    Button(action: {
-                        //
-                    }) {
-                        Image(systemName: /* term.isBookmarked ? "bookmark.fill" : */ "bookmark")
-                            .imageScale(.large)
-                            .font(.system(size: 20))
-                            .foregroundStyle(AppColor.primary)
-                    }
+                    BookmarkButtonView(user: user, term: viewModel.term)
                 }
                 .padding(20)
 
