@@ -36,8 +36,12 @@ public struct ContentView: View {
                                 .environmentObject(navigationManager)
                                 .navigationDestination(for: PathType.self) { path in
                                     switch path {
-                                    case let .GlossaryDetail(glossary):
-                                        GlossaryDetailView(glossary: glossary)
+                                    case let .GlossaryDetail(glossary, currentCount, totalCount):
+                                        GlossaryDetailView(
+                                            glossary: glossary,
+                                            currentCount: currentCount,
+                                            totalCount: totalCount
+                                        )
                                             .environmentObject(navigationManager)
 
                                     default:
