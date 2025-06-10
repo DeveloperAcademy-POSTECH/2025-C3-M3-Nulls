@@ -104,7 +104,7 @@ struct PreviewDatesGridView: View {
 
                         Text("\(dateValue.day)")
                             .font(.bodyEng)
-                            .foregroundStyle(isSelected(value: dateValue) ? AppColor.hotPink : AppColor.grey5)
+                            .foregroundStyle(isSelected(value: dateValue) ? AppColor.pink : AppColor.grey5)
                     }
                     .frame(height: 20)
                     .background(

@@ -13,7 +13,7 @@ struct StudyHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("\(streak)일째")
+                Text("1일째")//\(streak)일째")
                     .font(.largeTitle)
                     .foregroundStyle(AppColor.label)
                 Spacer()
