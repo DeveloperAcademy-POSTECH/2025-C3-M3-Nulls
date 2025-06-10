@@ -79,6 +79,7 @@ struct TestEndView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColor.bgColor)
+        .navigationBarBackButtonHidden(true)
         .ignoresSafeArea()
     }
 }

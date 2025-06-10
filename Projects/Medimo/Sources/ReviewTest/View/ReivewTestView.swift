@@ -87,7 +87,6 @@ struct ReviewTestView: View {
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-        
         .onAppear {
             guard !terms.isEmpty, terms.indices.contains(index - 1) else { return }
             currentTestType = randomValidTestType(for: terms[index - 1])
