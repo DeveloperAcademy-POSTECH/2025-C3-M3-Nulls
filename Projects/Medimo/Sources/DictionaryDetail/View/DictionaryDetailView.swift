@@ -27,67 +27,74 @@ struct DictionaryDetailView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        // MARK: - - 사운드, 북마크
-
-                        HStack {
-                            DictionaryDetailViewComponents.soundButton(
-                                spelling: viewModel.term.spelling
-                            ) {
-                                if let spelling = viewModel.term.spelling {
-                                    viewModel.speak(spelling)
-                                }
-                            }
-                            Spacer()
-                            BookmarkButtonView(user: user, term: viewModel.term)
-                        }
-                        .padding(.top, 48)
-                        .padding(.bottom, 20)
-
-                        // MARK: - - 용어, 약어, 분과
-
-                        VStack(alignment: .leading) {
-                            Text(viewModel.term.spelling ?? "")
-                                .font(.titleEng)
-                                .foregroundColor(AppColor.label)
-                                .padding(.bottom, 8)
-                            if let abbreviation = viewModel.term.abbreviation {
-                                if !abbreviation.isEmpty {
-                                    Text("[ \(abbreviation) ]")
-                                        .font(.titleEng)
-                                        .foregroundColor(AppColor.label)
-                                }
-                            }
-                            DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
-
-                            DictionaryDetailViewComponents.sectionRectangle()
-                        }
-                    }
-                    .padding(.horizontal, 32)
-
-                    // MARK: - - 의미
-
-                    DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)
-
-                    // MARK: - - 어원
-
-                    if let morphemes = (viewModel.term.morphemes)?.array as? [Morpheme], !morphemes.isEmpty {
-                        DictionaryDetailViewComponents.morphemeSection(morphemes)
-                    }
-//                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
-//                        DictionaryDetailViewComponents.morphemeSection(morphemes)
-//                    }
-
-                    // MARK: - - 설명
-
-                    DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
-
+            ZStack {
+                VStack {
                     Spacer()
+
+                    DictionaryDetailViewComponents.characterImage()
+                }
+
+                VStack(spacing: 0) {
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            // MARK: - - 사운드, 북마크
+
+                            HStack {
+                                DictionaryDetailViewComponents.soundButton(
+                                    spelling: viewModel.term.spelling
+                                ) {
+                                    if let spelling = viewModel.term.spelling {
+                                        viewModel.speak(spelling)
+                                    }
+                                }
+                                Spacer()
+                                BookmarkButtonView(user: user, term: viewModel.term)
+                            }
+                            .padding(.top, 48)
+                            .padding(.bottom, 20)
+
+                            // MARK: - - 용어, 약어, 분과
+
+                            VStack(alignment: .leading) {
+                                Text(viewModel.term.spelling ?? "")
+                                    .font(.titleEng)
+                                    .foregroundColor(AppColor.label)
+                                    .padding(.bottom, 8)
+                                if let abbreviation = viewModel.term.abbreviation {
+                                    if !abbreviation.isEmpty {
+                                        Text("[ \(abbreviation) ]")
+                                            .font(.titleEng)
+                                            .foregroundColor(AppColor.label)
+                                    }
+                                }
+                                DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
+
+                                DictionaryDetailViewComponents.sectionRectangle()
+                            }
+                        }
+                        .padding(.horizontal, 32)
+
+                        // MARK: - - 의미
+
+                        DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)
+
+                        // MARK: - - 어원
+
+                        if let morphemes = (viewModel.term.morphemes)?.array as? [Morpheme], !morphemes.isEmpty {
+                            DictionaryDetailViewComponents.morphemeSection(morphemes)
+                        }
+                        //                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
+                        //                        DictionaryDetailViewComponents.morphemeSection(morphemes)
+                        //                    }
+
+                        // MARK: - - 설명
+
+                        DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
+
+                        Spacer()
+                    }
                 }
             }
-            DictionaryDetailViewComponents.characterImage()
         }
     }
 }
