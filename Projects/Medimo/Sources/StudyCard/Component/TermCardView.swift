@@ -56,7 +56,7 @@ struct TermCardView: View {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
                         .font(isFlipped ? .title : .titleEng)
                     if !isFlipped, let abbreviation = term.abbreviation {
-                        if !abbreviation.isEmpty && abbreviation != "-" {
+                        if !abbreviation.isEmpty {
                             Text("[\(abbreviation)]")
                                 .font(.headlineEng)
                                 .padding(.vertical)
