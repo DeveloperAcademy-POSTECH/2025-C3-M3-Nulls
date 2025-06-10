@@ -20,48 +20,32 @@ struct GlossaryTermCard: View {
     let meaning: String?
 
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
-                // 영어 용어
                 if let spelling = spelling {
                     Text(spelling)
                         .font(.subheadlineEng)
-                        .foregroundColor(AppColor.navy)
-                        .frame(width: 373, alignment: .leading)
+                        .foregroundColor(AppColor.label)
                 }
-
-                // 약어와 뜻
                 if let meaning = meaning {
                     HStack(alignment: .top, spacing: 10) {
                         if let abbreviation = abbreviation, !abbreviation.isEmpty {
                             Text("[\(abbreviation)]")
-                                .font(.subheadlineEng).foregroundColor(AppColor.navy)
+                                .font(.subheadlineEng).foregroundColor(AppColor.label)
                         }
 
                         Text(meaning)
                             .font(.caption)
-                            .foregroundColor(AppColor.grey4)
+                            .foregroundColor(AppColor.secondaryLabel)
                     }
-                    .frame(width: 373, alignment: .leading)
                 }
             }
-            .padding(0)
-            .overlay(
-                GeometryReader { _ in
-                    VStack {
-                        Spacer()
-                            .padding(17)
-                        Rectangle()
-                            .fill(AppColor.grey2)
-                            .frame(height: 1)
-                    }
-                }
-            )
-            .frame(maxWidth: .infinity, alignment: .topLeading)
+            Rectangle()
+                .fill(AppColor.grey2)
+                .frame(height: 1)
         }
-        .padding(0)
-        .frame(width: 373, alignment: .bottom)
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
 }
 
