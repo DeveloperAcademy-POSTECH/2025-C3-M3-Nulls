@@ -12,12 +12,10 @@ struct GlossaryDetailView: View {
     @Environment(\.managedObjectContext) var context
     @EnvironmentObject var navigationManager: NavigationManager
     
-    @State var glossaryFilter: GlossaryTermFilter = .learned
-    
-    @State var viewModel: GlossaryDetailViewModel
+    @Bindable var viewModel: GlossaryDetailViewModel
     
     init(glossary: Glossary, currentCount: Int, totalCount: Int) {
-        _viewModel = State(wrappedValue: GlossaryDetailViewModel(
+        _viewModel = Bindable(wrappedValue: GlossaryDetailViewModel(
             glossary: glossary,
             currentCount: currentCount,
             totalCount: totalCount
@@ -40,16 +38,16 @@ struct GlossaryDetailView: View {
                             scrollOffset: 0
                         )
                     }
-                    GlossaryFilterToggle(selectedFilter: $glossaryFilter)
-                        .padding(.horizontal, 17)
+                    GlossaryFilterToggle(selectedFilter: $viewModel.termStudyFilter)
+                        .padding(.horizontal, 16)
                 }
                 .padding(.bottom, 15)
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(viewModel.getTerms()) { term in
+                        ForEach(viewModel.filteredTerms) { term in
                             Button {
-                                navigationManager.glossaryPath.append(.StudyCard)
+                                viewModel.selectedTerm = term
                             } label: {
                                 GlossaryTermCard(
                                     spelling: term.spelling ?? "",
@@ -59,7 +57,7 @@ struct GlossaryDetailView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 10)
+                    .padding(.horizontal, 16)
                     .padding(.bottom, 20)
                 }
             }.ignoresSafeArea(edges: .top)
@@ -67,6 +65,11 @@ struct GlossaryDetailView: View {
             .padding(.top, 0)
         }
         .navigationBarBackButtonHidden()
+        .sheet(item: $viewModel.selectedTerm) { term in
+            DictionaryDetailView(term: term)
+                .presentationDetents([.height(640)])
+                .presentationDragIndicator(.visible)
+        }
     }
 }
 
