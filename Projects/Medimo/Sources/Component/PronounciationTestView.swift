@@ -41,7 +41,7 @@ struct PronounciationTestView: View {
                         if volume < 0.05 {
                             showSoundAlert = true
                         } else {
-                            if let spelling = viewModel.term.spelling {
+                            if let spelling = term.spelling {
                                 viewModel.speak(spelling)
                             }
                             showSoundAlert = false

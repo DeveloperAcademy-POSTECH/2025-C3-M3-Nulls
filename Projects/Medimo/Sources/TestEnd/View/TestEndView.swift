@@ -68,7 +68,8 @@ struct TestEndView: View {
                 NextButton(
                     buttonText: learningType == .study ? "학습 완료하기" : "복습 완료하기",
                     action: {
-                        withAnimation {
+                        withAnimation(.none) {
+                            navigationManager.studyPath = []
                             isStudyInProgress = false
                         }
                     }
