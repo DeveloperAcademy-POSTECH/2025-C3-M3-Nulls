@@ -20,6 +20,8 @@ public struct ContentView: View {
     @StateObject private var navigationManager = NavigationManager()
 
     @StateObject var syncStatus = SyncStatus()
+    
+    @State private var learningType: LearningType = .study
 
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
@@ -73,26 +75,28 @@ public struct ContentView: View {
                                         case .StudyCard:
                                             StudyCardView(isStudyDone: $isStudyDone)
                                                 .environmentObject(navigationManager)
-
+                                            
                                         case .StudyCalendar:
                                             StudyCalendarView().environmentObject(navigationManager)
-
+                                            
                                         case let .StudyTest(terms):
                                             StudyTestView(
                                                 terms: terms,
-                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone
+                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
                                             ).environmentObject(navigationManager)
-
+                                            
                                         case .ReviewTest:
                                             ReviewTestView(
-                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone
+                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
+                                                learningType: $learningType
                                             ).environmentObject(navigationManager)
-
+                                            
                                         case let .TestCompletion(index):
                                             TestEndView(
-                                                isStudyInProgress: $isStudyInProgress, index: index
+                                                isStudyInProgress: $isStudyInProgress, index: index,
+                                                learningType: $learningType
                                             ).environmentObject(navigationManager)
-
+                                            
                                         default:
                                             EmptyView()
                                         }

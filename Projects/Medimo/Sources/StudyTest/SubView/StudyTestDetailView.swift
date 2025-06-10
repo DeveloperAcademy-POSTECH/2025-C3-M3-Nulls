@@ -17,6 +17,8 @@ struct StudyTestDetailView: View {
 
     @Binding var showSoundAlert: Bool
     @Binding var isStudyDone: Bool
+    
+    @Binding var learningType: LearningType
 
     var correctAnswer: String {
         switch testType {
@@ -51,6 +53,7 @@ struct StudyTestDetailView: View {
                     termSize: $termSize,
                     showSoundAlert: $showSoundAlert,
                     isStudyDone: $isStudyDone,
+                    learningType: learningType,
                     term: $term,
                     buttonText: buttonText
                 )
@@ -62,6 +65,9 @@ struct StudyTestDetailView: View {
             }
 
             Spacer()
+        }
+        .onAppear {
+            learningType = .study
         }
     }
 }

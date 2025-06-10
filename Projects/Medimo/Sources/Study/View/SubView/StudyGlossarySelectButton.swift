@@ -5,10 +5,26 @@
 //  Created by 양시준 on 6/8/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct StudyGlossarySelectButton: View {
+    var user: User {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let users = (try? CoreDataManager.shared.context.fetch(fetchRequest)) ?? []
+
+        return users.first ?? User(context: CoreDataManager.shared.context)
+    }
+
     var glossary: Glossary!
+
+    var currentCount: Int {
+        Int(user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
+    }
+
+    var totalCount: Int {
+        glossary.terms?.count ?? 0
+    }
 
     @Binding var selectedGlossary: Glossary?
     let studyManager = StudyManager.shared
@@ -27,7 +43,22 @@ struct StudyGlossarySelectButton: View {
                     Text(glossary.title ?? "")
                         .font(.body)
                         .foregroundStyle(AppColor.label)
-                    ProgressBar(index: studiedCount, total: glossary.terms?.count ?? 0, format: "%d")
+                    HStack {
+                        Capsule()
+                            .fill(AppColor.secondarySystemFill)
+                            .frame(height: 8)
+                            .overlay(
+                                GeometryReader { geometry in
+                                    Capsule()
+                                        .fill(AppColor.systemFill)
+                                        .frame(width: geometry.size.width * CGFloat(currentCount) / CGFloat(totalCount), height: 8)
+                                }
+                                .clipShape(Capsule())
+                            )
+                        Text("\(currentCount)/\(totalCount)")
+                            .font(.caption)
+                            .foregroundStyle(AppColor.systemFill)
+                    }
                 }
                 Image("chevron-right")
                     .frame(width: 24, height: 24)

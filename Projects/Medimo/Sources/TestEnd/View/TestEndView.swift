@@ -12,6 +12,16 @@ struct TestEndView: View {
     @Binding var isStudyInProgress: Bool
     var index: Int
     
+    @Binding var learningType: LearningType
+    
+    var top: String {
+        TestEndCheering.randomTopMessage(for: learningType)
+    }
+
+    var bottom: String {
+        TestEndCheering.randomBottomMessage(for: learningType)
+    }
+    
     var body: some View {
         VStack {
             Spacer(minLength: 140)
@@ -55,19 +65,21 @@ struct TestEndView: View {
                     Image("pinkBottom")
                 }
                 
-                NextButton(buttonText: "학습 종료하기", action: {
-                    
-                    
-                    withAnimation {
-                        isStudyInProgress = false
+                NextButton(
+                    buttonText: learningType == .study ? "학습 완료하기" : "복습 완료하기",
+                    action: {
+                        withAnimation {
+                            isStudyInProgress = false
+                        }
                     }
-                })
+                )
                 .padding(70)
                 .offset(y: 100)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColor.bgColor)
+        .navigationBarBackButtonHidden(true)
         .ignoresSafeArea()
     }
 }
