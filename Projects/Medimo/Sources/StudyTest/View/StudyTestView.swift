@@ -69,6 +69,7 @@ struct StudyTestView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    isStudyInProgress = false
                     showExitConfirm = true
                 }) {
                     Image(systemName: "chevron.left")
@@ -99,11 +100,33 @@ struct StudyTestView: View {
         }
     }
     
+//    private func randomValidTestType(for term: Term) -> TestType {
+//        let availableTypes = TestType.allCases.filter { type in
+//            switch type {
+//            case .abbreviation:
+//                guard let abbr = term.abbreviation?.trimmingCharacters(in: .whitespacesAndNewlines),
+//                      !abbr.isEmpty else {
+//                    return false
+//                }
+//                return true
+//            default:
+//                return true
+//            }
+//        }
+//        return availableTypes.randomElement() ?? .meaning
+//    }
+    
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
             switch type {
             case .abbreviation:
-                return term.abbreviation?.isEmpty == false
+                guard let abbr = term.abbreviation?
+                        .trimmingCharacters(in: .whitespacesAndNewlines),
+                      !abbr.isEmpty,
+                      abbr != "-" else {
+                    return false
+                }
+                return true
             default:
                 return true
             }

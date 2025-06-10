@@ -17,6 +17,7 @@ struct StudyCardView: View {
     @State private var index: Int = 1
     
     @Binding var isStudyDone: Bool
+    @Binding var isStudyInProgress: Bool
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
@@ -96,6 +97,7 @@ struct StudyCardView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    isStudyInProgress = false
                     navigationManager.studyPath = []
                 }) {
                     Image(systemName: "chevron.left")
