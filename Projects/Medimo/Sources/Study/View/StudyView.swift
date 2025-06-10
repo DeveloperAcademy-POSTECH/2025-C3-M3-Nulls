@@ -16,10 +16,12 @@ struct StudyView: View {
     
     @State private var isAtTop: Bool = true
     @Binding var isStudyInProgress: Bool
+    @Binding var isStudyDone: Bool
 
-    init(context: NSManagedObjectContext, isStudyInProgress: Binding<Bool>) {
+    init(context: NSManagedObjectContext, isStudyInProgress: Binding<Bool>, isStudyDone: Binding<Bool>) {
         studyViewModel = .init(moc: context)
         _isStudyInProgress = isStudyInProgress
+        _isStudyDone = isStudyDone
     }
 
     var body: some View {
@@ -28,7 +30,7 @@ struct StudyView: View {
                 VStack(spacing: 0) {
                     StudyHeaderView(streak: studyViewModel.streak)
 
-                    StudyMainCardView(isStudyInProgress: $isStudyInProgress)
+                    StudyMainCardView(isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
                         .padding(.top, 42)
                         .padding(.horizontal, 16)
 
@@ -48,21 +50,4 @@ struct StudyView: View {
             .background(AppColor.systemGroupedBackground)
         }
     }
-}
-
-private struct StudyViewPreviewWrapper: View {
-    @State var isStudyInProgress = false
-
-    var body: some View {
-        let context = CoreDataManager.preview.container.viewContext
-        StudyManager.shared.setContext(context)
-
-        return StudyView(context: context, isStudyInProgress: $isStudyInProgress)
-            .environmentObject(NavigationManager())
-            .environment(\.managedObjectContext, context)
-    }
-}
-
-#Preview {
-    StudyViewPreviewWrapper()
 }

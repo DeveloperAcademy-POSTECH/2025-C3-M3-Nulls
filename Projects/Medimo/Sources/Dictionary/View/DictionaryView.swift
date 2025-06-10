@@ -10,36 +10,27 @@ import CoreData
 import SwiftUI
 
 struct DictionaryView: View {
-    @Environment(\.managedObjectContext) var context
-    @Bindable private var viewModel: DictionaryViewModel
-
-    init(context: NSManagedObjectContext) {
-        _viewModel = Bindable(wrappedValue: DictionaryViewModel(context: context))
-    }
+    @State private var viewModel: DictionaryViewModel = .init()
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                ZStack {
-                    DictionaryHeaderView(searchText: $viewModel.searchText)
-                }
-                .zIndex(1)
-                DictionaryTermListView(viewModel: viewModel)
-            }
+        VStack(spacing: 0) {
+            DictionaryHeaderView(searchText: $viewModel.searchText)
 
-            .sheet(item: $viewModel.selectedTerm) { term in
-                DictionaryDetailView(term: term)
-                    .presentationDetents([.height(640)])
-                    .presentationDragIndicator(.visible)
-            }
+            DictionaryTermListView(viewModel: viewModel)
+                .padding(.bottom, 100)
+
+            Spacer()
+        }
+        .padding(.top, 52)
+        .sheet(item: $viewModel.selectedTerm) { term in
+            DictionaryDetailView(term: term)
+                .presentationDetents([.height(640)])
+                .presentationDragIndicator(.visible)
         }
     }
 }
 
 #Preview {
     let context = CoreDataManager.preview.container.viewContext
-    NavigationStack {
-        DictionaryView(context: context)
-            .environment(\.managedObjectContext, context)
-    }
+    DictionaryView()
 }

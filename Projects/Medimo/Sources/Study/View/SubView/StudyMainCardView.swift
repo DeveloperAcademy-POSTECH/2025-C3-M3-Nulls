@@ -22,8 +22,11 @@ struct StudyMainCardView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var navigationManager: NavigationManager
     let studyManager = StudyManager.shared
-    @Binding var isStudyInProgress: Bool
     
+    @Binding var isStudyInProgress: Bool
+    @Binding var isStudyDone: Bool
+    @State private var showAlert = false
+
     var body: some View {
         ZStack {
             StudyMainCardBackgroundView()
@@ -50,11 +53,22 @@ struct StudyMainCardView: View {
                     }
                     .padding(.horizontal, 20)
 
-                    ReviewStartButtonView {
-                        isStudyInProgress = true
-                        navigationManager.studyPath.append(.ReviewTest)
-                    }
+                    ReviewStartButtonView(
+                        action: {
+                            if isStudyDone {
+                                isStudyInProgress = true
+                                navigationManager.studyPath.append(.ReviewTest)
+                            } else {
+                                showAlert = true
+                            }
+                        }
+                    )
                     .padding(.horizontal, 20)
+                    .alert("리뷰를 시작할 수 없어요", isPresented: $showAlert) {
+                        Button("확인", role: .cancel) {}
+                    } message: {
+                        Text("학습을 먼저 완료해주세요!")
+                    }
                 }
             }
             .padding(.horizontal, 30)
@@ -62,18 +76,4 @@ struct StudyMainCardView: View {
             .padding(.bottom, 36)
         }
     }
-}
-
-#Preview {
-    @Previewable @State var isStudyInProgress = true
-    @Previewable @State var studyManager = StudyManager.shared
-    let context = CoreDataManager.preview.container.viewContext
-
-    studyManager.setContext(context)
-
-    return ScrollView {
-        StudyMainCardView(isStudyInProgress: $isStudyInProgress)
-            .padding(16)
-    }
-    .environment(\.managedObjectContext, context)
 }
