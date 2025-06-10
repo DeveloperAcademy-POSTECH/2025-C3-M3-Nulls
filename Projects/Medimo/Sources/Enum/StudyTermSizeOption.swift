@@ -6,7 +6,7 @@
 //
 
 enum StudyTermSizeOption: Int, CaseIterable {
-    case extraSmall = 5
+//    case extraSmall = 5
     case small = 10
     case medium = 20
     case large = 30
