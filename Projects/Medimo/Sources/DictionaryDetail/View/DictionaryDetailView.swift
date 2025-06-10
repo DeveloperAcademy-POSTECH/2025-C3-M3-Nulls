@@ -18,13 +18,13 @@ struct DictionaryDetailView: View {
     init(term: Term) {
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
-    
+
     var user: User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let users = (try? context.fetch(fetchRequest)) ?? []
         return users.first ?? User(context: context)
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -73,9 +73,12 @@ struct DictionaryDetailView: View {
 
                     // MARK: - - 어원
 
-                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
+                    if let morphemes = (viewModel.term.morphemes)?.array as? [Morpheme], !morphemes.isEmpty {
                         DictionaryDetailViewComponents.morphemeSection(morphemes)
                     }
+//                    if let morphemes = viewModel.term.morphemes as? Set<Morpheme>, !morphemes.isEmpty {
+//                        DictionaryDetailViewComponents.morphemeSection(morphemes)
+//                    }
 
                     // MARK: - - 설명
 

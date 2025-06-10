@@ -5,13 +5,13 @@
 //  Created by bear on 6/5/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct BookmarkButtonView: View {
     let user: User
     let term: Term
-    
+
     @State private var isBookmarked: Bool = false
 
     var body: some View {
@@ -53,11 +53,11 @@ enum DictionaryDetailViewComponents {
 //
 //        return Button(action: {
 //            isBookmarked.wrappedValue.toggle()
-//            
+//
 //            if (isBookmarked.wrappedValue) {
 //                // Term값을 User 모델의 bookmarks에 넣어준다
 //                user.addToBookmarks(term)
-//                
+//
 //            } else {
 //                // User 모델의 bookmarks에 들어있는 동일한 Term 객체를 찾아서 없애준다.
 //                user.removeFromBookmarks(term)
@@ -71,8 +71,6 @@ enum DictionaryDetailViewComponents {
 //        }
 //    }
 
-    
-    
     static func sectionGlossary(_ glossarys: NSSet?) -> some View {
         Text(
             (glossarys as? Set<Glossary>)?
@@ -121,7 +119,7 @@ enum DictionaryDetailViewComponents {
         .padding(.top, 24)
     }
 
-    static func morphemeSection(_ morphemes: Set<Morpheme>) -> some View {
+    static func morphemeSection(_ morphemes: [Morpheme]) -> some View {
         VStack(alignment: .leading) {
             sectionTitle("어원")
             sectionDivider()
@@ -178,7 +176,7 @@ enum DictionaryDetailViewComponents {
         DictionaryDetailViewComponents.soundButton(spelling: "example") {
             print("Speaking")
         }
-        
+
         DictionaryDetailViewComponents.meaningSection("예시 의미입니다.")
         DictionaryDetailViewComponents.explanationSection("설명 텍스트")
         DictionaryDetailViewComponents.sectionRectangle()

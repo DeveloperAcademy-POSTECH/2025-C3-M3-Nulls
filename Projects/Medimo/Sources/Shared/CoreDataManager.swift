@@ -205,7 +205,7 @@ extension CoreDataManager {
                     glossaryEntity.id = Int64(glossary.id)
                     glossaryEntity.category = glossary.category
                     glossaryEntity.title = glossary.title
-                    
+
                     let glossaryProgressEntity = GlossaryProgress(context: context)
                     glossaryProgressEntity.glossary = glossaryEntity
                     glossaryProgressEntity.studiedCount = 0
@@ -298,19 +298,26 @@ extension CoreDataManager {
             dict[morpheme.id] = morpheme
         }
 
-        func relatedMorphemeIds(for term: Term) -> [Int64] {
-            relationships
+        for term in terms {
+            // order 순서대로 morphemeId 추출
+            let morphemeIds = relationships
                 .filter { $0.termId == term.id }
                 .sorted { $0.order < $1.order }
                 .map { $0.morphemeId }
-        }
 
-        for term in terms {
-            let morphemeIds = relatedMorphemeIds(for: term)
-            // 새롭게 연결할 Morpheme 객체 배열 생성
+            // 순서대로 morpheme 객체 배열 생성
             let morphemesToAdd = morphemeIds.compactMap { morphemeDict[$0] }
-            // 기존 관계를 모두 제거하고 새로 설정 (Set으로 변환)
-            term.morphemes = NSSet(array: morphemesToAdd)
+
+            // TODO: - 삭제할 것. DEBUG
+            if term.id > 5, term.id < 13 {
+                print("Morphemes for term \(term.id):\n")
+                for morpheme in morphemesToAdd {
+                    print("  - \(morpheme.id) -> \(morpheme.spelling ?? "Unknown"): \(morpheme.meaning ?? "No meaning")")
+                }
+            }
+
+            // Core Data 모델에서 morphemes가 NSOrderedSet이면 아래처럼 설정
+            term.morphemes = NSOrderedSet(array: morphemesToAdd)
         }
 
         save()
