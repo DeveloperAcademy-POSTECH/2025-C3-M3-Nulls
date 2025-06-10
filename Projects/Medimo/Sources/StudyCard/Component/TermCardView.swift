@@ -23,7 +23,6 @@ struct TermCardView: View {
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
     
-    let coreDataManager = CoreDataManager.shared
     var user: User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let users = (try? context.fetch(fetchRequest)) ?? []
@@ -49,7 +48,7 @@ struct TermCardView: View {
                     Spacer()
 
                     // TODO: - 북마크 로직 수정
-                    BookmarkButtonView(manager: coreDataManager, user: user, term: viewModel.term)
+                    BookmarkButtonView(user: user, term: viewModel.term)
                 }
                 .padding(20)
 

@@ -41,7 +41,7 @@ struct DictionaryDetailView: View {
                                 }
                             }
                             Spacer()
-                            BookmarkButtonView(manager: coreDataManager, user: user, term: viewModel.term)
+                            BookmarkButtonView(user: user, term: viewModel.term)
                         }
                         .padding(.horizontal, 32)
                         .padding(.top, 48)

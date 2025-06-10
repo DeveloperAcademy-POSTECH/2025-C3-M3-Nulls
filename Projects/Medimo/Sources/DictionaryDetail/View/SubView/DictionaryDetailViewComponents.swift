@@ -9,7 +9,6 @@ import SwiftUI
 import CoreData
 
 struct BookmarkButtonView: View {
-    let manager: CoreDataManager
     let user: User
     let term: Term
     
@@ -23,7 +22,7 @@ struct BookmarkButtonView: View {
             } else {
                 user.removeFromBookmarks(term)
             }
-            try? manager.context.save()
+            try? CoreDataManager.shared.context.save()
         }) {
             Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                 .resizable()
