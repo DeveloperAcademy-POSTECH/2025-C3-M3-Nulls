@@ -12,8 +12,18 @@ struct GlossaryListView: View {
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject private var navigationManager: NavigationManager
     @State private var viewModel: GlossaryListViewModel
-    @State private var selectedCategory: String = "전체"
-
+    @State private var selectedCategory: MedicineCategory = .all
+    
+    var filteredGlossaries: [Glossary] {
+        if selectedCategory == .all {
+            viewModel.glossaries
+        } else {
+            viewModel.glossaries.filter {
+                $0.category == selectedCategory.rawValue
+            }
+        }
+    }
+    
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 24),
         GridItem(.flexible(), spacing: 24),
@@ -42,7 +52,7 @@ struct GlossaryListView: View {
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 24) {
-                        ForEach(viewModel.glossaries) { glossary in
+                        ForEach(filteredGlossaries) { glossary in
                             let currentCount = Int(viewModel.user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
                             let totalCount = glossary.terms?.count ?? 0
                             Button {

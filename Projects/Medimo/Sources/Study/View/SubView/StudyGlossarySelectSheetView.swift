@@ -14,6 +14,14 @@ struct StudyGlossarySelectSheetView: View {
     @State var selectedGlossary: Glossary? = nil
 
     var glossaries: [Glossary] = []
+    
+    var filteredGlossaries: [Glossary] {
+        if selectedCategory == .all {
+            glossaries
+        } else {
+            glossaries.filter { $0.category == selectedCategory.rawValue }
+        }
+    }
 
     init(context: NSManagedObjectContext, isPresented: Binding<Bool>) {
         glossaries = try! context.fetch(Glossary.fetchRequest())
@@ -34,7 +42,7 @@ struct StudyGlossarySelectSheetView: View {
                     .padding(.top, 42)
                 ScrollView {
                     VStack(spacing: 14) {
-                        ForEach(glossaries) { glossary in
+                        ForEach(filteredGlossaries) { glossary in
                             StudyGlossarySelectButton(glossary: glossary, selectedGlossary: $selectedGlossary)
                                 .padding(.horizontal, 32)
                         }
