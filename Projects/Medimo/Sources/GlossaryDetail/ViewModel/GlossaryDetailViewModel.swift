@@ -15,7 +15,9 @@ class GlossaryDetailViewModel {
     var currentCount: Int
     var totalCount: Int
     
-    var termFilter: GlossaryTermFilter = .notLearned
+    var selectedTerm: Term?
+    
+    var termStudyFilter: TermStudyFilter = .learned
     
     init(glossary: Glossary, currentCount: Int, totalCount: Int) {
         self.glossary = glossary
@@ -23,8 +25,21 @@ class GlossaryDetailViewModel {
         self.totalCount = totalCount
     }
     
-    func getTerms() -> [Term] {
+    var terms: [Term] {
         return glossary.terms?.allObjects as! [Term]
     }
     
+    var filteredTerms: [Term] {
+        return terms.filter {
+            guard let studyData = $0.termStudyData?.allObjects.first as? TermStudyData else {
+                return false
+            }
+            switch termStudyFilter {
+            case .learned:
+                return studyData.status == LearningStatus.completed.rawValue
+            case .notLearned:
+                return studyData.status == LearningStatus.notStarted.rawValue || studyData.status == LearningStatus.inProgress.rawValue
+            }
+        }
+    }
 }

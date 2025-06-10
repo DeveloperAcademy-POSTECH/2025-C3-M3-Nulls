@@ -43,7 +43,6 @@ struct DictionaryDetailView: View {
                             Spacer()
                             BookmarkButtonView(user: user, term: viewModel.term)
                         }
-                        .padding(.horizontal, 32)
                         .padding(.top, 48)
                         .padding(.bottom, 20)
 

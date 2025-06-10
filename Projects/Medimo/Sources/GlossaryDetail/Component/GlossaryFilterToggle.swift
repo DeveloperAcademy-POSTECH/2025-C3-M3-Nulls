@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct GlossaryFilterToggle: View {
-    @Binding var selectedFilter: GlossaryTermFilter
+    @Binding var selectedFilter: TermStudyFilter
     @Namespace private var animation
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(GlossaryTermFilter.allCases, id: \.self) { type in
+            ForEach(TermStudyFilter.allCases, id: \.self) { type in
                 Button {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         selectedFilter = type
@@ -60,7 +60,7 @@ struct GlossaryFilterToggle: View {
 }
 
 #Preview {
-    PreviewWrapperForGlossaryFilterToggle(GlossaryTermFilter.learned) { binding in
+    PreviewWrapperForGlossaryFilterToggle(TermStudyFilter.learned) { binding in
         GlossaryFilterToggle(selectedFilter: binding)
             .padding()
     }
