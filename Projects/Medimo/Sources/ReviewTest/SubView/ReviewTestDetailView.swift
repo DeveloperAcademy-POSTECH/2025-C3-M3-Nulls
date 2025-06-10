@@ -18,6 +18,8 @@ struct ReviewTestDetailView: View {
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
     @Binding var isStudyDone: Bool
+    
+    @Binding var learningType: LearningType
   
     var correctAnswer: String {
         switch testType {
@@ -50,9 +52,12 @@ struct ReviewTestDetailView: View {
                     correctAnswer: correctAnswer,
                     index: $index,
                     termSize: $termSize,
-//                    isStudyInProgress: $gisStudyInProgress,
+//                    isStudyInProgress: isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone, term: $term, buttonText: buttonText
+                    isStudyDone: $isStudyDone,
+                    learningType: learningType,
+                    term: $term,
+                    buttonText: buttonText
                 )
                 .padding(.bottom, 20)
                 
@@ -62,6 +67,9 @@ struct ReviewTestDetailView: View {
             }
             
             Spacer()
+        }
+        .onAppear {
+            learningType = .review
         }
     }
 }
