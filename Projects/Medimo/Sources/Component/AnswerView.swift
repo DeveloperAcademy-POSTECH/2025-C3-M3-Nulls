@@ -20,7 +20,6 @@ struct AnswerView: View {
     @State private var isCorrect: Bool = false
 
     @Binding var showSoundAlert: Bool
-    @Binding var isStudyDone: Bool
     @State var learningType: LearningType
 
     @Binding var term: Term
@@ -96,8 +95,6 @@ struct AnswerView: View {
                         answer = ""
                         index += 1
                     } else {
-                        isStudyDone = true
-
                         studyManager.addDateInfoWhenFinished()
                         studyManager.updateGlossaryProgress()
 

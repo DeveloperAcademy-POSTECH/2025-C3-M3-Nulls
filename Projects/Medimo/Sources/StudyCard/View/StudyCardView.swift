@@ -18,7 +18,6 @@ struct StudyCardView: View {
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
     
-    @Binding var isStudyDone: Bool
     @Binding var isStudyInProgress: Bool
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
