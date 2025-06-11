@@ -28,12 +28,15 @@ struct ReviewTestView: View {
     @State private var showSoundAlert = false
     
     @Binding var learningType: LearningType
+    
+    @Binding var isAnswered: Bool
 
     init(
         isStudyInProgress: Binding<Bool>,
         isStudyDone: Binding<Bool>,
         learningType: Binding<LearningType>,
-        viewModel: ReviewTestViewModel = ReviewTestViewModel()
+        viewModel: ReviewTestViewModel = ReviewTestViewModel(),
+        isAnswered: Binding<Bool>
     ) {
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
@@ -43,6 +46,7 @@ struct ReviewTestView: View {
         self._studyTermSize = State(initialValue: todayTerms.count)
         self._isStudyDone = isStudyDone
         self._learningType = learningType
+        self._isAnswered = isAnswered
     }
 
     var body: some View {
@@ -61,7 +65,8 @@ struct ReviewTestView: View {
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
                     isStudyDone: $isStudyDone,
-                    learningType: $learningType
+                    learningType: $learningType,
+                    isAnswered: $isAnswered
                 )
             }
         }

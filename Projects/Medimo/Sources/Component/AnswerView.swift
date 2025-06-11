@@ -16,7 +16,7 @@ struct AnswerView: View {
     @Binding var termSize: Int
 
     @State private var answer: String = ""
-    @State private var isAnswered: Bool = false
+    @Binding var isAnswered: Bool
     @State private var isCorrect: Bool = false
 
     @Binding var showSoundAlert: Bool

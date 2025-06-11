@@ -29,12 +29,15 @@ struct StudyTestView: View {
     
     @Binding var learningType: LearningType
     
+    @Binding var isAnswered: Bool
+    
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
         isStudyDone: Binding<Bool>,
         learningType: Binding<LearningType>,
-        viewModel: StudyTestViewModel = StudyTestViewModel()
+        viewModel: StudyTestViewModel = StudyTestViewModel(),
+        isAnswered: Binding<Bool>
     ) {
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
@@ -42,6 +45,7 @@ struct StudyTestView: View {
         self._studyTermSize = State(initialValue: terms.count)
         self._isStudyDone = isStudyDone
         self._learningType = learningType
+        self._isAnswered = isAnswered
     }
     
     var body: some View {
@@ -59,7 +63,8 @@ struct StudyTestView: View {
                     index: $index,
                     showSoundAlert: $showSoundAlert,
                     isStudyDone: $isStudyDone,
-                    learningType: $learningType
+                    learningType: $learningType,
+                    isAnswered: $isAnswered
                 )
             }
         }
@@ -99,23 +104,7 @@ struct StudyTestView: View {
             currentTestType = randomValidTestType(for: terms[newValue - 1])
         }
     }
-    
-//    private func randomValidTestType(for term: Term) -> TestType {
-//        let availableTypes = TestType.allCases.filter { type in
-//            switch type {
-//            case .abbreviation:
-//                guard let abbr = term.abbreviation?.trimmingCharacters(in: .whitespacesAndNewlines),
-//                      !abbr.isEmpty else {
-//                    return false
-//                }
-//                return true
-//            default:
-//                return true
-//            }
-//        }
-//        return availableTypes.randomElement() ?? .meaning
-//    }
-    
+
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
             switch type {
