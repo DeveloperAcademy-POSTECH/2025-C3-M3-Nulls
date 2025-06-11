@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(
     name: "Projects",
+    options: .options(
+        defaultKnownRegions: ["ko"],
+        developmentRegion: "ko"
+    ),
     targets: [
         .target(
             name: "Medimo",
@@ -23,7 +27,6 @@ let project = Project(
                         "SCDream7.otf",
                     ],
                     "UIBackgroundModes": ["remote-notification"],
-//                    "UILaunchStoryboardName": "LaunchScreen.storyboard"
                 ]
             ),
             sources: ["Medimo/Sources/**"],
