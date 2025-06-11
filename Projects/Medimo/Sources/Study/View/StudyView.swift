@@ -37,7 +37,7 @@ struct StudyView: View {
                             navigationManager.studyPath.append(.StudyCalendar)
                         }
                         .padding(16)
-                        .padding(.bottom, 84)
+                        .padding(.bottom, 100)
                 }
                 .background(
                     StudyHeaderBackgroundView()

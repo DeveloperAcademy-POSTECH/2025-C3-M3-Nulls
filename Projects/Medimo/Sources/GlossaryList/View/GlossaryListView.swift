@@ -90,6 +90,7 @@ struct GlossaryListView: View {
                     .padding(.bottom, 68)
                 }
             }
+            .background(AppColor.white)
         }
     }
 }

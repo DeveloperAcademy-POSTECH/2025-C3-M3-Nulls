@@ -10,14 +10,14 @@ import SwiftUI
 
 struct StudyCardView: View {
     @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
-    
+
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var navigationManager: NavigationManager
 
     @StateObject private var viewModel = StudyCardViewModel()
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
-    
+
     @Binding var isStudyInProgress: Bool
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
@@ -35,16 +35,25 @@ struct StudyCardView: View {
         VStack {
             if viewModel.terms.count > 0 {
                 HStack {
-                    ProgressView(value: Double(index), total: Double(viewModel.terms.count))
-                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                        .padding(.trailing)
+                    Capsule()
+                        .fill(AppColor.skyBlue)
+                        .frame(height: 8)
+                        .overlay(
+                            GeometryReader { geometry in
+                                Capsule()
+                                    .fill(AppColor.blue)
+                                    .frame(width: geometry.size.width * CGFloat(index) / CGFloat(viewModel.terms.count), height: 8)
+                            }
+                            .clipShape(Capsule())
+                        )
+                        .padding(.trailing, 12)
                     Text("\(String(format: "%02d", index)) / \(viewModel.terms.count)")
                         .font(.caption)
-                        .foregroundStyle(AppColor.primary)
+                        .foregroundStyle(AppColor.navy)
                 }
                 .padding(.bottom)
-                .padding(.horizontal, 15)
-                .padding(.top, 30)
+                .padding(.horizontal, 36)
+                .padding(.top)
 
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 10) {
@@ -55,7 +64,7 @@ struct StudyCardView: View {
                                 .modifier(CardBackgroundModifier(position: position))
                                 .id(idx)
                                 .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
-                                .frame(width: UIScreen.main.bounds.width - 64)
+                                .frame(width: UIScreen.main.bounds.width - 70)
                                 .scrollTransition { content, phase in
                                     content
                                         .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
@@ -102,7 +111,7 @@ struct StudyCardView: View {
                     navigationManager.studyPath = []
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(AppColor.grey3)
+                        .foregroundColor(AppColor.blue)
                 }
             }
         }

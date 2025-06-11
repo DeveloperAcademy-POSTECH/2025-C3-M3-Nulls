@@ -108,8 +108,8 @@ extension CalendarViewModel {
 // MARK: - Custom Calender 제외
 
 extension CalendarViewModel {
-    func getTodayDateString() -> String {
-        let date = Date()
+    func getSelectedDateString() -> String {
+        let date = selectedDate
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "yyyy년 M월 d일"

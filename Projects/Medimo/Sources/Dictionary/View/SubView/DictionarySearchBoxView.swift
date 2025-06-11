@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DictionarySearchBoxView: View {
     @Binding var searchText: String
-    
+
     var body: some View {
         RoundedRectangle(cornerRadius: 13)
             .overlay(
@@ -25,7 +25,7 @@ struct DictionarySearchBoxView: View {
                     .padding(21)
                     Spacer()
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(AppColor.white)
                         .padding(7)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
@@ -40,6 +40,6 @@ struct DictionarySearchBoxView: View {
 }
 
 #Preview {
-    @Previewable @State var searchText: String = ""
+    @Previewable @State var searchText = ""
     DictionarySearchBoxView(searchText: $searchText)
 }

@@ -16,14 +16,8 @@ struct StudyCalendarCardView: View {
             RoundedRectangle(cornerRadius: 28)
                 .fill(AppColor.white.opacity(0.9))
                 .shadow(
-                    color: Color(
-                        uiColor: UIColor(
-                            red: 164 / 255,
-                            green: 193 / 255,
-                            blue: 247 / 255,
-                            alpha: 0.45
-                        )
-                    ),
+                    color: Color(AppColor.skyBlue)
+                        .opacity(0.45),
                     radius: 10, x: 0, y: 2
                 )
             VStack {
@@ -75,7 +69,7 @@ struct PreviewDatesGridView: View {
             if let color = color {
                 Circle()
                     .fill(color)
-                    .frame(width: 40, height: 40)
+                    .frame(width: 32, height: 32)
             } else {
                 Color.clear
             }
@@ -107,13 +101,6 @@ struct PreviewDatesGridView: View {
                     }
                     .frame(height: 20)
                     .background(
-                        // 1개 성공시
-                        //                Circle()
-                        //                    .fill(AppColor.skyBlue)
-                        //                    .frame(width: 40, height: 40)
-                        //                    .opacity(isSelected ? 1 : 0)
-
-                        // 2개 성공시
                         studiedBackground(for: dateValue)
                     )
 

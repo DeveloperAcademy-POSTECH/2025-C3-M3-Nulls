@@ -35,11 +35,15 @@ struct StudyCalendarView: View {
     }
 
     func getTotalStudyCount() -> Int {
-        dateInfos.reduce(0) { $0 + Int($1.studyCount) }
+        Int(dateInfos.first(where: {
+            calendarViewModel.isSameDay(date1: $0.date ?? Date(), date2: calendarViewModel.selectedDate)
+        })?.studyCount ?? 0)
     }
 
     func getTotalReviewCount() -> Int {
-        dateInfos.reduce(0) { $0 + Int($1.reviewCount) }
+        Int(dateInfos.first(where: {
+            calendarViewModel.isSameDay(date1: $0.date ?? Date(), date2: calendarViewModel.selectedDate)
+        })?.reviewCount ?? 0)
     }
 
     var body: some View {
@@ -49,7 +53,7 @@ struct StudyCalendarView: View {
 
             VStack {
                 Spacer()
-                Image("cloudImage")
+                Image("cloudBottom")
                     .resizable()
                     .scaledToFit()
             }
@@ -103,7 +107,7 @@ struct StudyCalendarView: View {
                         Spacer()
                     }
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .foregroundColor(AppColor.label)
                     .padding(.vertical, 32)
                     .background(
                         RoundedRectangle(cornerRadius: 24)
@@ -128,7 +132,7 @@ struct StudyCalendarView: View {
                     // 단어 통계
                     VStack {
                         HStack {
-                            Text(calendarViewModel.getTodayDateString())
+                            Text(calendarViewModel.getSelectedDateString())
                                 .font(.headline)
                                 .foregroundStyle(AppColor.navy)
 
@@ -141,6 +145,7 @@ struct StudyCalendarView: View {
                         WordsStatisticsView(description: "복습한 단어", count: getTotalReviewCount())
                     }
                     .padding(.horizontal, 16)
+                    .padding(.bottom, 50)
 
                     Spacer()
                 }

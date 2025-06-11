@@ -280,22 +280,34 @@ public class StudyManager {
         }
     }
 
-    func addDateInfoWhenFinished() {
+    func addDateInfoWhenFinished(_ learningType: LearningType) {
         let (exists, dateInfo) = isTodayDateInfoExists()
 
         if exists {
             print("📅 오늘 날짜 정보가 이미 존재합니다.")
 
-            dateInfo!.studyCount += Int32(studyTermSize)
-            dateInfo!.reviewCount += Int32(studyTermSize) // 임시
+            if learningType == .study {
+                dateInfo!.studyCount += Int32(studyTermSize)
+            }
+            if learningType == .review {
+                dateInfo!.reviewCount += Int32(studyTermSize)
+            }
+
             print("📅 오늘 날짜 정보 업데이트: studyCount = \(dateInfo!.studyCount), reviewCount = \(dateInfo!.reviewCount)")
         } else {
             print("📅 오늘 날짜 정보가 존재하지 않습니다. 추가합니다.")
 
             let dateInfo = DateInfo(context: coredataManager.context)
             dateInfo.date = Date()
-            dateInfo.studyCount = Int32(studyTermSize)
-            dateInfo.reviewCount = Int32(studyTermSize) // 임시
+
+            if learningType == .study {
+                dateInfo.studyCount = Int32(studyTermSize)
+                dateInfo.reviewCount = 0
+            }
+            if learningType == .review {
+                dateInfo.studyCount = 0
+                dateInfo.reviewCount = Int32(studyTermSize)
+            }
 
             user.addToDateInfos(dateInfo)
         }

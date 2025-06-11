@@ -1,4 +1,3 @@
-
 //
 //  TermListView.swift
 //  Projects
@@ -32,7 +31,8 @@ struct DictionaryDetailView: View {
                     Spacer()
 
                     DictionaryDetailViewComponents.characterImage()
-                }
+                } // VStack
+                .background(AppColor.white)
 
                 VStack(spacing: 0) {
                     ScrollView {
@@ -49,7 +49,7 @@ struct DictionaryDetailView: View {
                                 }
                                 Spacer()
                                 BookmarkButtonView(user: user, term: viewModel.term)
-                            }
+                            } // HStack
                             .padding(.top, 48)
                             .padding(.bottom, 20)
 
@@ -70,8 +70,8 @@ struct DictionaryDetailView: View {
                                 DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
 
                                 DictionaryDetailViewComponents.sectionRectangle()
-                            }
-                        }
+                            } // VStack
+                        } // VStack
                         .padding(.horizontal, 32)
 
                         // MARK: - - 의미
@@ -92,10 +92,11 @@ struct DictionaryDetailView: View {
                         DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
 
                         Spacer()
-                    }
-                }
-            }
-        }
+                    } // ScrollView
+                } // VStack
+                
+            } // ZStack
+        } // NavigationStack
     }
 }
 
