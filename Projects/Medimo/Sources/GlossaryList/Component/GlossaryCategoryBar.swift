@@ -28,6 +28,7 @@ struct GlossaryCategoryBar: View {
                     )
                 }
             }
+            .padding(.horizontal, 16)
         }
     }
 }

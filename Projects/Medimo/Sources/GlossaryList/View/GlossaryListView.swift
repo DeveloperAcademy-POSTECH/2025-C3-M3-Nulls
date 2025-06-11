@@ -47,7 +47,6 @@ struct GlossaryListView: View {
                         .padding(.top, 28)
                         .padding(.horizontal, 24)
                     GlossaryCategoryBar(selectedCategory: $selectedCategory)
-                        .padding(.horizontal, 16)
                 }
                 .background(AppColor.secondarySystemFill)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,6 +85,7 @@ struct GlossaryListView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 32)
+                    .padding(.bottom, 68)
                 }
             }
         }
