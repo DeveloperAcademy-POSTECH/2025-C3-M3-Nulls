@@ -10,10 +10,6 @@ import SwiftUI
 extension User {
     func progressForGlossary(_ glossaryId: Int64?) -> GlossaryProgress? {
         let progressList = progresses as? Set<GlossaryProgress>
-//        print("glossaryId: \(String(describing: glossaryId))")
-//        for progress in progressList ?? [] {
-//            print("progress: \(String(describing: progress.glossary?.id))")
-//        }
         return progressList?.first(where: { $0.glossary?.id == glossaryId })
     }
 }

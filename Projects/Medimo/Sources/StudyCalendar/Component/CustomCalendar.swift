@@ -131,7 +131,6 @@ struct DateButton: View {
 
         if let user = users.first {
             let array = user.dateInfos!.allObjects as? [DateInfo] ?? []
-            print(array)
             return array
         }
         return []

@@ -10,6 +10,8 @@ import SwiftUI
 enum PathType: Hashable {
     // 단어장
     case GlossaryDetail(glossary: Glossary, currenctCount: Int, totalCount: Int)
+    case BookmarkDetail
+
     // 학습
     case StudyCard
     case StudyTest(terms: [Term])

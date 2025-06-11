@@ -37,6 +37,7 @@ struct StudyGlossarySelectButton: View {
         Button {
             selectedGlossary = glossary
             studyManager.studyingGlossaryId = selectedGlossary?.id
+            print("⚠️ Glossary selected: \(studyManager.studyingGlossary?.title)")
         } label: {
             HStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -80,11 +81,11 @@ struct StudyGlossarySelectButton: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    @Previewable @State var selectedGlossary: Glossary? = nil
 //    let context = CoreDataManager.preview.container.viewContext
 ////    StudyManager.shared.setContext(context)
 //    var glossary = try! context.fetch(Glossary.fetchRequest()).first!
 //
 //    return StudyGlossarySelectButton(glossary: glossary, selectedGlossary: $selectedGlossary)
-//}
+// }
