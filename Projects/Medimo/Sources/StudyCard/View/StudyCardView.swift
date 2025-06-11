@@ -1,35 +1,30 @@
-//
-//  StudyCardView.swift
-//  Projects
-//
-
+import AVFAudio
+import Combine
 import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
     @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
-    
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var navigationManager: NavigationManager
 
     @StateObject private var viewModel = StudyCardViewModel()
     @State private var currentCardIndex: Int? = 0
     @State private var index: Int = 1
-    
+
     @Binding var isStudyDone: Bool
     @Binding var isStudyInProgress: Bool
-    
+
     @State private var showSoundAlert: Bool = false
     @State private var isSoundButtonTapped: Bool = false
 
+    @State private var volumeCancellable: AnyCancellable?
+
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
-        case .center:
-            return AppColor.white
-        case .left:
-            return AppColor.blue
-        case .right:
-            return AppColor.skyBlue
+        case .center: return AppColor.white
+        case .left: return AppColor.blue
+        case .right: return AppColor.skyBlue
         }
     }
 
@@ -54,8 +49,12 @@ struct StudyCardView: View {
                             ForEach(Array(viewModel.terms.enumerated()), id: \.offset) { idx, term in
                                 let position = viewModel.cardPosition(for: idx, currentIndex: currentCardIndex)
                                 let color = colorForPosition(position)
-                                
-                                TermCardView(term: term, showSoundAlert: $showSoundAlert, isSoundButtonTapped: $isSoundButtonTapped, backgroundColor: color)
+                                TermCardView(
+                                    term: term,
+                                    showSoundAlert: $showSoundAlert,
+                                    isSoundButtonTapped: $isSoundButtonTapped,
+                                    backgroundColor: color
+                                )
                                     .modifier(CardBackgroundModifier(position: position))
                                     .id(idx)
                                     .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
@@ -121,6 +120,23 @@ struct StudyCardView: View {
             viewModel.loadTerms(with: context, existGlossaryId: selectedGlossaryId)
             index = viewModel.terms.isEmpty ? 0 : 1
             currentCardIndex = 0
+            
+            let session = AVAudioSession.sharedInstance()
+            try? session.setActive(true)
+
+            volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    let volume = session.outputVolume
+                    if volume >= 0.05 {
+                        if showSoundAlert {
+                            showSoundAlert = false
+                        }
+                    }
+                }
+        }
+        .onDisappear {
+            volumeCancellable?.cancel()
         }
         .onChange(of: currentCardIndex) { if let newIndex = currentCardIndex { index = newIndex + 1 } }
         .onChange(of: index) {

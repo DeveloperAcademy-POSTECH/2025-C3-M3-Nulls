@@ -5,7 +5,6 @@
 
 import CoreData
 import SwiftUI
-import AVFAudio
 import Combine
 
 struct TermCardView: View {
@@ -17,7 +16,6 @@ struct TermCardView: View {
 
     @Binding var showSoundAlert: Bool
     @Binding var isSoundButtonTapped: Bool
-    @State private var volumeCancellable: AnyCancellable?
 
     var backgroundColor: Color = AppColor.white
 
@@ -43,13 +41,14 @@ struct TermCardView: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    DictionaryDetailViewComponents.soundButton(
-                        spelling: viewModel.term.spelling
-                    ) {
+                    DictionaryDetailViewComponents.soundButton(spelling: viewModel.term.spelling) {
                         isSoundButtonTapped = true
-                        checkVolumeAndPlay()
+                        VolumeHelper.checkVolumeAndPlay(
+                            spelling: viewModel.term.spelling,
+                            onTooLowVolume: { showSoundAlert = true },
+                            onSuccess: { showSoundAlert = false }
+                        )
                     }
-
                     Spacer()
                     BookmarkButtonView(user: user, term: viewModel.term)
                 }
@@ -59,9 +58,7 @@ struct TermCardView: View {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
                         .font(isFlipped ? .title : .titleEng)
                     if !isFlipped, let abbreviation = term.abbreviation, !abbreviation.isEmpty {
-                        Text("[\(abbreviation)]")
-                            .font(.headlineEng)
-                            .padding(.vertical)
+                        Text("[\(abbreviation)]").font(.headlineEng).padding(.vertical)
                     }
                 }
                 .foregroundStyle(AppColor.label)
@@ -94,46 +91,5 @@ struct TermCardView: View {
         }
         .frame(height: 480)
         .onTapGesture { isFlipped.toggle() }
-        .onAppear { startVolumeMonitoring() }
-        .onDisappear { volumeCancellable?.cancel() }
-    }
-
-    private func checkVolumeAndPlay() {
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setActive(true)
-        } catch {
-            showSoundAlert = true
-            return
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let volume = session.outputVolume
-            if volume < 0.05 {
-                showSoundAlert = true
-            } else {
-                if let spelling = term.spelling {
-                    viewModel.speak(spelling)
-                }
-                showSoundAlert = false
-            }
-        }
-    }
-
-    private func startVolumeMonitoring() {
-        let session = AVAudioSession.sharedInstance()
-        try? session.setActive(true)
-
-        volumeCancellable?.cancel()
-        volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
-            .autoconnect()
-            .sink { _ in
-                let volume = session.outputVolume
-                if volume >= 0.05 {
-                    if showSoundAlert {
-                        showSoundAlert = false
-                    }
-                }
-            }
     }
 }

@@ -31,7 +31,8 @@ class DictionaryDetailViewModel {
 
     static let synthesizer = AVSpeechSynthesizer()
 
-    func speak(_ text: String) {
+    /// 👉 static으로 변경
+    static func speak(_ text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
 
