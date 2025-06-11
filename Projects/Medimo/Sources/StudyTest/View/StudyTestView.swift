@@ -14,7 +14,7 @@ struct StudyTestView: View {
     @State private var showExitConfirm = false
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 1
+    @State private var index: Int = 0
     
     @Binding var isStudyInProgress: Bool
     
@@ -43,21 +43,19 @@ struct StudyTestView: View {
     
     var body: some View {
         VStack {
-            ProgressBar(index: index, total: terms.count)
+            ProgressBar(index: index + 1, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
             
-            if terms.indices.contains(index - 1) {
-                StudyTestDetailView(
-                    term: $terms[index - 1],
-                    testType: currentTestType,
-                    buttonText: buttonText,
-                    termSize: $studyTermSize,
-                    index: $index,
-                    showSoundAlert: $showSoundAlert,
-                    learningType: $learningType
-                )
-            }
+            StudyTestDetailView(
+                term: $terms[index],
+                testType: currentTestType,
+                buttonText: buttonText,
+                termSize: $studyTermSize,
+                index: $index,
+                showSoundAlert: $showSoundAlert,
+                learningType: $learningType
+            )
         }
         .padding(24)
         .background(AppColor.bgColor)
@@ -65,7 +63,6 @@ struct StudyTestView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    isStudyInProgress = false
                     showExitConfirm = true
                 }) {
                     Image(systemName: "chevron.left")
@@ -75,6 +72,7 @@ struct StudyTestView: View {
         }
         .alert("학습 종료하기", isPresented: $showExitConfirm) {
             Button("종료하기", role: .destructive) {
+                isStudyInProgress = false
                 navigationManager.studyPath = []
             }
             Button("취소", role: .cancel) {
@@ -84,7 +82,7 @@ struct StudyTestView: View {
         }
         
         .onAppear {
-            currentTestType = randomValidTestType(for: terms[index - 1])
+            currentTestType = randomValidTestType(for: terms[index])
         }
         .onChange(of: index) { _, newValue in
             if newValue == studyTermSize {
@@ -92,25 +90,9 @@ struct StudyTestView: View {
             } else {
                 buttonText = "다음 문제로"
             }
-            currentTestType = randomValidTestType(for: terms[newValue - 1])
+            currentTestType = randomValidTestType(for: terms[newValue])
         }
     }
-    
-//    private func randomValidTestType(for term: Term) -> TestType {
-//        let availableTypes = TestType.allCases.filter { type in
-//            switch type {
-//            case .abbreviation:
-//                guard let abbr = term.abbreviation?.trimmingCharacters(in: .whitespacesAndNewlines),
-//                      !abbr.isEmpty else {
-//                    return false
-//                }
-//                return true
-//            default:
-//                return true
-//            }
-//        }
-//        return availableTypes.randomElement() ?? .meaning
-//    }
     
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
