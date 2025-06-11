@@ -24,10 +24,11 @@ struct BookmarkButtonView: View {
             }
             try? CoreDataManager.shared.context.save()
         }) {
-            Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+            Image(isBookmarked ? "bookmark.fill" : "bookmark")
                 .resizable()
-                .frame(width: 15, height: 20)
-                .foregroundStyle(AppColor.primary)
+                .scaledToFit()
+                .frame(width: 28, height: 28)
+                .foregroundStyle(AppColor.navy)
         }
         .onAppear {
             isBookmarked = user.bookmarks?.contains(term) ?? false
@@ -43,33 +44,10 @@ enum DictionaryDetailViewComponents {
             Image(systemName: "speaker.wave.2.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24)
-                .foregroundStyle(AppColor.primary)
+                .frame(width: 28, height: 28)
+                .foregroundStyle(AppColor.navy)
         }
     }
-
-//    static func bookmarkIcon(manager: CoreDataManager, user: User, term: Term, isBookmarked: Binding<Bool>) -> some View {
-//        let isCurrentlyBookmarked = user.bookmarks?.contains(term) ?? false
-//
-//        return Button(action: {
-//            isBookmarked.wrappedValue.toggle()
-//
-//            if (isBookmarked.wrappedValue) {
-//                // Term값을 User 모델의 bookmarks에 넣어준다
-//                user.addToBookmarks(term)
-//
-//            } else {
-//                // User 모델의 bookmarks에 들어있는 동일한 Term 객체를 찾아서 없애준다.
-//                user.removeFromBookmarks(term)
-//            }
-//            manager.save()
-//        }) {
-//            Image(systemName: isCurrentlyBookmarked ? "bookmark.fill" : "bookmark")
-//                .resizable()
-//                .frame(width: 15)
-//                .foregroundStyle(AppColor.primary)
-//        }
-//    }
 
     static func sectionGlossary(_ glossarys: NSSet?) -> some View {
         Text(

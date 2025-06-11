@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct ContentView: View {
     @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
-    
+
     @Environment(\.managedObjectContext) var moc
     let coreDataManager = CoreDataManager.shared
     let cloudKitManager = CloudKitManager.shared
@@ -128,66 +128,6 @@ public struct ContentView: View {
                         }
                     }
                     .id(isStudyInProgress)
-//                    if isStudyInProgress {
-//                        NavigationStack(path: $navigationManager.studyPath) {
-//                            ZStack {
-//                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-//                                    .environmentObject(navigationManager)
-//                                    .navigationDestination(for: PathType.self) { path in
-//                                        switch path {
-//                                        case .StudyCard:
-//                                            StudyCardView(isStudyDone: $isStudyDone, isStudyInProgress: $isStudyInProgress)
-//                                                .environmentObject(navigationManager)
-//
-//                                        case .StudyCalendar:
-//                                            StudyCalendarView().environmentObject(navigationManager)
-//
-//                                        case let .StudyTest(terms):
-//                                            StudyTestView(
-//                                                terms: terms,
-//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        case .ReviewTest:
-//                                            ReviewTestView(
-//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
-//                                                learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        case let .TestCompletion(index):
-//                                            TestEndView(
-//                                                isStudyInProgress: $isStudyInProgress, index: index,
-//                                                learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        default:
-//                                            EmptyView()
-//                                        }
-//                                    }
-//
-//                                VStack {
-//                                    Spacer()
-//
-//                                    CustomTabBar(selected: $selectedTab)
-//                                        .padding(.bottom, 24)
-//                                }
-//                                .ignoresSafeArea(edges: .bottom)
-//                            }
-//                        }
-//                    } else {
-//                        ZStack {
-//                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-//                                .environmentObject(navigationManager)
-//
-//                            VStack {
-//                                Spacer()
-//
-//                                CustomTabBar(selected: $selectedTab)
-//                                    .padding(.bottom, 24)
-//                            }
-//                            .ignoresSafeArea(edges: .bottom)
-//                        }
-//                    }
 
                 case .dictionary:
                     ZStack {
@@ -205,12 +145,6 @@ public struct ContentView: View {
                 }
             }
         } // ZStack
-        .onAppear {
-            // TEST
-//            let userFetchRequest: NSFetchRequest<User> = User.fetchRequest()
-//            userFetchRequest.fetchLimit = 1
-//            let user : User = (try? coreDataManager.context.fetch(userFetchRequest).first) ?? User(context: coreDataManager.context)
-        }
     }
 }
 

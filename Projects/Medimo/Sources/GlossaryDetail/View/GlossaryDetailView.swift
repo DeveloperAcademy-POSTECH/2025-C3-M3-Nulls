@@ -11,9 +11,9 @@ import SwiftUI
 struct GlossaryDetailView: View {
     @Environment(\.managedObjectContext) var context
     @EnvironmentObject var navigationManager: NavigationManager
-    
+
     @Bindable var viewModel: GlossaryDetailViewModel
-    
+
     init(glossary: Glossary, currentCount: Int, totalCount: Int) {
         _viewModel = Bindable(wrappedValue: GlossaryDetailViewModel(
             glossary: glossary,
@@ -21,16 +21,16 @@ struct GlossaryDetailView: View {
             totalCount: totalCount
         ))
     }
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color(red: 0.8, green: 0.86, blue: 0.99)
+            Color(AppColor.skyBlue)
                 .frame(height: 211)
                 .edgesIgnoringSafeArea(.top)
-            
+
             VStack(spacing: 0) {
                 VStack(spacing: 15) {
-                    ZStack{
+                    ZStack {
                         GlossaryHeaderView(
                             title: viewModel.glossary.title ?? "제목 없음",
                             lastStudiedAt: viewModel.lastStudiedAt,
@@ -70,8 +70,8 @@ struct GlossaryDetailView: View {
                     Spacer()
                 }
             }.ignoresSafeArea(edges: .top)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding(.top, 0)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .padding(.top, 0)
         }
         .navigationBarBackButtonHidden()
         .sheet(item: $viewModel.selectedTerm) { term in
@@ -82,8 +82,6 @@ struct GlossaryDetailView: View {
     }
 }
 
-    
-    
 #Preview {
     let context = CoreDataManager.preview.container.viewContext
 

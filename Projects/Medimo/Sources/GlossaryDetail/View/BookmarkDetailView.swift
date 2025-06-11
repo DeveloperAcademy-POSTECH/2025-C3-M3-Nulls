@@ -28,7 +28,7 @@ struct BookmarkDetailView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color(red: 0.8, green: 0.86, blue: 0.99)
+            Color(AppColor.skyBlue)
                 .frame(height: 150)
                 .edgesIgnoringSafeArea(.top)
 
@@ -108,16 +108,11 @@ struct BookmarkHeaderView: View {
                     .padding(.horizontal, 4)
                 }
                 .foregroundStyle(AppColor.textColor)
-                .padding(.leading, 16)
                 .padding(.horizontal, 16)
             }
         }
         .padding(.top, 90)
         .padding(.bottom, 16)
-//        .background(AppColor.secondarySystemFill)
-//        }
-//        .frame(height: 211)
-        // .ignoresSafeArea(edges: .top)
     }
 }
 

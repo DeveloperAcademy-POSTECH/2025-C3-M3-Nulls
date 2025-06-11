@@ -23,6 +23,8 @@ struct AnswerView: View {
     @Binding var isStudyDone: Bool
     @State var learningType: LearningType
 
+    @FocusState private var isTextFieldFocused: Bool
+
     @Binding var term: Term
 
     var buttonText: String
@@ -48,14 +50,19 @@ struct AnswerView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("정답 입력하기", text: $answer)
+                TextField("", text: $answer)
                     .font(.bodyEng)
-                    .foregroundStyle(AppColor.grey3)
+                    .foregroundStyle(AppColor.label)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
                     .submitLabel(.done)
-                    .onSubmit {
-                        submitAction()
+                    .onSubmit { submitAction() }
+                    .focused($isTextFieldFocused)
+                    .placeholder(when: answer.isEmpty) {
+                        Text("정답 입력하기")
+                            .font(.bodyEng)
+                            .foregroundStyle(AppColor.grey3)
+                            .padding(.horizontal, 8)
                     }
 
                 Button(action: {
@@ -98,13 +105,19 @@ struct AnswerView: View {
                     } else {
                         isStudyDone = true
 
-                        studyManager.addDateInfoWhenFinished()
+                        studyManager.addDateInfoWhenFinished(learningType)
                         studyManager.updateGlossaryProgress()
 
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
                 })
             }
+        }
+        .onAppear {
+            isTextFieldFocused = true
+        }
+        .onChange(of: index) {
+            isTextFieldFocused = true
         }
     }
 }

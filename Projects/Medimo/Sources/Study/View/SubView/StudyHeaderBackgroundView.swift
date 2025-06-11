@@ -12,8 +12,8 @@ struct StudyHeaderBackgroundView: View {
         VStack {
             LinearGradient(
                 colors: [
-                    Color(UIColor(red: 187/255, green: 209/255, blue: 249/255, alpha: CGFloat(1))),
-                    Color(UIColor(red: 187/255, green: 209/255, blue: 249/255, alpha: CGFloat(0)))
+                    Color(AppColor.skyBlue),
+                    Color(AppColor.bgColor),
                 ],
                 startPoint: UnitPoint(x: 0.5, y: 0.65),
                 endPoint: UnitPoint(x: 0.5, y: 1)

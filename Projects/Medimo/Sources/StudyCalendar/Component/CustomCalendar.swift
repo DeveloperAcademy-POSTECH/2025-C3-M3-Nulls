@@ -147,7 +147,7 @@ struct DateButton: View {
             if let color = color {
                 Circle()
                     .fill(color)
-                    .frame(width: 40, height: 40)
+                    .frame(width: 32, height: 32)
             } else {
                 Color.clear
             }
