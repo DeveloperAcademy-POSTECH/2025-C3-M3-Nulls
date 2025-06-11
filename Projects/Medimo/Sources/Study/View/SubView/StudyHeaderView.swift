@@ -21,7 +21,7 @@ struct StudyHeaderView: View {
                         Spacer()
                     }
                     HStack {
-                        Text("오늘부터 새로운 시작이에요! 힘내세요! 🚀")
+                        Text("의학용어를 학습해봐요! 🚀")
                             .font(.title)
                             .foregroundStyle(AppColor.label)
                         Spacer()
