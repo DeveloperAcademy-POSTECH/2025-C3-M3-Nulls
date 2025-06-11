@@ -33,6 +33,7 @@ struct GlossaryDetailView: View {
                     ZStack{
                         GlossaryHeaderView(
                             title: viewModel.glossary.title ?? "제목 없음",
+                            lastStudiedAt: viewModel.lastStudiedAt,
                             currentCount: viewModel.currentCount,
                             totalCount: viewModel.totalCount,
                             scrollOffset: 0
@@ -43,22 +44,30 @@ struct GlossaryDetailView: View {
                 }
                 .padding(.bottom, 15)
 
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.filteredTerms) { term in
-                            Button {
-                                viewModel.selectedTerm = term
-                            } label: {
-                                GlossaryTermCard(
-                                    spelling: term.spelling ?? "",
-                                    abbreviation: term.abbreviation,
-                                    meaning: term.meaning ?? ""
-                                )
+                if viewModel.filteredTerms.count > 0 {
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(viewModel.filteredTerms.sorted(by: { $0.spelling ?? "" < $1.spelling ?? "" })) { term in
+                                Button {
+                                    viewModel.selectedTerm = term
+                                } label: {
+                                    GlossaryTermCard(
+                                        spelling: term.spelling ?? "",
+                                        abbreviation: term.abbreviation,
+                                        meaning: term.meaning ?? ""
+                                    )
+                                }
                             }
                         }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 20)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 20)
+                } else {
+                    Spacer()
+                    Text(viewModel.termStudyFilter == .learned ? "아직 학습한 단어가 없어요" : "모든 단어들을 학습했어요!")
+                        .font(.caption)
+                        .foregroundStyle(AppColor.grey3)
+                    Spacer()
                 }
             }.ignoresSafeArea(edges: .top)
             .frame(maxHeight: .infinity, alignment: .top)

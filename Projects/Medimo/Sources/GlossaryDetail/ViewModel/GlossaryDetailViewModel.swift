@@ -12,6 +12,7 @@ import Observation
 @Observable
 class GlossaryDetailViewModel {
     var glossary: Glossary
+    var glossaryProgress: GlossaryProgress?
     var currentCount: Int
     var totalCount: Int
     
@@ -20,7 +21,13 @@ class GlossaryDetailViewModel {
     var termStudyFilter: TermStudyFilter = .learned
     
     init(glossary: Glossary, currentCount: Int, totalCount: Int) {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let context = CoreDataManager.shared.context
+        let users = (try? context.fetch(fetchRequest)) ?? []
+        let user = users.first ?? User(context: context)
+        
         self.glossary = glossary
+        self.glossaryProgress = user.progressForGlossary(glossary.id)
         self.currentCount = currentCount
         self.totalCount = totalCount
     }
@@ -41,5 +48,9 @@ class GlossaryDetailViewModel {
                 return studyData.status == LearningStatus.notStarted.rawValue || studyData.status == LearningStatus.inProgress.rawValue
             }
         }
+    }
+    
+    var lastStudiedAt: Date? {
+        return glossaryProgress?.lastStudiedAt
     }
 }

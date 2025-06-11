@@ -2,13 +2,6 @@
 //  GlossaryCategoryBar.swift
 //  Projects
 //
-//  Created by Ell Han on 6/4/25.
-//
-
-//
-//  GlossaryCategoryBar.swift
-//  Projects
-//
 //  Created by Ell on 2025/06/04.
 //
 
@@ -18,16 +11,16 @@ struct GlossaryCategoryBar: View {
     @Binding var selectedCategory: MedicineCategory
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(MedicineCategory.allCases, id: \.self) { category in
-                    GlossaryCategoryButton(
-                        title: category.rawValue,
-                        isSelected: selectedCategory == category,
-                        action: { selectedCategory = category }
-                    )
-                }
+        HStack {
+            Spacer()
+            ForEach(MedicineCategory.allCases, id: \.self) { category in
+                GlossaryCategoryButton(
+                    title: category.rawValue,
+                    isSelected: selectedCategory == category,
+                    action: { selectedCategory = category }
+                )
             }
+            .padding(.horizontal, 16)
         }
     }
 }
