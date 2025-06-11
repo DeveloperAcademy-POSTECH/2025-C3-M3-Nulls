@@ -36,7 +36,7 @@ struct StudyingGloassaryChooseButtonView: View {
 
 #Preview {
     let context = CoreDataManager.preview.container.viewContext
-    StudyManager.shared.setContext(context)
+    StudyManager.shared.setContext(context, 0)
 
     return StudyingGloassaryChooseButtonView()
         .environment(\.managedObjectContext, context)

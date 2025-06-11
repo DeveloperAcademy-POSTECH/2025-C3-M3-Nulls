@@ -9,6 +9,8 @@ import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
+    @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
+    
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var navigationManager: NavigationManager
 
@@ -106,7 +108,7 @@ struct StudyCardView: View {
             }
         }
         .onAppear {
-            viewModel.loadTerms(with: context)
+            viewModel.loadTerms(with: context, existGlossaryId: selectedGlossaryId)
             index = viewModel.terms.isEmpty ? 0 : 1
             currentCardIndex = 0
         }
