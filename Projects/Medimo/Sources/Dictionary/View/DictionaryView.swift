@@ -17,9 +17,9 @@ struct DictionaryView: View {
             DictionaryHeaderView(searchText: $viewModel.searchText)
 
             DictionaryTermListView(viewModel: viewModel)
-                .padding(.bottom, 100)
+                .padding(.bottom, 64)
 
-            Spacer()
+//            Spacer()
         }
         .background(AppColor.white)
         .padding(.top, 52)

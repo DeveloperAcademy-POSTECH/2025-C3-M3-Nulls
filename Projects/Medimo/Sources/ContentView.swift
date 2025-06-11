@@ -34,110 +34,107 @@ public struct ContentView: View {
 
     public var body: some View {
         ZStack(alignment: .bottom) {
-            VStack {
-                switch selectedTab {
-                case .glossary:
-                    NavigationStack(path: $navigationManager.glossaryPath) {
-                        ZStack {
-                            GlossaryListView(context: moc)
-                                .environmentObject(navigationManager)
-                                .navigationDestination(for: PathType.self) { path in
-                                    switch path {
-                                    case let .GlossaryDetail(glossary, currentCount, totalCount):
-                                        GlossaryDetailView(
-                                            glossary: glossary,
-                                            currentCount: currentCount,
-                                            totalCount: totalCount
-                                        )
-                                        .environmentObject(navigationManager)
-
-                                    case .BookmarkDetail:
-                                        BookmarkDetailView()
-                                            .environmentObject(navigationManager)
-
-                                    default:
-                                        EmptyView()
-                                    }
-                                }
-
-                            VStack {
-                                Spacer()
-
-                                CustomTabBar(selected: $selectedTab)
-                                    .padding(.bottom, 24)
-                            }
-                            .ignoresSafeArea(edges: .bottom)
-                        }
-                    }
-
-                case .study:
-                    NavigationStack(path: $navigationManager.studyPath) {
-                        ZStack {
-                            StudyView(
-                                context: moc,
-                                isStudyInProgress: $isStudyInProgress
-                            )
+            switch selectedTab {
+            case .glossary:
+                NavigationStack(path: $navigationManager.glossaryPath) {
+                    ZStack {
+                        GlossaryListView(context: moc)
                             .environmentObject(navigationManager)
                             .navigationDestination(for: PathType.self) { path in
                                 switch path {
-                                case .StudyCard:
-                                    StudyCardView(isStudyInProgress: $isStudyInProgress)
+                                case let .GlossaryDetail(glossary, currentCount, totalCount):
+                                    GlossaryDetailView(
+                                        glossary: glossary,
+                                        currentCount: currentCount,
+                                        totalCount: totalCount
+                                    )
                                     .environmentObject(navigationManager)
 
-                                case .StudyCalendar:
-                                    StudyCalendarView().environmentObject(navigationManager)
-
-                                case let .StudyTest(terms):
-                                    StudyTestView(
-                                        terms: terms,
-                                        isStudyInProgress: $isStudyInProgress,
-                                        learningType: $learningType
-                                    ).environmentObject(navigationManager)
-
-                                case .ReviewTest:
-                                    ReviewTestView(
-                                        isStudyInProgress: $isStudyInProgress,
-                                        learningType: $learningType
-                                    ).environmentObject(navigationManager)
-
-                                case let .TestCompletion(index):
-                                    TestEndView(
-                                        isStudyInProgress: $isStudyInProgress,
-                                        index: index,
-                                        learningType: $learningType
-                                    ).environmentObject(navigationManager)
+                                case .BookmarkDetail:
+                                    BookmarkDetailView()
+                                        .environmentObject(navigationManager)
 
                                 default:
                                     EmptyView()
                                 }
                             }
 
-                            VStack {
-                                Spacer()
-                                CustomTabBar(selected: $selectedTab)
-                                    .padding(.bottom, 24)
-                            }
-                            .ignoresSafeArea(edges: .bottom)
-                        }
-                    }
-                    .id(isStudyInProgress)
-
-                case .dictionary:
-                    ZStack {
-                        DictionaryView()
-                            .environmentObject(navigationManager)
-
                         VStack {
                             Spacer()
 
                             CustomTabBar(selected: $selectedTab)
-                                .padding(.bottom, 24)
+                                .padding(.bottom, 16)
                         }
                         .ignoresSafeArea(edges: .bottom)
-                    } // VStack
+                    }
+                }
+
+            case .study:
+                NavigationStack(path: $navigationManager.studyPath) {
+                    ZStack {
+                        StudyView(
+                            context: moc,
+                            isStudyInProgress: $isStudyInProgress
+                        )
+                        .environmentObject(navigationManager)
+                        .navigationDestination(for: PathType.self) { path in
+                            switch path {
+                            case .StudyCard:
+                                StudyCardView(isStudyInProgress: $isStudyInProgress)
+                                    .environmentObject(navigationManager)
+
+                            case .StudyCalendar:
+                                StudyCalendarView().environmentObject(navigationManager)
+
+                            case let .StudyTest(terms):
+                                StudyTestView(
+                                    terms: terms,
+                                    isStudyInProgress: $isStudyInProgress,
+                                    learningType: $learningType
+                                ).environmentObject(navigationManager)
+
+                            case .ReviewTest:
+                                ReviewTestView(
+                                    isStudyInProgress: $isStudyInProgress,
+                                    learningType: $learningType
+                                ).environmentObject(navigationManager)
+
+                            case let .TestCompletion(index):
+                                TestEndView(
+                                    isStudyInProgress: $isStudyInProgress,
+                                    index: index,
+                                    learningType: $learningType
+                                ).environmentObject(navigationManager)
+
+                            default:
+                                EmptyView()
+                            }
+                        }
+
+                        VStack {
+                            Spacer()
+                            CustomTabBar(selected: $selectedTab)
+                                .padding(.bottom, 16)
+                        }
+                        .ignoresSafeArea(edges: .bottom)
+                    }
+                }
+                .id(isStudyInProgress)
+
+            case .dictionary:
+                ZStack {
+                    DictionaryView()
+                        .environmentObject(navigationManager)
+
+                    VStack {
+                        Spacer()
+                        CustomTabBar(selected: $selectedTab)
+                            .padding(.bottom, 16)
+                    }
+                    .ignoresSafeArea(edges: .bottom)
                 }
             }
-        } // ZStack
+        }
     }
 }
 
