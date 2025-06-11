@@ -14,6 +14,7 @@ extension Font {
     static let body = Font.custom("S-CoreDream-5Medium", size: 17, relativeTo: .body) // MM_Pr
     static let subheadline = Font.custom("S-CoreDream-6Bold", size: 13, relativeTo: .subheadline)
     static let caption = Font.custom("S-CoreDream-5Medium", size: 13, relativeTo: .caption) // MM_AT
+    static let caption2 = Font.custom("S-CoreDream-5Medium", size: 13, relativeTo: .caption)
     
     static let largeTitleEng = Font.custom("Gmarket Sans Bold", size: 32, relativeTo: .largeTitle) // MM_EH1
     static let titleEng = Font.custom("Gmarket Sans Bold", size: 24, relativeTo: .title) // MM_EH2

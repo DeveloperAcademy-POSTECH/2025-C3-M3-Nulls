@@ -33,6 +33,7 @@ struct GlossaryDetailView: View {
                     ZStack{
                         GlossaryHeaderView(
                             title: viewModel.glossary.title ?? "제목 없음",
+                            lastStudiedAt: viewModel.lastStudiedAt,
                             currentCount: viewModel.currentCount,
                             totalCount: viewModel.totalCount,
                             scrollOffset: 0
@@ -46,7 +47,7 @@ struct GlossaryDetailView: View {
                 if viewModel.filteredTerms.count > 0 {
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(viewModel.filteredTerms) { term in
+                            ForEach(viewModel.filteredTerms.sorted(by: { $0.spelling ?? "" < $1.spelling ?? "" })) { term in
                                 Button {
                                     viewModel.selectedTerm = term
                                 } label: {

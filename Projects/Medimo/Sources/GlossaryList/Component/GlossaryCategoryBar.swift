@@ -20,7 +20,7 @@ struct GlossaryCategoryBar: View {
                     action: { selectedCategory = category }
                 )
             }
-            Spacer()
+            .padding(.horizontal, 16)
         }
     }
 }

@@ -60,8 +60,8 @@ struct SplashView: View {
                     result = await coreDataManager.initialize()
                 }
                 let elapsed = Date().timeIntervalSince(start)
-                if elapsed < 2 {
-                    try? await Task.sleep(nanoseconds: UInt64((2 - elapsed) * 1_000_000_000))
+                if elapsed < 1 {
+                    try? await Task.sleep(nanoseconds: UInt64((1 - elapsed) * 1_000_000_000))
                 }
                 DispatchQueue.main.async {
                     withAnimation(.easeInOut(duration: 0.5)) {

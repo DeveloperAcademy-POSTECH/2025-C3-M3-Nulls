@@ -11,10 +11,7 @@ struct CustomTabBar: View {
     @Binding var selected: TabType
 
     var body: some View {
-//        ZStack {
-//            Color.yellow
         VStack {
-            Spacer()
             HStack(spacing: 0) {
                 ForEach(TabType.allCases, id: \.self) { tab in
                     Spacer()
@@ -28,17 +25,17 @@ struct CustomTabBar: View {
                 }
             }
             .padding(.bottom, 16)
-            .frame(height: 90)
             .background(
                 TopRoundedRectangle(radius: 20)
                     .fill(Color.white)
                     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: -12)
             )
+            Spacer()
         }
+        .animation(.default, value: selected)
         .frame(height: 0)
         .padding(.bottom, 24)
     }
-//    }
 }
 
 struct TabBarButton: View {
@@ -75,18 +72,17 @@ struct TabBarButtonContent: View {
                     Image(tab.Icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 28,
-                               height: 28)
+                        .frame(width: 28, height: 28)
                         .foregroundColor(isSelected
                             ? (tab == .study ? AppColor.pink : AppColor.blue)
                             : AppColor.grey3)
                         .padding(.bottom, 8)
                 }
             }
-            .padding(.top, isSelected ? -12 : 12)
+            .padding(.top, isSelected ? -12 : 0)
 
             Text(tab.title)
-                .font(.caption)
+                .font(.caption2)
                 .foregroundStyle(AppColor.label)
         }
         .frame(maxHeight: .infinity, alignment: .bottom)

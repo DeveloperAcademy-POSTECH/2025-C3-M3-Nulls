@@ -73,7 +73,7 @@ struct TermCardView: View {
                     if isFlipped {
                         Text(term.explanation ?? "")
                     } else {
-                        if let morphemes = term.morphemes as? Set<Morpheme> {
+                        if let morphemes = (term.morphemes)?.array as? [Morpheme] {
                             let morphemeArray = morphemes.sorted { ($0.spelling ?? "") < ($1.spelling ?? "") }
 
                             VStack(alignment: .leading, spacing: 4) {

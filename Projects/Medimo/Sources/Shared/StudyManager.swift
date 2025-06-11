@@ -14,7 +14,7 @@ public class StudyManager {
 
     private init() {}
 
-    private var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext?
 
     let coredataManager = CoreDataManager.shared
 
@@ -32,12 +32,15 @@ public class StudyManager {
 
     var studyingGlossaryId: Int64? {
         didSet {
+            print("⚠️ Cache 초기화")
             _cachedStudyingGlossary = nil
             _cachedTermStudyDataList = nil
         }
     }
 
     func setContext(_ context: NSManagedObjectContext) {
+        if self.context === context { return }
+        
         self.context = context
 
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
@@ -68,6 +71,7 @@ public class StudyManager {
         do {
             let result = try context?.fetch(request).first
             _cachedStudyingGlossary = result
+            print("⚠️ Glossary Changed: \(String(describing: result?.title))")
             return result
         } catch {
             print("Glossary fetch 실패: \(error)")
@@ -78,7 +82,7 @@ public class StudyManager {
 
     var currentGlossaryProgress: GlossaryProgress? {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
         return currentProgress
     }
 
@@ -245,18 +249,16 @@ public class StudyManager {
 
     func checkCurrentGlossaryProgress() {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
 
         let progressList = user.progresses as? Set<GlossaryProgress> ?? []
 
-        print("✏️ 현재 유저: \(String(describing: progressList))")
         print("✏️ 현재 Glossary: \(String(describing: studyingGlossary?.title))")
-        print("✏️ 현재 학습 진행 상황: \(String(describing: currentProgress))")
     }
 
     func updateGlossaryProgress() {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
 
         print("✏️ 입력전 Progress 학습 진행 상황: \(String(describing: currentProgress))")
 

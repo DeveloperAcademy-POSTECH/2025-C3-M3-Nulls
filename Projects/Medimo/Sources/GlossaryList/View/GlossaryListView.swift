@@ -13,7 +13,9 @@ struct GlossaryListView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     @State private var viewModel: GlossaryListViewModel
     @State private var selectedCategory: MedicineCategory = .all
-    
+
+    let studyManager = StudyManager.shared
+
     var filteredGlossaries: [Glossary] {
         if selectedCategory == .all {
             viewModel.glossaries
@@ -23,7 +25,7 @@ struct GlossaryListView: View {
             }
         }
     }
-    
+
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 24),
         GridItem(.flexible(), spacing: 24),
@@ -51,6 +53,18 @@ struct GlossaryListView: View {
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 24) {
+                        if selectedCategory == .all {
+                            Button {
+                                navigationManager.glossaryPath.append(
+                                    .BookmarkDetail
+                                )
+                            } label: {
+                                BookmarkCardView(
+                                    title: "북마크",
+                                    totalCount: studyManager.user.bookmarks?.count ?? 0
+                                )
+                            }                            
+                        }
                         ForEach(filteredGlossaries) { glossary in
                             let currentCount = Int(viewModel.user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
                             let totalCount = glossary.terms?.count ?? 0
@@ -73,6 +87,7 @@ struct GlossaryListView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 32)
+                    .padding(.bottom, 68)
                 }
             }
         }
