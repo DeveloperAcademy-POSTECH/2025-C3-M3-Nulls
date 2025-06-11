@@ -1,8 +1,7 @@
 //
-//  FlashCard.swift
+//  TermCardView.swift
 //  Projects
 //
-//  Created by 이서현 on 6/1/25
 
 import CoreData
 import SwiftUI
@@ -13,18 +12,19 @@ struct TermCardView: View {
     @ObservedObject var term: Term
     @Environment(\.managedObjectContext) var context
 
-    @State private var isPlaying = false
     @State private var isFlipped = false
     @State var viewModel: DictionaryDetailViewModel
 
     @Binding var showSoundAlert: Bool
+    @Binding var isSoundButtonTapped: Bool
     @State private var volumeCancellable: AnyCancellable?
 
     var backgroundColor: Color = AppColor.white
 
-    init(term: Term, showSoundAlert: Binding<Bool>, backgroundColor: Color) {
+    init(term: Term, showSoundAlert: Binding<Bool>, isSoundButtonTapped: Binding<Bool>, backgroundColor: Color) {
         self.term = term
         self._showSoundAlert = showSoundAlert
+        self._isSoundButtonTapped = isSoundButtonTapped
         self.backgroundColor = backgroundColor
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
@@ -46,6 +46,7 @@ struct TermCardView: View {
                     DictionaryDetailViewComponents.soundButton(
                         spelling: viewModel.term.spelling
                     ) {
+                        isSoundButtonTapped = true
                         checkVolumeAndPlay()
                     }
 
@@ -108,7 +109,6 @@ struct TermCardView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             let volume = session.outputVolume
-            print("볼륨 확인 (딜레이 후): \(volume)")
             if volume < 0.05 {
                 showSoundAlert = true
             } else {
@@ -124,14 +124,15 @@ struct TermCardView: View {
         let session = AVAudioSession.sharedInstance()
         try? session.setActive(true)
 
+        volumeCancellable?.cancel()
         volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
                 let volume = session.outputVolume
-                if volume < 0.05 {
-                    if !showSoundAlert { showSoundAlert = true }
-                } else {
-                    if showSoundAlert { showSoundAlert = false }
+                if volume >= 0.05 {
+                    if showSoundAlert {
+                        showSoundAlert = false
+                    }
                 }
             }
     }
