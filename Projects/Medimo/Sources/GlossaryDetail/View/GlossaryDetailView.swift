@@ -45,7 +45,7 @@ struct GlossaryDetailView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(viewModel.filteredTerms) { term in
+                        ForEach(viewModel.filteredTerms.sorted(by: { $0.spelling ?? "" < $1.spelling ?? "" })) { term in
                             Button {
                                 viewModel.selectedTerm = term
                             } label: {
