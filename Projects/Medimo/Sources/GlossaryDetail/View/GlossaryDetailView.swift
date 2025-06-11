@@ -33,6 +33,7 @@ struct GlossaryDetailView: View {
                     ZStack{
                         GlossaryHeaderView(
                             title: viewModel.glossary.title ?? "제목 없음",
+                            lastStudiedAt: viewModel.lastStudiedAt,
                             currentCount: viewModel.currentCount,
                             totalCount: viewModel.totalCount,
                             scrollOffset: 0
