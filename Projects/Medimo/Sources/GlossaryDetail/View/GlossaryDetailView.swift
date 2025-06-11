@@ -73,6 +73,7 @@ struct GlossaryDetailView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.top, 0)
         }
+        .background(AppColor.white)
         .navigationBarBackButtonHidden()
         .sheet(item: $viewModel.selectedTerm) { term in
             DictionaryDetailView(term: term)

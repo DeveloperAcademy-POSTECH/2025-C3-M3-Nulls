@@ -11,14 +11,15 @@ struct GlossaryCategoryBar: View {
     @Binding var selectedCategory: MedicineCategory
 
     var body: some View {
-        HStack {
-            Spacer()
-            ForEach(MedicineCategory.allCases, id: \.self) { category in
-                GlossaryCategoryButton(
-                    title: category.rawValue,
-                    isSelected: selectedCategory == category,
-                    action: { selectedCategory = category }
-                )
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(MedicineCategory.allCases, id: \.self) { category in
+                    GlossaryCategoryButton(
+                        title: category.rawValue,
+                        isSelected: selectedCategory == category,
+                        action: { selectedCategory = category }
+                    )
+                }
             }
             .padding(.horizontal, 16)
         }

@@ -5,6 +5,7 @@
 //  Created by 이서현 on 6/5/25.
 //
 
+import AudioToolbox
 import SwiftUI
 
 struct AnswerView: View {
@@ -27,6 +28,8 @@ struct AnswerView: View {
 
     @Binding var term: Term
 
+    @State private var showError: Bool = false
+
     var buttonText: String
 
     func clean(_ text: String) -> String {
@@ -36,6 +39,14 @@ struct AnswerView: View {
     }
 
     func submitAction() {
+        if answer.isEmpty {
+            showError = true
+            // 진동 발생
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            return
+        }
+        showError = false
+
         let trimmedAnswers = correctAnswer
             .split(separator: ",")
             .map { clean(String($0)) }
@@ -73,13 +84,23 @@ struct AnswerView: View {
                         .foregroundStyle(AppColor.white)
                 }
                 .padding(12)
-                .background(AppColor.navy)
+                .background(showError ? AppColor.hotPink : AppColor.navy)
                 .cornerRadius(16)
                 .disabled(answer.isEmpty || isAnswered)
             }
             .padding(8)
-            .background(AppColor.white)
+            .background(showError ? AppColor.skyPink : AppColor.white)
             .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(showError ? AppColor.hotPink : Color.clear, lineWidth: 1)
+            )
+            
+            Text("잠깐! 아직 정답을 작성하지 않았어요.")
+                .font(.caption)
+                .foregroundStyle(AppColor.hotPink)
+                .opacity(showError ? 1 : 0)
+                .padding(.top, 15)
 
             if isAnswered {
                 if isCorrect {
@@ -118,6 +139,7 @@ struct AnswerView: View {
         }
         .onChange(of: index) {
             isTextFieldFocused = true
+            showError = false
         }
     }
 }

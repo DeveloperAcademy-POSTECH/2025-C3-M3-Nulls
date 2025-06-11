@@ -21,6 +21,7 @@ struct DictionaryView: View {
 
             Spacer()
         }
+        .background(AppColor.white)
         .padding(.top, 52)
         .sheet(item: $viewModel.selectedTerm) { term in
             DictionaryDetailView(term: term)

@@ -46,6 +46,15 @@ struct BookmarkDetailView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
+                        if bookmarks.isEmpty {
+                            VStack {
+                                Spacer()
+                                Text("북마크가 없습니다.")
+                                    .font(.headline)
+                                    .foregroundStyle(AppColor.label)
+                                    .padding(.top, 100)
+                            }
+                        }
                         ForEach(bookmarks) { term in
                             Button {
                                 selectedTerm = term
@@ -65,6 +74,7 @@ struct BookmarkDetailView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.top, 0)
         }
+        .background(AppColor.white)
         .navigationBarBackButtonHidden()
         .sheet(item: $selectedTerm) { term in
             DictionaryDetailView(term: term)
