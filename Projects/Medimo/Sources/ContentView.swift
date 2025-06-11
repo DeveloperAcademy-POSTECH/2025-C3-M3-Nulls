@@ -9,6 +9,8 @@ import CoreData
 import SwiftUI
 
 public struct ContentView: View {
+    @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
+    
     @Environment(\.managedObjectContext) var moc
     let coreDataManager = CoreDataManager.shared
     let cloudKitManager = CloudKitManager.shared
@@ -27,7 +29,9 @@ public struct ContentView: View {
 
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
-        studyManager.setContext(context)
+        
+        studyManager.setContext(context, selectedGlossaryId)
+
         studyManager.countCurrentStreakAndSave()
     }
 
@@ -128,67 +132,6 @@ public struct ContentView: View {
                         }
                     }
                     .id(isStudyInProgress)
-//                    if isStudyInProgress {
-//                        NavigationStack(path: $navigationManager.studyPath) {
-//                            ZStack {
-//                                StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-//                                    .environmentObject(navigationManager)
-//                                    .navigationDestination(for: PathType.self) { path in
-//                                        switch path {
-//                                        case .StudyCard:
-//                                            StudyCardView(isStudyDone: $isStudyDone, isStudyInProgress: $isStudyInProgress)
-//                                                .environmentObject(navigationManager)
-//
-//                                        case .StudyCalendar:
-//                                            StudyCalendarView().environmentObject(navigationManager)
-//
-//                                        case let .StudyTest(terms):
-//                                            StudyTestView(
-//                                                terms: terms,
-//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        case .ReviewTest:
-//                                            ReviewTestView(
-//                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
-//                                                learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        case let .TestCompletion(index):
-//                                            TestEndView(
-//                                                isStudyInProgress: $isStudyInProgress, index: index,
-//                                                learningType: $learningType
-//                                            ).environmentObject(navigationManager)
-//
-//                                        default:
-//                                            EmptyView()
-//                                        }
-//                                    }
-//
-//                                VStack {
-//                                    Spacer()
-//
-//                                    CustomTabBar(selected: $selectedTab)
-//                                        .padding(.bottom, 24)
-//                                }
-//                                .ignoresSafeArea(edges: .bottom)
-//                            }
-//                        }
-//                    } else {
-//                        ZStack {
-//                            StudyView(context: moc, isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone)
-//                                .environmentObject(navigationManager)
-//
-//                            VStack {
-//                                Spacer()
-//
-//                                CustomTabBar(selected: $selectedTab)
-//                                    .padding(.bottom, 24)
-//                            }
-//                            .ignoresSafeArea(edges: .bottom)
-//                        }
-//                    }
-
                 case .dictionary:
                     ZStack {
                         DictionaryView()

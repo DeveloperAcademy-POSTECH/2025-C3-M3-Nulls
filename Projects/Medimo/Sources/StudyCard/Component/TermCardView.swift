@@ -6,6 +6,8 @@
 
 import CoreData
 import SwiftUI
+import AVFAudio
+import Combine
 
 struct TermCardView: View {
     @ObservedObject var term: Term
@@ -15,10 +17,14 @@ struct TermCardView: View {
     @State private var isFlipped = false
     @State var viewModel: DictionaryDetailViewModel
 
+    @Binding var showSoundAlert: Bool
+    @State private var volumeCancellable: AnyCancellable?
+
     var backgroundColor: Color = AppColor.white
 
-    init(term: Term, backgroundColor: Color) {
+    init(term: Term, showSoundAlert: Binding<Bool>, backgroundColor: Color) {
         self.term = term
+        self._showSoundAlert = showSoundAlert
         self.backgroundColor = backgroundColor
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
     }
@@ -40,14 +46,10 @@ struct TermCardView: View {
                     DictionaryDetailViewComponents.soundButton(
                         spelling: viewModel.term.spelling
                     ) {
-                        if let spelling = viewModel.term.spelling {
-                            viewModel.speak(spelling)
-                        }
+                        checkVolumeAndPlay()
                     }
 
                     Spacer()
-
-                    // TODO: - 북마크 로직 수정
                     BookmarkButtonView(user: user, term: viewModel.term)
                 }
                 .padding(20)
@@ -55,12 +57,10 @@ struct TermCardView: View {
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
                         .font(isFlipped ? .title : .titleEng)
-                    if !isFlipped, let abbreviation = term.abbreviation {
-                        if !abbreviation.isEmpty {
-                            Text("[\(abbreviation)]")
-                                .font(.headlineEng)
-                                .padding(.vertical)
-                        }
+                    if !isFlipped, let abbreviation = term.abbreviation, !abbreviation.isEmpty {
+                        Text("[\(abbreviation)]")
+                            .font(.headlineEng)
+                            .padding(.vertical)
                     }
                 }
                 .foregroundStyle(AppColor.label)
@@ -75,7 +75,6 @@ struct TermCardView: View {
                     } else {
                         if let morphemes = (term.morphemes)?.array as? [Morpheme] {
                             let morphemeArray = morphemes.sorted { ($0.spelling ?? "") < ($1.spelling ?? "") }
-
                             VStack(alignment: .leading, spacing: 4) {
                                 ForEach(morphemeArray, id: \.self) { morpheme in
                                     Text("\(morpheme.spelling ?? "") \(morpheme.meaning ?? "")")
@@ -93,35 +92,47 @@ struct TermCardView: View {
             .padding(28)
         }
         .frame(height: 480)
-        .onTapGesture {
-            isFlipped.toggle()
+        .onTapGesture { isFlipped.toggle() }
+        .onAppear { startVolumeMonitoring() }
+        .onDisappear { volumeCancellable?.cancel() }
+    }
+
+    private func checkVolumeAndPlay() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setActive(true)
+        } catch {
+            showSoundAlert = true
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let volume = session.outputVolume
+            print("볼륨 확인 (딜레이 후): \(volume)")
+            if volume < 0.05 {
+                showSoundAlert = true
+            } else {
+                if let spelling = term.spelling {
+                    viewModel.speak(spelling)
+                }
+                showSoundAlert = false
+            }
         }
     }
-}
 
-#Preview {
-    let context = CoreDataManager.preview.container.viewContext
-    var term = Term(context: context)
+    private func startVolumeMonitoring() {
+        let session = AVAudioSession.sharedInstance()
+        try? session.setActive(true)
 
-    let morpheme1 = Morpheme(context: context)
-    morpheme1.spelling = "neur"
-    morpheme1.meaning = "신경"
-
-    let morpheme2 = Morpheme(context: context)
-    morpheme2.spelling = "itis"
-    morpheme2.meaning = "~의 염증"
-
-    term = Term(context: context)
-    term.spelling = "Neuritis"
-    term.abbreviation = "NT"
-    term.meaning = "신경의 염증"
-    term.morphemes = NSOrderedSet(array: [morpheme1, morpheme2])
-    term.explanation = """
-    Neuritis는 신경에 염증이 생긴 상태를 의미합니다.
-    이로 인해 통증, 감각 저하, 근육 약화 등의 증상이 나타날 수 있습니다.
-    주로 감염, 외상 또는 자가면역 반응으로 인해 발생합니다.
-    """
-
-    return TermCardView(term: term, backgroundColor: AppColor.white)
-        .environment(\.managedObjectContext, context)
+        volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
+            .autoconnect()
+            .sink { _ in
+                let volume = session.outputVolume
+                if volume < 0.05 {
+                    if !showSoundAlert { showSoundAlert = true }
+                } else {
+                    if showSoundAlert { showSoundAlert = false }
+                }
+            }
+    }
 }

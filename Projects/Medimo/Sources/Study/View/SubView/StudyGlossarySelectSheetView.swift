@@ -63,7 +63,7 @@ struct StudyGlossarySelectSheetView: View {
 #Preview {
     @Previewable @State var isPresented = true
     let context = CoreDataManager.preview.container.viewContext
-    StudyManager.shared.setContext(context)
+    StudyManager.shared.setContext(context, 0)
 
     return StudyGlossarySelectSheetView(context: context, isPresented: $isPresented)
 }

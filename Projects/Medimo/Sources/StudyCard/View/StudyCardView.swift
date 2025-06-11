@@ -9,6 +9,8 @@ import CoreData
 import SwiftUI
 
 struct StudyCardView: View {
+    @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
+    
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var navigationManager: NavigationManager
 
@@ -18,6 +20,8 @@ struct StudyCardView: View {
     
     @Binding var isStudyDone: Bool
     @Binding var isStudyInProgress: Bool
+    
+    @State private var showSoundAlert: Bool = false
 
     func colorForPosition(_ position: CardBackgroundModifier.CardPosition) -> Color {
         switch position {
@@ -44,21 +48,28 @@ struct StudyCardView: View {
                 .padding(.bottom)
                 .padding(.horizontal, 15)
                 .padding(.top, 30)
-
+                
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 10) {
                         ForEach(Array(viewModel.terms.enumerated()), id: \.offset) { idx, term in
                             let position = viewModel.cardPosition(for: idx, currentIndex: currentCardIndex)
                             let color = colorForPosition(position)
-                            TermCardView(term: term, backgroundColor: color)
-                                .modifier(CardBackgroundModifier(position: position))
-                                .id(idx)
-                                .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
-                                .frame(width: UIScreen.main.bounds.width - 64)
-                                .scrollTransition { content, phase in
-                                    content
-                                        .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
+                            ZStack {
+                                TermCardView(term: term, showSoundAlert: $showSoundAlert, backgroundColor: color)
+                                    .modifier(CardBackgroundModifier(position: position))
+                                    .id(idx)
+                                    .animation(.easeInOut(duration: 0.15), value: currentCardIndex)
+                                    .frame(width: UIScreen.main.bounds.width - 64)
+                                    .scrollTransition { content, phase in
+                                        content
+                                            .scaleEffect(y: phase.isIdentity ? 1 : 0.85)
+                                    }
+                                
+                                if idx == currentCardIndex, showSoundAlert {
+                                    SoundAlert()
+                                        .padding(.horizontal, 8)
                                 }
+                            }
                         }
                         Color.clear
                             .frame(width: 30)
@@ -69,9 +80,9 @@ struct StudyCardView: View {
                 .scrollTargetBehavior(.viewAligned)
                 .scrollIndicators(.hidden)
                 .scrollPosition(id: $currentCardIndex, anchor: .center)
-
+                
                 Spacer()
-
+                
                 Button("용어 테스트 시작") {
                     navigationManager.studyPath.append(.StudyTest(terms: viewModel.terms))
                 }
@@ -89,7 +100,7 @@ struct StudyCardView: View {
                     .font(.caption)
                     .foregroundStyle(AppColor.grey1)
             }
-
+            
             Spacer()
         }
         .padding(.bottom, 20)
@@ -106,7 +117,7 @@ struct StudyCardView: View {
             }
         }
         .onAppear {
-            viewModel.loadTerms(with: context)
+            viewModel.loadTerms(with: context, existGlossaryId: selectedGlossaryId)
             index = viewModel.terms.isEmpty ? 0 : 1
             currentCardIndex = 0
         }

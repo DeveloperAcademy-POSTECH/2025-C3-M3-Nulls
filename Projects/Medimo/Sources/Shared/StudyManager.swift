@@ -6,7 +6,7 @@
 //
 
 import CoreData
-import Foundation
+import SwiftUI
 
 @Observable
 public class StudyManager {
@@ -38,7 +38,7 @@ public class StudyManager {
         }
     }
 
-    func setContext(_ context: NSManagedObjectContext) {
+    func setContext(_ context: NSManagedObjectContext, _ existGlossaryId: Int) {
         if self.context === context { return }
 
         self.context = context
@@ -46,11 +46,17 @@ public class StudyManager {
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
         request.fetchLimit = 1
 
+        print("⚠️ Glossary ExistGlossaryId: \(existGlossaryId)")
+
         do {
-            if let glossary = try context.fetch(request).first {
-                studyingGlossaryId = glossary.id
+            if existGlossaryId != 0 {
+                studyingGlossaryId = Int64(existGlossaryId)
             } else {
-                studyingGlossaryId = nil
+                if let glossary = try context.fetch(request).first {
+                    studyingGlossaryId = glossary.id
+                } else {
+                    studyingGlossaryId = nil
+                }
             }
         } catch {
             print("❌ Glossary fetch 실패: \(error)")
@@ -108,7 +114,11 @@ public class StudyManager {
     }
 
     func getNextStudyTerms() -> [Term] {
-        guard let dataList = termStudyDataList else { return [] }
+        print("== getNextStudyTerms() called ==")
+        guard let dataList = termStudyDataList else {
+            print("termStudyDataList is nil")
+            return []
+        }
 
         var termIdList: [Int64] = []
 
@@ -125,6 +135,7 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
+        print("termIdList: \(termIdList)")
 
         var result: [Term] = []
 
@@ -137,6 +148,8 @@ public class StudyManager {
                 if result.count >= studyTermSize { break }
             }
         }
+        print("result: \(result)")
+        
         return result
     }
 
