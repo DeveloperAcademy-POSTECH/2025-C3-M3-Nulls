@@ -28,17 +28,21 @@ struct StudyTestView: View {
     
     @Binding var learningType: LearningType
     
+    @Binding var isAnswered: Bool
+    
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
         learningType: Binding<LearningType>,
-        viewModel: StudyTestViewModel = StudyTestViewModel()
+        viewModel: StudyTestViewModel = StudyTestViewModel(),
+        isAnswered: Binding<Bool>
     ) {
         self._terms = State(initialValue: terms)
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
         self._learningType = learningType
+        self._isAnswered = isAnswered
     }
     
     var body: some View {
@@ -46,16 +50,17 @@ struct StudyTestView: View {
             ProgressBar(index: index + 1, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-            
-            StudyTestDetailView(
-                term: $terms[index],
-                testType: currentTestType,
-                buttonText: buttonText,
-                termSize: $studyTermSize,
-                index: $index,
-                showSoundAlert: $showSoundAlert,
-                learningType: $learningType
-            )
+            if index < studyTermSize {
+                StudyTestDetailView(
+                    term: $terms[index],
+                    testType: currentTestType,
+                    buttonText: buttonText,
+                    termSize: $studyTermSize,
+                    index: $index,
+                    showSoundAlert: $showSoundAlert,
+                    learningType: $learningType, isAnswered: $isAnswered
+                )
+            }
         }
         .padding(24)
         .background(AppColor.bgColor)
@@ -80,17 +85,16 @@ struct StudyTestView: View {
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-        
         .onAppear {
             currentTestType = randomValidTestType(for: terms[index])
         }
         .onChange(of: index) { _, newValue in
-            if newValue == studyTermSize {
+            if newValue == studyTermSize - 1 {
                 buttonText = "학습 결과 보러가기"
             } else {
                 buttonText = "다음 문제로"
+                currentTestType = randomValidTestType(for: terms[newValue])
             }
-            currentTestType = randomValidTestType(for: terms[newValue])
         }
     }
     

@@ -27,11 +27,14 @@ struct ReviewTestView: View {
     @State private var showSoundAlert = false
     
     @Binding var learningType: LearningType
+    
+    @Binding var isAnswered: Bool
 
     init(
         isStudyInProgress: Binding<Bool>,
         learningType: Binding<LearningType>,
-        viewModel: ReviewTestViewModel = ReviewTestViewModel()
+        viewModel: ReviewTestViewModel = ReviewTestViewModel(),
+        isAnswered: Binding<Bool>
     ) {
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
@@ -40,6 +43,7 @@ struct ReviewTestView: View {
         self.terms = todayTerms
         self._studyTermSize = State(initialValue: todayTerms.count)
         self._learningType = learningType
+        self._isAnswered = isAnswered
     }
 
     var body: some View {
@@ -47,7 +51,7 @@ struct ReviewTestView: View {
             ProgressBar(index: index + 1, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-            
+
             ReviewTestDetailView(
                 term: $terms[index],
                 testType: currentTestType,
@@ -56,7 +60,8 @@ struct ReviewTestView: View {
                 index: $index,
                 isStudyInProgress: $isStudyInProgress,
                 showSoundAlert: $showSoundAlert,
-                learningType: $learningType
+                learningType: $learningType,
+                isAnswered: $isAnswered
             )
         }
         .padding(24)
@@ -86,7 +91,7 @@ struct ReviewTestView: View {
             currentTestType = randomValidTestType(for: terms[index])
         }
         .onChange(of: index) { _, newValue in
-            if newValue == studyTermSize {
+            if newValue == studyTermSize - 1 {
                 buttonText = "학습 결과 보러가기"
             } else {
                 buttonText = "다음 문제로"

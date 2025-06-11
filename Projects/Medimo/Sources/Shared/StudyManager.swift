@@ -114,7 +114,11 @@ public class StudyManager {
     }
 
     func getNextStudyTerms() -> [Term] {
-        guard let dataList = termStudyDataList else { return [] }
+        print("== getNextStudyTerms() called ==")
+        guard let dataList = termStudyDataList else {
+            print("termStudyDataList is nil")
+            return []
+        }
 
         var termIdList: [Int64] = []
 
@@ -131,6 +135,7 @@ public class StudyManager {
                 .compactMap { $0.term?.id }
             termIdList.append(contentsOf: notStartedTermIdList.prefix(studyTermSize - termIdList.count))
         }
+        print("termIdList: \(termIdList)")
 
         var result: [Term] = []
 
@@ -143,6 +148,8 @@ public class StudyManager {
                 if result.count >= studyTermSize { break }
             }
         }
+        print("result: \(result)")
+        
         return result
     }
 

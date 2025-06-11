@@ -17,11 +17,11 @@ struct AnswerView: View {
     @Binding var termSize: Int
 
     @State private var answer: String = ""
-    @State private var isAnswered: Bool = false
+    @Binding var isAnswered: Bool
     @State private var isCorrect: Bool = false
 
     @Binding var showSoundAlert: Bool
-    @State var learningType: LearningType
+    @Binding var learningType: LearningType
 
     @FocusState private var isTextFieldFocused: Bool
 
@@ -117,14 +117,18 @@ struct AnswerView: View {
                 Spacer()
 
                 NextButton(buttonText: buttonText, action: {
-                    if index < termSize {
+                    print("buttonText: \(buttonText), index: \(index), termSize: \(termSize)")
+                    if index < termSize - 1 {
                         isAnswered = false
                         isCorrect = false
                         answer = ""
                         index += 1
                     } else {
+                        isAnswered = false
                         studyManager.addDateInfoWhenFinished(learningType)
-                        studyManager.updateGlossaryProgress()
+                        if learningType == .study {
+                            studyManager.updateGlossaryProgress()
+                        }
 
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }

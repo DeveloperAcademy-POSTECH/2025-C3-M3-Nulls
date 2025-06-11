@@ -17,11 +17,14 @@ struct PronounciationTestView: View {
     @State var viewModel: DictionaryDetailViewModel
     @State private var volumeCancellable: AnyCancellable?
 
-    init(term: Term, showSoundAlert: Binding<Bool>) {
-            self.term = term
-            self._showSoundAlert = showSoundAlert
-            _viewModel = State(initialValue: DictionaryDetailViewModel(term: term))
-        }
+    init(term: Term, showSoundAlert: Binding<Bool>, isAnswered: Binding<Bool>) {
+        self.term = term
+        self._showSoundAlert = showSoundAlert
+        self._isAnswered = isAnswered
+        _viewModel = State(initialValue: DictionaryDetailViewModel(term: term))
+    }
+    
+    @Binding var isAnswered: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -42,7 +45,7 @@ struct PronounciationTestView: View {
                             showSoundAlert = true
                         } else {
                             if let spelling = term.spelling {
-                                viewModel.speak(spelling)
+                                DictionaryDetailViewModel.sharedSpeak(spelling)
                             }
                             showSoundAlert = false
                         }
@@ -76,6 +79,7 @@ struct PronounciationTestView: View {
             volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
                 .autoconnect()
                 .sink { _ in
+                    guard !isAnswered else { return }
                     let volume = session.outputVolume
                     showSoundAlert = volume < 0.05
                 }
@@ -84,26 +88,4 @@ struct PronounciationTestView: View {
             volumeCancellable?.cancel()
         }
     }
-}
-
-struct PronounciationTestViewPreview: View {
-    @State private var showSoundAlert = false
-
-    var body: some View {
-        let context = CoreDataManager.preview.container.viewContext
-
-        let sampleTerm: Term = {
-            let term = Term(context: context)
-            term.spelling = "Electrocardiogram"
-            term.meaning = "심전도"
-            return term
-        }()
-
-        return PronounciationTestView(term: sampleTerm, showSoundAlert: $showSoundAlert)
-            .environment(\.managedObjectContext, context)
-    }
-}
-
-#Preview {
-    PronounciationTestViewPreview()
 }

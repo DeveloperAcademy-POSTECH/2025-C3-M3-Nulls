@@ -86,11 +86,9 @@ struct GlossaryDetailView: View {
 #Preview {
     let context = CoreDataManager.preview.container.viewContext
 
-    // ✅ 샘플 Glossary 인스턴스 생성
     let sampleGlossary = Glossary(context: context)
     sampleGlossary.title = "샘플 용어집"
 
-    // ✅ 샘플 Term 인스턴스 추가
     let sampleTerm = Term(context: context)
     sampleTerm.spelling = "hypoxia"
     sampleTerm.meaning = "저산소증"

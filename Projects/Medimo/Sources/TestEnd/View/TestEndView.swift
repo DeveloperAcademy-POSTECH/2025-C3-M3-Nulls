@@ -44,7 +44,7 @@ struct TestEndView: View {
                         .foregroundStyle(AppColor.grey4)
                         .padding(.bottom, 10)
 
-                    Text("\(index)개")
+                    Text("\(index + 1)개")
                         .font(.largeTitle)
                         .foregroundStyle(AppColor.navy)
                 }

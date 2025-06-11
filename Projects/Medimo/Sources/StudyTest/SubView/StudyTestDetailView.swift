@@ -18,6 +18,8 @@ struct StudyTestDetailView: View {
     @Binding var showSoundAlert: Bool
     
     @Binding var learningType: LearningType
+    
+    @Binding var isAnswered: Bool
 
     var correctAnswer: String {
         switch testType {
@@ -42,7 +44,7 @@ struct StudyTestDetailView: View {
             case .abbreviation:
                 AbbreviationTestView(term: term)
             case .pronunciation:
-                PronounciationTestView(term: term, showSoundAlert: $showSoundAlert)
+                PronounciationTestView(term: term, showSoundAlert: $showSoundAlert, isAnswered: $isAnswered)
             }
 
             VStack {
@@ -50,8 +52,8 @@ struct StudyTestDetailView: View {
                     correctAnswer: correctAnswer,
                     index: $index,
                     termSize: $termSize,
-                    showSoundAlert: $showSoundAlert,
-                    learningType: learningType,
+                    isAnswered: $isAnswered, showSoundAlert: $showSoundAlert,
+                    learningType: $learningType,
                     term: $term,
                     buttonText: buttonText
                 )

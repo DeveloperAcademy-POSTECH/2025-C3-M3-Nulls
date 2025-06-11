@@ -23,10 +23,12 @@ public struct ContentView: View {
     @StateObject var syncStatus = SyncStatus()
 
     @State private var learningType: LearningType = .study
+    
+    @State private var isAnswered: Bool = false
 
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
-
+        
         studyManager.setContext(context, selectedGlossaryId)
 
         studyManager.countCurrentStreakAndSave()
@@ -58,7 +60,6 @@ public struct ContentView: View {
                                     EmptyView()
                                 }
                             }
-
                         VStack {
                             Spacer()
 
@@ -90,13 +91,13 @@ public struct ContentView: View {
                                 StudyTestView(
                                     terms: terms,
                                     isStudyInProgress: $isStudyInProgress,
-                                    learningType: $learningType
+                                    learningType: $learningType, isAnswered: $isAnswered
                                 ).environmentObject(navigationManager)
 
                             case .ReviewTest:
                                 ReviewTestView(
                                     isStudyInProgress: $isStudyInProgress,
-                                    learningType: $learningType
+                                    learningType: $learningType, isAnswered: $isAnswered
                                 ).environmentObject(navigationManager)
 
                             case let .TestCompletion(index):
