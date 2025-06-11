@@ -91,5 +91,17 @@ struct TabBarButtonContent: View {
 }
 
 #Preview {
-    CustomTabBar(selected: .constant(.glossary))
+    @Previewable @State var selectedTab: TabType = .study
+
+    ZStack {
+        DictionaryView()
+            .environmentObject(NavigationManager())
+
+        VStack {
+            Spacer()
+            CustomTabBar(selected: $selectedTab)
+                .padding(.bottom, 16)
+        }
+        .ignoresSafeArea(edges: .bottom)
+    }
 }
