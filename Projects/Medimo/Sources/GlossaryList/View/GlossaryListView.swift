@@ -53,15 +53,17 @@ struct GlossaryListView: View {
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 24) {
-                        Button {
-                            navigationManager.glossaryPath.append(
-                                .BookmarkDetail
-                            )
-                        } label: {
-                            BookmarkCardView(
-                                title: "북마크",
-                                totalCount: studyManager.user.bookmarks?.count ?? 0
-                            )
+                        if selectedCategory == .all {
+                            Button {
+                                navigationManager.glossaryPath.append(
+                                    .BookmarkDetail
+                                )
+                            } label: {
+                                BookmarkCardView(
+                                    title: "북마크",
+                                    totalCount: studyManager.user.bookmarks?.count ?? 0
+                                )
+                            }                            
                         }
                         ForEach(filteredGlossaries) { glossary in
                             let currentCount = Int(viewModel.user.progressForGlossary(glossary.id)?.studiedCount ?? 0)
