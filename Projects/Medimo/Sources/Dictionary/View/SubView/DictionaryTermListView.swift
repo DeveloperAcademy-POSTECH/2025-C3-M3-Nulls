@@ -30,7 +30,7 @@ struct DictionaryTermListView: View {
     }
 }
 
-#Preview {
-    let context = CoreDataManager.preview.container.viewContext
-    DictionaryTermListView(viewModel: .init())
-}
+// #Preview {
+//    let context = CoreDataManager.preview.container.viewContext
+//    DictionaryTermListView(viewModel: .init())
+// }

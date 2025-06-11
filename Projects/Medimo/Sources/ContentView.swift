@@ -20,14 +20,21 @@ public struct ContentView: View {
     @StateObject private var navigationManager = NavigationManager()
 
     @StateObject var syncStatus = SyncStatus()
-    
+
     @State private var learningType: LearningType = .study
 
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
-        studyManager.setContext(context)
 
+        studyManager.setContext(context)
         studyManager.checkCurrentGlossaryProgress()
+
+        if let bookmarks = studyManager.user.bookmarks as? Set<Term> {
+            let bookmarkArray = Array(bookmarks)
+            for bookmark in bookmarkArray {
+                print(bookmark.spelling)
+            }
+        }
     }
 
     public var body: some View {
@@ -49,6 +56,10 @@ public struct ContentView: View {
                                         )
                                         .environmentObject(navigationManager)
 
+                                    case .BookmarkDetail:
+                                        BookmarkDetailView()
+                                            .environmentObject(navigationManager)
+
                                     default:
                                         EmptyView()
                                     }
@@ -65,8 +76,7 @@ public struct ContentView: View {
                     }
 
                 case .study:
-                    NavigationStack(path: $navigationManager.studyPath)
-                    {
+                    NavigationStack(path: $navigationManager.studyPath) {
                         ZStack {
                             StudyView(
                                 context: moc,
@@ -82,10 +92,10 @@ public struct ContentView: View {
                                         isStudyInProgress: $isStudyInProgress
                                     )
                                     .environmentObject(navigationManager)
-                                    
+
                                 case .StudyCalendar:
                                     StudyCalendarView().environmentObject(navigationManager)
-                                    
+
                                 case let .StudyTest(terms):
                                     StudyTestView(
                                         terms: terms,
@@ -93,21 +103,21 @@ public struct ContentView: View {
                                         isStudyDone: $isStudyDone,
                                         learningType: $learningType
                                     ).environmentObject(navigationManager)
-                                    
+
                                 case .ReviewTest:
                                     ReviewTestView(
                                         isStudyInProgress: $isStudyInProgress,
                                         isStudyDone: $isStudyDone,
                                         learningType: $learningType
                                     ).environmentObject(navigationManager)
-                                    
+
                                 case let .TestCompletion(index):
                                     TestEndView(
                                         isStudyInProgress: $isStudyInProgress,
                                         index: index,
                                         learningType: $learningType
                                     ).environmentObject(navigationManager)
-                                    
+
                                 default:
                                     EmptyView()
                                 }
@@ -132,28 +142,28 @@ public struct ContentView: View {
 //                                        case .StudyCard:
 //                                            StudyCardView(isStudyDone: $isStudyDone, isStudyInProgress: $isStudyInProgress)
 //                                                .environmentObject(navigationManager)
-//                                            
+//
 //                                        case .StudyCalendar:
 //                                            StudyCalendarView().environmentObject(navigationManager)
-//                                            
+//
 //                                        case let .StudyTest(terms):
 //                                            StudyTestView(
 //                                                terms: terms,
 //                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone, learningType: $learningType
 //                                            ).environmentObject(navigationManager)
-//                                            
+//
 //                                        case .ReviewTest:
 //                                            ReviewTestView(
 //                                                isStudyInProgress: $isStudyInProgress, isStudyDone: $isStudyDone,
 //                                                learningType: $learningType
 //                                            ).environmentObject(navigationManager)
-//                                            
+//
 //                                        case let .TestCompletion(index):
 //                                            TestEndView(
 //                                                isStudyInProgress: $isStudyInProgress, index: index,
 //                                                learningType: $learningType
 //                                            ).environmentObject(navigationManager)
-//                                            
+//
 //                                        default:
 //                                            EmptyView()
 //                                        }

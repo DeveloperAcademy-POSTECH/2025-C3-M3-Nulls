@@ -13,10 +13,8 @@ extension Date {
         let calendar = Calendar.current
 
         let startDate = calendar.date(from: calendar.dateComponents([.year, .month], from: self))!
-        print("📝 startDate: \(startDate)")
 
         let range = calendar.range(of: .day, in: .month, for: startDate)!
-        print("📝 range: \(range)")
 
         return range.compactMap { day -> Date in
             calendar.date(

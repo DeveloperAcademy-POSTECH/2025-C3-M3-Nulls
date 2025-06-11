@@ -14,7 +14,7 @@ public class StudyManager {
 
     private init() {}
 
-    private var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext?
 
     let coredataManager = CoreDataManager.shared
 
@@ -32,6 +32,7 @@ public class StudyManager {
 
     var studyingGlossaryId: Int64? {
         didSet {
+            print("⚠️ Cache 초기화")
             _cachedStudyingGlossary = nil
             _cachedTermStudyDataList = nil
         }
@@ -70,6 +71,7 @@ public class StudyManager {
         do {
             let result = try context?.fetch(request).first
             _cachedStudyingGlossary = result
+            print("⚠️ Glossary Changed: \(String(describing: result?.title))")
             return result
         } catch {
             print("Glossary fetch 실패: \(error)")
@@ -251,9 +253,7 @@ public class StudyManager {
 
         let progressList = user.progresses as? Set<GlossaryProgress> ?? []
 
-        print("✏️ 현재 유저: \(String(describing: progressList))")
         print("✏️ 현재 Glossary: \(String(describing: studyingGlossary?.title))")
-        print("✏️ 현재 학습 진행 상황: \(String(describing: currentProgress))")
     }
 
     func updateGlossaryProgress() {
