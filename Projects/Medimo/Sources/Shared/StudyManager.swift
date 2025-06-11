@@ -39,6 +39,8 @@ public class StudyManager {
     }
 
     func setContext(_ context: NSManagedObjectContext) {
+        if self.context === context { return }
+        
         self.context = context
 
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
@@ -80,7 +82,7 @@ public class StudyManager {
 
     var currentGlossaryProgress: GlossaryProgress? {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
         return currentProgress
     }
 
@@ -247,7 +249,7 @@ public class StudyManager {
 
     func checkCurrentGlossaryProgress() {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
 
         let progressList = user.progresses as? Set<GlossaryProgress> ?? []
 
@@ -256,7 +258,7 @@ public class StudyManager {
 
     func updateGlossaryProgress() {
         let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossary?.id })
+            .first(where: { $0.glossary?.id == studyingGlossaryId })
 
         print("✏️ 입력전 Progress 학습 진행 상황: \(String(describing: currentProgress))")
 
