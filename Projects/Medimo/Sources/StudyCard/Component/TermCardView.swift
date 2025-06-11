@@ -37,9 +37,9 @@ struct TermCardView: View {
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 20)
                 .fill(backgroundColor)
-                .shadow(color: .black.opacity(0.2), radius: 5)
+                .shadow(color: .black.opacity(0.35), radius: 20, x: 0, y: 4)
 
-            VStack(spacing: 8) {
+            VStack(spacing: 0) {
                 HStack {
                     DictionaryDetailViewComponents.soundButton(spelling: viewModel.term.spelling) {
                         isSoundButtonTapped = true
@@ -50,9 +50,10 @@ struct TermCardView: View {
                         )
                     }
                     Spacer()
+                    
                     BookmarkButtonView(user: user, term: viewModel.term)
                 }
-                .padding(20)
+                .padding(.top, 30)
 
                 VStack(alignment: .leading) {
                     Text((isFlipped ? term.meaning : term.spelling) ?? "")
@@ -62,7 +63,7 @@ struct TermCardView: View {
                     }
                 }
                 .foregroundStyle(AppColor.label)
-                .padding(20)
+                .padding(.vertical, 55)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
@@ -73,7 +74,7 @@ struct TermCardView: View {
                     } else {
                         if let morphemes = (term.morphemes)?.array as? [Morpheme] {
                             let morphemeArray = morphemes.sorted { ($0.spelling ?? "") < ($1.spelling ?? "") }
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 7) {
                                 ForEach(morphemeArray, id: \.self) { morpheme in
                                     Text("\(morpheme.spelling ?? "") \(morpheme.meaning ?? "")")
                                 }
@@ -83,11 +84,10 @@ struct TermCardView: View {
                 }
                 .font(.caption)
                 .foregroundStyle(AppColor.grey4)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 40)
+                .padding(.vertical, 30)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(28)
+            .padding(30)
         }
         .frame(height: 480)
         .onTapGesture { isFlipped.toggle() }

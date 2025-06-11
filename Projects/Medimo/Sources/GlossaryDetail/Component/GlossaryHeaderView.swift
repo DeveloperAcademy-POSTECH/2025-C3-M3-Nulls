@@ -14,7 +14,7 @@ struct GlossaryHeaderView: View {
     let currentCount: Int
     let totalCount: Int
     let scrollOffset: CGFloat
-    
+
     func lastStudiedAtString(_ date: Date?) -> String {
         if let date = date {
             let formatter = DateFormatter()
@@ -50,11 +50,11 @@ struct GlossaryHeaderView: View {
                         HStack(spacing: 3) {
                             Text("\(currentCount)")
                                 .font(.body)
-                                .foregroundStyle(AppColor.textColor)
+                                .foregroundStyle(AppColor.label)
 
                             Text("/\(totalCount)")
                                 .font(.caption)
-                                .foregroundStyle(AppColor.secondary)
+                                .foregroundStyle(AppColor.blue)
                         }
                         .padding(.horizontal, 4)
                     }
@@ -64,8 +64,8 @@ struct GlossaryHeaderView: View {
                         .overlay(
                             GeometryReader { geometry in
                                 Capsule()
-                                    .fill(AppColor.systemFill)
-                                    .frame(width: geometry.size.width * CGFloat(currentCount)/CGFloat(totalCount), height: 8)
+                                    .fill(AppColor.blue)
+                                    .frame(width: geometry.size.width * CGFloat(currentCount) / CGFloat(totalCount), height: 8)
                             }
                             .clipShape(Capsule())
                         )

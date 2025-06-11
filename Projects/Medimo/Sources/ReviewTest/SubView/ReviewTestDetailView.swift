@@ -17,7 +17,6 @@ struct ReviewTestDetailView: View {
     
     @Binding var isStudyInProgress: Bool
     @Binding var showSoundAlert: Bool
-    @Binding var isStudyDone: Bool
     
     @Binding var learningType: LearningType
     
@@ -54,9 +53,9 @@ struct ReviewTestDetailView: View {
                     correctAnswer: correctAnswer,
                     index: $index,
                     termSize: $termSize,
-                    isAnswered: $isAnswered, showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone,
-                    learningType: learningType,
+                    isAnswered: $isAnswered,
+                    showSoundAlert: $showSoundAlert,
+                    learningType: $learningType,
                     term: $term,
                     buttonText: buttonText
                 )

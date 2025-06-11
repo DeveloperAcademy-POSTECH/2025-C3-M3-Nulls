@@ -1,3 +1,10 @@
+//
+//  TermListView.swift
+//  Projects
+//
+//  Created by 양시준 on 6/1/25.
+//
+
 import CoreData
 import SwiftUI
 import AVFAudio
@@ -28,7 +35,8 @@ struct DictionaryDetailView: View {
                 VStack {
                     Spacer()
                     DictionaryDetailViewComponents.characterImage()
-                }
+                } // VStack
+                .background(AppColor.white)
 
                 VStack(spacing: 0) {
                     ScrollView {
@@ -47,7 +55,7 @@ struct DictionaryDetailView: View {
                                 }
                                 Spacer()
                                 BookmarkButtonView(user: user, term: viewModel.term)
-                            }
+                            } // HStack
                             .padding(.top, 48)
                             .padding(.bottom, 20)
 
@@ -65,8 +73,8 @@ struct DictionaryDetailView: View {
 
                                 DictionaryDetailViewComponents.sectionGlossary(viewModel.term.glossaries)
                                 DictionaryDetailViewComponents.sectionRectangle()
-                            }
-                        }
+                            } // VStack
+                        } // VStack
                         .padding(.horizontal, 32)
 
                         DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)

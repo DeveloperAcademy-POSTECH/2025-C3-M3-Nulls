@@ -5,6 +5,7 @@
 //  Created by 이서현 on 6/5/25.
 //
 
+import AudioToolbox
 import SwiftUI
 
 struct AnswerView: View {
@@ -20,10 +21,13 @@ struct AnswerView: View {
     @State private var isCorrect: Bool = false
 
     @Binding var showSoundAlert: Bool
-    @Binding var isStudyDone: Bool
-    @State var learningType: LearningType
+    @Binding var learningType: LearningType
+
+    @FocusState private var isTextFieldFocused: Bool
 
     @Binding var term: Term
+
+    @State private var showError: Bool = false
 
     var buttonText: String
 
@@ -34,6 +38,14 @@ struct AnswerView: View {
     }
 
     func submitAction() {
+        if answer.isEmpty {
+            showError = true
+            // 진동 발생
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            return
+        }
+        showError = false
+
         let trimmedAnswers = correctAnswer
             .split(separator: ",")
             .map { clean(String($0)) }
@@ -48,14 +60,19 @@ struct AnswerView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("정답 입력하기", text: $answer)
+                TextField("", text: $answer)
                     .font(.bodyEng)
-                    .foregroundStyle(AppColor.grey3)
+                    .foregroundStyle(AppColor.label)
                     .padding(.horizontal, 8)
                     .disabled(isAnswered)
                     .submitLabel(.done)
-                    .onSubmit {
-                        submitAction()
+                    .onSubmit { submitAction() }
+                    .focused($isTextFieldFocused)
+                    .placeholder(when: answer.isEmpty) {
+                        Text("정답 입력하기")
+                            .font(.bodyEng)
+                            .foregroundStyle(AppColor.grey3)
+                            .padding(.horizontal, 8)
                     }
 
                 Button(action: {
@@ -66,13 +83,23 @@ struct AnswerView: View {
                         .foregroundStyle(AppColor.white)
                 }
                 .padding(12)
-                .background(AppColor.navy)
+                .background(showError ? AppColor.hotPink : AppColor.navy)
                 .cornerRadius(16)
                 .disabled(answer.isEmpty || isAnswered)
             }
             .padding(8)
-            .background(AppColor.white)
+            .background(showError ? AppColor.skyPink : AppColor.white)
             .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(showError ? AppColor.hotPink : Color.clear, lineWidth: 1)
+            )
+
+            Text("잠깐! 아직 정답을 작성하지 않았어요.")
+                .font(.caption)
+                .foregroundStyle(AppColor.hotPink)
+                .opacity(showError ? 1 : 0)
+                .padding(.top, 15)
 
             if isAnswered {
                 if isCorrect {
@@ -90,21 +117,30 @@ struct AnswerView: View {
                 Spacer()
 
                 NextButton(buttonText: buttonText, action: {
-                    if index < termSize {
+                    print("buttonText: \(buttonText), index: \(index), termSize: \(termSize)")
+                    if index < termSize - 1 {
                         isAnswered = false
                         isCorrect = false
                         answer = ""
                         index += 1
                     } else {
-                        isStudyDone = true
-
-                        studyManager.addDateInfoWhenFinished()
-                        studyManager.updateGlossaryProgress()
+                        isAnswered = false
+                        studyManager.addDateInfoWhenFinished(learningType)
+                        if learningType == .study {
+                            studyManager.updateGlossaryProgress()
+                        }
 
                         navigationManager.studyPath.append(.TestCompletion(index: index))
                     }
                 })
             }
+        }
+        .onAppear {
+            isTextFieldFocused = true
+        }
+        .onChange(of: index) {
+            isTextFieldFocused = true
+            showError = false
         }
     }
 }

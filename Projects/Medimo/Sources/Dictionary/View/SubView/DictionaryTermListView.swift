@@ -26,7 +26,6 @@ struct DictionaryTermListView: View {
             .padding(.vertical, 20)
         }
         .scrollContentBackground(.hidden)
-        .background(Color.white)
     }
 }
 

@@ -14,10 +14,9 @@ struct StudyTestView: View {
     @State private var showExitConfirm = false
     
     private var viewModel: StudyTestViewModel
-    @State private var index: Int = 1
+    @State private var index: Int = 0
     
     @Binding var isStudyInProgress: Bool
-    @Binding var isStudyDone: Bool
     
     @State private var terms: [Term]
     @State private var studyTermSize: Int
@@ -34,7 +33,6 @@ struct StudyTestView: View {
     init(
         terms: [Term],
         isStudyInProgress: Binding<Bool>,
-        isStudyDone: Binding<Bool>,
         learningType: Binding<LearningType>,
         viewModel: StudyTestViewModel = StudyTestViewModel(),
         isAnswered: Binding<Bool>
@@ -43,28 +41,24 @@ struct StudyTestView: View {
         self._isStudyInProgress = isStudyInProgress
         self.viewModel = viewModel
         self._studyTermSize = State(initialValue: terms.count)
-        self._isStudyDone = isStudyDone
         self._learningType = learningType
         self._isAnswered = isAnswered
     }
     
     var body: some View {
         VStack {
-            ProgressBar(index: index, total: terms.count)
+            ProgressBar(index: index + 1, total: terms.count)
                 .padding(.bottom, 48)
                 .padding(.horizontal, 8)
-            
-            if terms.indices.contains(index - 1) {
+            if index < studyTermSize {
                 StudyTestDetailView(
-                    term: $terms[index - 1],
+                    term: $terms[index],
                     testType: currentTestType,
                     buttonText: buttonText,
                     termSize: $studyTermSize,
                     index: $index,
                     showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone,
-                    learningType: $learningType,
-                    isAnswered: $isAnswered
+                    learningType: $learningType, isAnswered: $isAnswered
                 )
             }
         }
@@ -74,7 +68,6 @@ struct StudyTestView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    isStudyInProgress = false
                     showExitConfirm = true
                 }) {
                     Image(systemName: "chevron.left")
@@ -84,6 +77,7 @@ struct StudyTestView: View {
         }
         .alert("학습 종료하기", isPresented: $showExitConfirm) {
             Button("종료하기", role: .destructive) {
+                isStudyInProgress = false
                 navigationManager.studyPath = []
             }
             Button("취소", role: .cancel) {
@@ -91,20 +85,19 @@ struct StudyTestView: View {
         } message: {
             Text("지금 나가면 진행 중인 학습이 초기화돼요.\n정말 종료할까요?")
         }
-        
         .onAppear {
-            currentTestType = randomValidTestType(for: terms[index - 1])
+            currentTestType = randomValidTestType(for: terms[index])
         }
         .onChange(of: index) { _, newValue in
-            if newValue == studyTermSize {
+            if newValue == studyTermSize - 1 {
                 buttonText = "학습 결과 보러가기"
             } else {
                 buttonText = "다음 문제로"
+                currentTestType = randomValidTestType(for: terms[newValue])
             }
-            currentTestType = randomValidTestType(for: terms[newValue - 1])
         }
     }
-
+    
     private func randomValidTestType(for term: Term) -> TestType {
         let availableTypes = TestType.allCases.filter { type in
             switch type {

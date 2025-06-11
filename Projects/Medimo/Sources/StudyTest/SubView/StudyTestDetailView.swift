@@ -16,7 +16,6 @@ struct StudyTestDetailView: View {
     @Binding var index: Int
 
     @Binding var showSoundAlert: Bool
-    @Binding var isStudyDone: Bool
     
     @Binding var learningType: LearningType
     
@@ -54,8 +53,7 @@ struct StudyTestDetailView: View {
                     index: $index,
                     termSize: $termSize,
                     isAnswered: $isAnswered, showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone,
-                    learningType: learningType,
+                    learningType: $learningType,
                     term: $term,
                     buttonText: buttonText
                 )

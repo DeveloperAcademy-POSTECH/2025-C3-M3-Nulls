@@ -28,7 +28,7 @@ struct BookmarkDetailView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color(red: 0.8, green: 0.86, blue: 0.99)
+            Color(AppColor.skyBlue)
                 .frame(height: 150)
                 .edgesIgnoringSafeArea(.top)
 
@@ -46,6 +46,15 @@ struct BookmarkDetailView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
+                        if bookmarks.isEmpty {
+                            VStack {
+                                Spacer()
+                                Text("북마크가 없습니다.")
+                                    .font(.headline)
+                                    .foregroundStyle(AppColor.label)
+                                    .padding(.top, 100)
+                            }
+                        }
                         ForEach(bookmarks) { term in
                             Button {
                                 selectedTerm = term
@@ -65,6 +74,7 @@ struct BookmarkDetailView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.top, 0)
         }
+        .background(AppColor.white)
         .navigationBarBackButtonHidden()
         .sheet(item: $selectedTerm) { term in
             DictionaryDetailView(term: term)
@@ -108,16 +118,11 @@ struct BookmarkHeaderView: View {
                     .padding(.horizontal, 4)
                 }
                 .foregroundStyle(AppColor.textColor)
-                .padding(.leading, 16)
                 .padding(.horizontal, 16)
             }
         }
         .padding(.top, 90)
         .padding(.bottom, 16)
-//        .background(AppColor.secondarySystemFill)
-//        }
-//        .frame(height: 211)
-        // .ignoresSafeArea(edges: .top)
     }
 }
 
