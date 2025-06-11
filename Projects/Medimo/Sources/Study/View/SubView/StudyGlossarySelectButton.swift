@@ -9,6 +9,8 @@ import CoreData
 import SwiftUI
 
 struct StudyGlossarySelectButton: View {
+    @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
+
     var user: User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let users = (try? CoreDataManager.shared.context.fetch(fetchRequest)) ?? []
@@ -36,8 +38,11 @@ struct StudyGlossarySelectButton: View {
     var body: some View {
         Button {
             selectedGlossary = glossary
+            selectedGlossaryId = Int(glossary.id)
+
             studyManager.studyingGlossaryId = selectedGlossary?.id
-            print("⚠️ Glossary selected: \(studyManager.studyingGlossary?.title)")
+
+            print("⚠️ selected glossary ID: \(selectedGlossaryId)")
         } label: {
             HStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {

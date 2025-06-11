@@ -11,8 +11,8 @@ import Foundation
 class StudyCardViewModel: ObservableObject {
     @Published var terms: [Term] = []
 
-    func loadTerms(with context: NSManagedObjectContext) {
-        StudyManager.shared.setContext(context)
+    func loadTerms(with context: NSManagedObjectContext, existGlossaryId: Int) {
+        StudyManager.shared.setContext(context, existGlossaryId)
         terms = StudyManager.shared.getNextStudyTerms()
     }
 

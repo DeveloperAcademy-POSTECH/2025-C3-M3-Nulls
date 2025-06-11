@@ -9,6 +9,8 @@ import CoreData
 import SwiftUI
 
 public struct ContentView: View {
+    @AppStorage("selectedGlossaryId") private var selectedGlossaryId: Int = 0
+    
     @Environment(\.managedObjectContext) var moc
     let coreDataManager = CoreDataManager.shared
     let cloudKitManager = CloudKitManager.shared
@@ -26,7 +28,7 @@ public struct ContentView: View {
     init(context: NSManagedObjectContext) {
         let studyManager = StudyManager.shared
 
-        studyManager.setContext(context)
+        studyManager.setContext(context, selectedGlossaryId)
 
         studyManager.countCurrentStreakAndSave()
     }
