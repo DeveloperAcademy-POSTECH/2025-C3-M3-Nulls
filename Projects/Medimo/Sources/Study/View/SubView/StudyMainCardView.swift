@@ -20,7 +20,6 @@ struct StudyMainCardView: View {
     let studyManager = StudyManager.shared
 
     @Binding var isStudyInProgress: Bool
-    @Binding var isStudyDone: Bool
     @State private var showAlert = false
 
     var body: some View {
@@ -48,7 +47,7 @@ struct StudyMainCardView: View {
 
                     ReviewStartButtonView(
                         action: {
-                            if isStudyDone {
+                            if studyManager.getTodayReviewTerms().count > 0 {
                                 isStudyInProgress = true
                                 navigationManager.studyPath.append(.ReviewTest)
                             } else {
