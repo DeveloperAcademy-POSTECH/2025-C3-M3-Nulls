@@ -1,8 +1,3 @@
-//
-//  DictionaryDetailView.swift
-//  Projects
-//
-
 import CoreData
 import SwiftUI
 import AVFAudio
@@ -15,6 +10,7 @@ struct DictionaryDetailView: View {
     @State var viewModel: DictionaryDetailViewModel
     @State private var showSoundAlert = false
     @State private var volumeCancellable: AnyCancellable?
+    @State private var isSoundButtonTapped = false
 
     init(term: Term) {
         _viewModel = State(wrappedValue: DictionaryDetailViewModel(term: term))
@@ -37,12 +33,12 @@ struct DictionaryDetailView: View {
                 VStack(spacing: 0) {
                     ScrollView {
                         VStack(alignment: .leading) {
-
-                            // MARK: - 사운드, 북마크 버튼
                             HStack {
                                 DictionaryDetailViewComponents.soundButton(
                                     spelling: viewModel.term.spelling
                                 ) {
+                                    isSoundButtonTapped = true
+
                                     VolumeHelper.checkVolumeAndPlay(
                                         spelling: viewModel.term.spelling,
                                         onTooLowVolume: { showSoundAlert = true },
@@ -55,7 +51,6 @@ struct DictionaryDetailView: View {
                             .padding(.top, 48)
                             .padding(.bottom, 20)
 
-                            // MARK: - 용어, 약어, 분과
                             VStack(alignment: .leading) {
                                 Text(viewModel.term.spelling ?? "")
                                     .font(.titleEng)
@@ -74,15 +69,12 @@ struct DictionaryDetailView: View {
                         }
                         .padding(.horizontal, 32)
 
-                        // MARK: - 의미
                         DictionaryDetailViewComponents.meaningSection(viewModel.term.meaning)
 
-                        // MARK: - 어원
                         if let morphemes = (viewModel.term.morphemes)?.array as? [Morpheme], !morphemes.isEmpty {
                             DictionaryDetailViewComponents.morphemeSection(morphemes)
                         }
 
-                        // MARK: - 설명
                         DictionaryDetailViewComponents.explanationSection(viewModel.term.explanation)
 
                         Spacer()
@@ -100,19 +92,15 @@ struct DictionaryDetailView: View {
             }
         }
         .onAppear {
-            // 볼륨 감시 시작
             let session = AVAudioSession.sharedInstance()
             try? session.setActive(true)
-            
+
             volumeCancellable = Timer.publish(every: 0.5, on: .main, in: .common)
                 .autoconnect()
                 .sink { _ in
+                    guard isSoundButtonTapped else { return }
                     let volume = session.outputVolume
-                    if volume >= 0.05 {
-                        if showSoundAlert {
-                            showSoundAlert = false
-                        }
-                    }
+                    showSoundAlert = (volume < 0.05)
                 }
         }
         .onDisappear {

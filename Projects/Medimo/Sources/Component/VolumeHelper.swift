@@ -8,7 +8,11 @@
 import AVFAudio
 
 struct VolumeHelper {
-    static func checkVolumeAndPlay(spelling: String?, onTooLowVolume: @escaping () -> Void, onSuccess: @escaping () -> Void) {
+    static func checkVolumeAndPlay(
+        spelling: String?,
+        onTooLowVolume: @escaping () -> Void,
+        onSuccess: @escaping () -> Void
+    ) {
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setActive(true)
@@ -23,7 +27,7 @@ struct VolumeHelper {
                 onTooLowVolume()
             } else {
                 if let spelling = spelling {
-                    DictionaryDetailViewModel.speak(spelling)
+                    DictionaryDetailViewModel.sharedSpeak(spelling)
                 }
                 onSuccess()
             }

@@ -45,7 +45,7 @@ struct PronounciationTestView: View {
                             showSoundAlert = true
                         } else {
                             if let spelling = term.spelling {
-                                DictionaryDetailViewModel.speak(spelling)
+                                DictionaryDetailViewModel.sharedSpeak(spelling)
                             }
                             showSoundAlert = false
                         }
