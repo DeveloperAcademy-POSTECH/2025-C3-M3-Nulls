@@ -40,7 +40,7 @@ public class StudyManager {
 
     func setContext(_ context: NSManagedObjectContext) {
         if self.context === context { return }
-        
+
         self.context = context
 
         let request: NSFetchRequest<Glossary> = Glossary.fetchRequest()
@@ -209,6 +209,55 @@ public class StudyManager {
 
     // MARK: - CoreData Management
 
+    private func compareLongestStreakAndSave() {
+        if user.longestStreak < user.currentStreak {
+            user.longestStreak = user.currentStreak
+            print("🔥 새로운 최고 연속 학습일 갱신: \(user.longestStreak)")
+        } else {
+            print("🔥 현재 연속 학습일이 최고 기록을 갱신하지 못했습니다.")
+        }
+    }
+
+    func countCurrentStreakAndSave() {
+        let fetchRequest: NSFetchRequest<DateInfo> = DateInfo.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+
+        do {
+            let dateInfos = try coredataManager.context.fetch(fetchRequest)
+                .compactMap { $0.date }
+                .sorted(by: { $0 > $1 }) // 내림차순 정렬
+
+            let today = Calendar.current.startOfDay(for: Date())
+            let hasToday = dateInfos.contains { Calendar.current.isDate($0, inSameDayAs: today) }
+
+            var streak = 0
+            var currentDate = today
+
+            for date in dateInfos {
+                let infoDate = Calendar.current.startOfDay(for: date)
+                if infoDate == currentDate {
+                    streak += 1
+                    currentDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+                } else if infoDate < currentDate {
+                    break
+                }
+            }
+
+            // 오늘 날짜 데이터가 없으면 streak를 저장하지 않음(유지)
+            if hasToday {
+                user.currentStreak = Int64(streak)
+            }
+            print("🔥 현재 연속 학습일: \(user.currentStreak)")
+
+            compareLongestStreakAndSave()
+
+            coredataManager.save()
+
+        } catch {
+            print("❌ DateInfo fetch 실패: \(error)")
+        }
+    }
+
     func isTodayDateInfoExists() -> (exists: Bool, dateInfo: DateInfo?) {
         let fetchRequest: NSFetchRequest<DateInfo> = DateInfo.fetchRequest()
         do {
@@ -245,15 +294,6 @@ public class StudyManager {
             user.addToDateInfos(dateInfo)
         }
         coredataManager.save()
-    }
-
-    func checkCurrentGlossaryProgress() {
-        let currentProgress: GlossaryProgress? = (user.progresses as? Set<GlossaryProgress>)?
-            .first(where: { $0.glossary?.id == studyingGlossaryId })
-
-        let progressList = user.progresses as? Set<GlossaryProgress> ?? []
-
-        print("✏️ 현재 Glossary: \(String(describing: studyingGlossary?.title))")
     }
 
     func updateGlossaryProgress() {

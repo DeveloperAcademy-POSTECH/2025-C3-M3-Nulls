@@ -27,14 +27,8 @@ public struct ContentView: View {
         let studyManager = StudyManager.shared
 
         studyManager.setContext(context)
-        studyManager.checkCurrentGlossaryProgress()
 
-        if let bookmarks = studyManager.user.bookmarks as? Set<Term> {
-            let bookmarkArray = Array(bookmarks)
-            for bookmark in bookmarkArray {
-                print(bookmark.spelling)
-            }
-        }
+        studyManager.countCurrentStreakAndSave()
     }
 
     public var body: some View {

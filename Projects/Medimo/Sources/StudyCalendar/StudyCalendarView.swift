@@ -74,6 +74,7 @@ struct StudyCalendarView: View {
                         Image("download")
                             .foregroundStyle(AppColor.blue)
                     }
+                    .opacity(0.0)
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)

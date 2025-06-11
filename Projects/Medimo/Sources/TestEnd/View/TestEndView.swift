@@ -8,12 +8,13 @@ import SwiftUI
 
 struct TestEndView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    
+    let studyManager: StudyManager = .shared
+
     @Binding var isStudyInProgress: Bool
     var index: Int
-    
+
     @Binding var learningType: LearningType
-    
+
     var top: String {
         TestEndCheering.randomTopMessage(for: learningType)
     }
@@ -21,11 +22,11 @@ struct TestEndView: View {
     var bottom: String {
         TestEndCheering.randomBottomMessage(for: learningType)
     }
-    
+
     var body: some View {
         VStack {
             Spacer(minLength: 140)
-            
+
             Text("어제보다 더 알게 되었어요")
                 .font(.body)
                 .foregroundStyle(AppColor.grey4)
@@ -34,7 +35,7 @@ struct TestEndView: View {
                 .font(.title)
                 .foregroundStyle(AppColor.grey4)
                 .padding(.bottom, 54)
-            
+
             ZStack {
                 Image("cloudCenter")
                 VStack {
@@ -42,13 +43,13 @@ struct TestEndView: View {
                         .font(.body)
                         .foregroundStyle(AppColor.grey4)
                         .padding(.bottom, 10)
-                    
+
                     Text("\(index)개")
                         .font(.largeTitle)
                         .foregroundStyle(AppColor.navy)
                 }
             }
-            
+
             Spacer()
             ZStack {
                 VStack {
@@ -61,13 +62,14 @@ struct TestEndView: View {
                             .offset(y: -90)
                     }
                     .padding(.bottom, -60)
-                    
+
                     Image("pinkBottom")
                 }
-                
+
                 NextButton(
                     buttonText: learningType == .study ? "학습 완료하기" : "복습 완료하기",
                     action: {
+                        studyManager.countCurrentStreakAndSave()
                         withAnimation(.none) {
                             navigationManager.studyPath = []
                             isStudyInProgress = false
