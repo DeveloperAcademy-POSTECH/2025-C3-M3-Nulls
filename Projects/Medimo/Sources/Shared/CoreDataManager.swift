@@ -267,23 +267,6 @@ extension CoreDataManager {
         user.longestStreak = 0
         user.totalLearningTerms = 0
 
-        // TODO: - 나중에 삭제하기
-        // 테스트용 DateInfo 5개 생성
-        for i in 0 ..< 5 {
-            let dateInfo = DateInfo(context: context)
-            if i % 2 == 0 {
-                dateInfo.date = Calendar.current.date(byAdding: .day, value: -i, to: Date())
-                dateInfo.studyCount = Int32(10 + i)
-                dateInfo.reviewCount = Int32(10 + i)
-            } else {
-                dateInfo.date = Calendar.current.date(byAdding: .day, value: -i, to: Date())
-                dateInfo.studyCount = Int32(10 + i)
-                dateInfo.reviewCount = 0
-            }
-
-            user.addToDateInfos(dateInfo)
-        }
-
         save()
     }
 
@@ -311,14 +294,6 @@ extension CoreDataManager {
 
             // 순서대로 morpheme 객체 배열 생성
             let morphemesToAdd = morphemeIds.compactMap { morphemeDict[$0] }
-
-            // TODO: - 삭제할 것. DEBUG
-            if term.id > 5, term.id < 13 {
-                print("Morphemes for term \(term.id):\n")
-                for morpheme in morphemesToAdd {
-                    print("  - \(morpheme.id) -> \(morpheme.spelling ?? "Unknown"): \(morpheme.meaning ?? "No meaning")")
-                }
-            }
 
             // Core Data 모델에서 morphemes가 NSOrderedSet이면 아래처럼 설정
             term.morphemes = NSOrderedSet(array: morphemesToAdd)
