@@ -45,7 +45,7 @@ struct GlossaryListView: View {
                         .font(.largeTitle)
                         .foregroundStyle(AppColor.label)
                         .padding(.top, 28)
-                        .padding(.horizontal, 24)
+                        .padding(.leading, 22)
                     GlossaryCategoryBar(selectedCategory: $selectedCategory)
                 }
                 .background(AppColor.secondarySystemFill)
