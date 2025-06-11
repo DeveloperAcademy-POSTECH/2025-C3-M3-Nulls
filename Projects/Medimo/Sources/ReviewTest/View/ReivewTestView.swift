@@ -16,7 +16,6 @@ struct ReviewTestView: View {
     private var viewModel: ReviewTestViewModel
     @State private var index: Int = 1
     @Binding var isStudyInProgress: Bool
-    @Binding var isStudyDone: Bool
     
     @State var terms: [Term]
     
@@ -31,7 +30,6 @@ struct ReviewTestView: View {
 
     init(
         isStudyInProgress: Binding<Bool>,
-        isStudyDone: Binding<Bool>,
         learningType: Binding<LearningType>,
         viewModel: ReviewTestViewModel = ReviewTestViewModel()
     ) {
@@ -41,7 +39,6 @@ struct ReviewTestView: View {
         let todayTerms = StudyManager.shared.getTodayReviewTerms()
         self.terms = todayTerms
         self._studyTermSize = State(initialValue: todayTerms.count)
-        self._isStudyDone = isStudyDone
         self._learningType = learningType
     }
 
@@ -60,7 +57,6 @@ struct ReviewTestView: View {
                     index: $index,
                     isStudyInProgress: $isStudyInProgress,
                     showSoundAlert: $showSoundAlert,
-                    isStudyDone: $isStudyDone,
                     learningType: $learningType
                 )
             }

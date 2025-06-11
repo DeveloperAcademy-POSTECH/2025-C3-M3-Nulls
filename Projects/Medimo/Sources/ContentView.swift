@@ -17,7 +17,6 @@ public struct ContentView: View {
 
     @State private var selectedTab: TabType = .study
     @State private var isStudyInProgress = true
-    @State private var isStudyDone = false
 
     @StateObject private var navigationManager = NavigationManager()
 
@@ -76,17 +75,13 @@ public struct ContentView: View {
                         ZStack {
                             StudyView(
                                 context: moc,
-                                isStudyInProgress: $isStudyInProgress,
-                                isStudyDone: $isStudyDone
+                                isStudyInProgress: $isStudyInProgress
                             )
                             .environmentObject(navigationManager)
                             .navigationDestination(for: PathType.self) { path in
                                 switch path {
                                 case .StudyCard:
-                                    StudyCardView(
-                                        isStudyDone: $isStudyDone,
-                                        isStudyInProgress: $isStudyInProgress
-                                    )
+                                    StudyCardView(isStudyInProgress: $isStudyInProgress)
                                     .environmentObject(navigationManager)
 
                                 case .StudyCalendar:
@@ -96,14 +91,12 @@ public struct ContentView: View {
                                     StudyTestView(
                                         terms: terms,
                                         isStudyInProgress: $isStudyInProgress,
-                                        isStudyDone: $isStudyDone,
                                         learningType: $learningType
                                     ).environmentObject(navigationManager)
 
                                 case .ReviewTest:
                                     ReviewTestView(
                                         isStudyInProgress: $isStudyInProgress,
-                                        isStudyDone: $isStudyDone,
                                         learningType: $learningType
                                     ).environmentObject(navigationManager)
 

@@ -21,7 +21,6 @@ struct AnswerView: View {
     @State private var isCorrect: Bool = false
 
     @Binding var showSoundAlert: Bool
-    @Binding var isStudyDone: Bool
     @State var learningType: LearningType
 
     @FocusState private var isTextFieldFocused: Bool
@@ -95,7 +94,7 @@ struct AnswerView: View {
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(showError ? AppColor.hotPink : Color.clear, lineWidth: 1)
             )
-            
+
             Text("잠깐! 아직 정답을 작성하지 않았어요.")
                 .font(.caption)
                 .foregroundStyle(AppColor.hotPink)
@@ -124,8 +123,6 @@ struct AnswerView: View {
                         answer = ""
                         index += 1
                     } else {
-                        isStudyDone = true
-
                         studyManager.addDateInfoWhenFinished(learningType)
                         studyManager.updateGlossaryProgress()
 
